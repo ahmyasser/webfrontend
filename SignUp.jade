@@ -6,33 +6,43 @@ html
         link(type="text/css" rel="stylesheet" href="SignUp.css")
         script(type="text/javascript" src="bootstrap/js/jquery.min.js")
         script(type="text/javascript" src="bootstrap/js/bootstrap.min.js")
+        script(type="text/javascript" src="SignUp.js")
         meta(charset="UTF-8")
         title Twitter
         
     body
-        h1(class="text-center")
-            |Welcome To Twitter
+        div(id="navbar" class="navbar-collapse collapse")
+            h1(class="text-center")
+                |Welcome To Twitter
+                
         div(class="row")            
-            div(class="col-lg-6 col-lg-offset-3 text-center")
+            div(class="col-lg-4 col-lg-offset-8 text-center")
+                div(class="input-group")
                     h2 Log In
-                    |Email: 
-                    input(type="text" name="email" )
+                    input(type="text" name="email" class="text-input" placeholder="Username" size="30")
                     br
-                    |Password
-                    input(type="password" name="password")
+                    input(type="password" name="password" class="text-input" placeholder="Password" size="30")
+                    br
+                    button(type="submit" name="Submit" class="btn btn-default")
+                        |Submit
                     
         
         div(class="row")            
-            div(class="col-lg-6 col-lg-offset-3 text-center")
-                h2 Sign Up
-                |Username
-                input(type="text" name="username-signup" )
-                br
-                |Email:
-                input(type="text" name="email-signup" )
-                br
-                |Password
-                input(type="password" name="password-signup")
-                button(type="submit" name="Submit")
-                    |Submit
-        
+            div(class="col-lg-4 col-lg-offset-8 text-center")
+                div(class="input-group")
+                    h2 Sign Up
+                    input(type="text" name="username-signup" class="text-input" placeholder="Username"  size="30")
+                    br
+                    input(type="email" name="email-signup" class="text-input" placeholder="Email" size="30" pattern="[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}")
+                    br
+                    input(type="password" name="password-signup" class="text-input" placeholder="Password" size="30")
+                    br
+                    input(type="text" name="name-signup" class="text-input" placeholder="Name" size="30")
+                    br
+                    button(type="submit" name="Submit" class="btn btn-default" id="signup")
+                        |Submit
+                    
+                    div(id="dialogue")
+                        p
+                            demo
+            
