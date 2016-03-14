@@ -6,7 +6,7 @@ $(document).ready () ->
         details = {
             queue: "USER",
             method: "register",
-            username: $("input[name=username-signup]").val(),w 
+            username: $("input[name=username-signup]").val(), 
             password: $("input[name=password-signup]").val(),
             email: $("input[name=email-signup]").val(),
             name: $("input[name=name-signup]").val()
