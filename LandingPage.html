@@ -2,29 +2,49 @@
 <html>
   <head>
     <link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css">
-    <link type="text/css" rel="stylesheet" href="SignUp.css">
+    <link type="text/css" rel="stylesheet" href="LandingPage.css">
     <script type="text/javascript" src="bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="SignUp.js"></script>
     <meta charset="UTF-8">
     <title>Twitter</title>
   </head>
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">
+        <button type="button" data-toggle="collapse" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">
               
             Toggle Navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Twitter</a>
       </div>
       <div class="collapse navbar-collapse">
-        <form role="search" class="navbar-form">
+        <form role="search" class="navbar-form navbar-center">
           <div class="form-group">
             <input type="text" placeholder="Search" class="form-control">
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown"><a data-toggle="dropdown" role="button" href="#" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle">dropdown<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Logout</a></li>
+              <li><a href="#">Edit Profile</a></li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
-  <div></div>
+  <nav class="navbar navbar-default navbar-fixed-bottom">
+    <ul class="nav nav-pills nav-justified">
+      <li role="presentation" class="active"><a>Timeline</a></li>
+      <li role="presentation"><a>Notifications</a></li>
+      <li role="presentation"><a>Messages</a></li>
+      <li role="presentation"><a>Lists</a></li>
+      <li role="presentation"><a>Profile</a></li>
+    </ul>
+  </nav>
+  <body>
+    <div class="row">
+      <div class="col-"></div>
+    </div>
+  </body>
 </html>

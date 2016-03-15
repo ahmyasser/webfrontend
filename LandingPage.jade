@@ -3,17 +3,17 @@ doctype html
 html
     head
         link(type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css")
-        link(type="text/css" rel="stylesheet" href="SignUp.css")
+        link(type="text/css" rel="stylesheet" href="LandingPage.css")
         script(type="text/javascript" src="bootstrap/js/jquery.min.js")
         script(type="text/javascript" src="bootstrap/js/bootstrap.min.js")
-        script(type="text/javascript" src="SignUp.js")
+        //- script(type="text/javascript" src="SignUp.js")
         meta(charset="UTF-8")
         title Twitter
         
     nav(class="navbar navbar-default")
         div(class="container-fluid")
             div(class="navbar-header")
-                button(type="button" class ="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false")
+                button(type="button" class ="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false")
                     span(class="sr-only")   
                         |Toggle Navigation
                     span(class="icon-bar")
@@ -24,10 +24,48 @@ html
                     |Twitter
         
             div(class="collapse navbar-collapse")
-                form(class="navbar-form" role="search")
+                form(class="navbar-form navbar-center" role="search")
                     div(class="form-group")
                         input(type="text" class="form-control" placeholder="Search")
                     button(type="submit" class="btn btn-default")
                         |Submit
-
-    div
+                
+                ul(class="nav navbar-nav navbar-right")
+                    li(class="dropdown")
+                        a(class="dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" aria-expanded="false")
+                            |dropdown
+                            span(class="caret")
+                                                
+                        ul(class="dropdown-menu")
+                            li
+                                a(href="#")
+                                    |Logout
+                            li
+                                a(href="#")
+                                    |Edit Profile
+                                    
+    
+    nav(class="navbar navbar-default navbar-fixed-bottom")
+        ul(class="nav nav-pills nav-justified")
+            li(role="presentation" class="active")
+                a
+                    |Timeline
+            li(role="presentation")
+                a
+                    |Notifications
+            
+            li(role="presentation")
+                a
+                    |Messages
+                
+            li(role="presentation")
+                a
+                    |Lists
+            
+            li(role="presentation")
+                a
+                    |Profile
+                               
+    body
+        div(class="row")
+            div(class="col-")
