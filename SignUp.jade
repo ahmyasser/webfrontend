@@ -15,32 +15,32 @@ html
             h1(class="text-center")
                 |Welcome To Twitter
                 
-        div(class="row")            
-            div(class="col-lg-4 col-lg-offset-8 text-center")
-                div(class="input-group")
-                    form
-                        h2 Log In
-                        input(type="text" name="username-login" class="text-input" placeholder="Username" size="30")
-                        br
-                        input(type="password" name="password-login" class="text-input" placeholder="Password" size="30")
-                        br
-                        button(type="submit" name="Login" class="btn btn-default" id="login")
-                            |Login
-                        
-        
-        div(class="row")            
-            div(class="col-lg-4 col-lg-offset-8 text-center")
-                div(class="input-group")
-                    form
-                        h2 Sign Up
-                        input(type="text" name="username-signup" class="text-input" placeholder="Username"  size="30")
-                        br
-                        input(type="email" name="email-signup" class="text-input" placeholder="Email" size="30" pattern="[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}")
-                        br
-                        input(type="password" name="password-signup" class="text-input" placeholder="Password" size="30")
-                        br
-                        input(type="text" name="name-signup" class="text-input" placeholder="Name" size="30")
-                        br
-                        button(type="submit" name="Submit" class="btn btn-default" id="signup")
-                            |Submit
-                        
+        div(class="container")
+            div(class="row")            
+                div(class="col-sm-4 col-sm-offset-8 text-center")
+                    div(class="input-group")
+                        form
+                            input(type="text" name="username-login" class="text-input" placeholder="Username" size="30")
+                            br
+                            input(type="password" name="password-login" class="text-input" placeholder="Password" size="30")
+                            br
+                            button(type="submit" name="Login" class="btn btn-default" id="login")
+                                |Login
+        br
+        br                
+        div(class="container")
+            div(class="row")            
+                div(class="col-sm-4 col-sm-offset-8 text-center")
+                    div(class="input-group")
+                        form
+                            input(type="text" name="username-signup" class="text-input" placeholder="Username"  size="30")
+                            br
+                            input(type="email" name="email-signup" class="text-input" placeholder="Email" size="30" pattern="[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}")
+                            br
+                            input(type="password" name="password-signup" class="text-input" placeholder="Password" size="30")
+                            br
+                            input(type="text" name="name-signup" class="text-input" placeholder="Name" size="30")
+                            br
+                            button(type="submit" name="Submit" class="btn btn-default" id="signup")
+                                |Sign Up
+                            

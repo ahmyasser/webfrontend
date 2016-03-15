@@ -6,7 +6,7 @@ $(document).ready () ->
         details = {
             queue: "USER",
             method: "register",
-            username: $("input[name=username-signup]").val(), 
+            username: $("input[name=username-signup]").val(),
             password: $("input[name=password-signup]").val(),
             email: $("input[name=email-signup]").val(),
             name: $("input[name=name-signup]").val()
@@ -41,7 +41,7 @@ $(document).ready () ->
                         data: JSON.stringify(login_details),
                         success: (result) ->
                             alert("SUCCESS")
-                            window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html"
+                            window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html?id="+result.user_id
 
                         error: (xhr,status,error) ->
                             alert("Error")
@@ -83,7 +83,8 @@ $(document).ready () ->
                 datatype: "json",
                 data: JSON.stringify(details),
                 success: (result) ->
-                    window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html"
+                    result.user_id
+                    window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html?id="+result.user_id
 
                 error: (xhr,status,error) ->
                     alert("Error")

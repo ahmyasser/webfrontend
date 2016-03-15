@@ -40,7 +40,7 @@ $(document).ready(function() {
             data: JSON.stringify(login_details),
             success: function(result) {
               alert("SUCCESS");
-              return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html";
+              return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html?id=" + result.user_id;
             },
             error: function(xhr, status, error) {
               alert("Error");
@@ -89,7 +89,8 @@ $(document).ready(function() {
         datatype: "json",
         data: JSON.stringify(details),
         success: function(result) {
-          return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html";
+          result.user_id;
+          return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html?id=" + result.user_id;
         },
         error: function(xhr, status, error) {
           alert("Error");
