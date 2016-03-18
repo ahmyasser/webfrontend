@@ -1,8 +1,7 @@
+windows = true
 $(document).ready () ->
     $("#signup").click (event) ->
         event.preventDefault()
-        console.log("entered sign")
-
         details = {
             queue: "USER",
             method: "register",
@@ -40,8 +39,11 @@ $(document).ready () ->
                         datatype: "json",
                         data: JSON.stringify(login_details),
                         success: (result) ->
-                            alert("SUCCESS")
-                            window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html?id="+result.user_id
+                            sessionStorage.user_id = result.user_id
+                            if windows
+                                window.location.href = "C:/Users/Ahmed/Documents/TwitterFrontEnd/LandingPage.html?="+result.user_id
+                            else
+                                window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/SignUp.html?="+result.user_id
 
                         error: (xhr,status,error) ->
                             alert("Error")
@@ -61,7 +63,6 @@ $(document).ready () ->
 $(document).ready () ->
     $("#login").click (event) ->
         event.preventDefault()
-        console.log("entered login")
         details = {
             queue: "USER",
             method: "login",
@@ -83,8 +84,11 @@ $(document).ready () ->
                 datatype: "json",
                 data: JSON.stringify(details),
                 success: (result) ->
-                    result.user_id
-                    window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html?id="+result.user_id
+                    sessionStorage.user_id = result.user_id
+                    if windows
+                        window.location.href = "C:/Users/Ahmed/Documents/TwitterFrontEnd/LandingPage.html?="+result.user_id
+                    else
+                        window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/SignUp.html?="+result.user_id
 
                 error: (xhr,status,error) ->
                     alert("Error")

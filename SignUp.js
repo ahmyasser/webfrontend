@@ -1,8 +1,11 @@
+var windows;
+
+windows = true;
+
 $(document).ready(function() {
   return $("#signup").click(function(event) {
     var check, details;
     event.preventDefault();
-    console.log("entered sign");
     details = {
       queue: "USER",
       method: "register",
@@ -39,8 +42,12 @@ $(document).ready(function() {
             datatype: "json",
             data: JSON.stringify(login_details),
             success: function(result) {
-              alert("SUCCESS");
-              return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html?id=" + result.user_id;
+              sessionStorage.user_id = result.user_id;
+              if (windows) {
+                return window.location.href = "C:/Users/Ahmed/Documents/TwitterFrontEnd/LandingPage.html?=" + result.user_id;
+              } else {
+                return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/SignUp.html?=" + result.user_id;
+              }
             },
             error: function(xhr, status, error) {
               alert("Error");
@@ -67,7 +74,6 @@ $(document).ready(function() {
   return $("#login").click(function(event) {
     var check, details;
     event.preventDefault();
-    console.log("entered login");
     details = {
       queue: "USER",
       method: "login",
@@ -89,8 +95,12 @@ $(document).ready(function() {
         datatype: "json",
         data: JSON.stringify(details),
         success: function(result) {
-          result.user_id;
-          return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/LandingPage.html?id=" + result.user_id;
+          sessionStorage.user_id = result.user_id;
+          if (windows) {
+            return window.location.href = "C:/Users/Ahmed/Documents/TwitterFrontEnd/LandingPage.html?=" + result.user_id;
+          } else {
+            return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/SignUp.html?=" + result.user_id;
+          }
         },
         error: function(xhr, status, error) {
           alert("Error");
