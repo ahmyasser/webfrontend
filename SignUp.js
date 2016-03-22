@@ -1,7 +1,3 @@
-var windows;
-
-windows = true;
-
 $(document).ready(function() {
   return $("#signup").click(function(event) {
     var check, details;
@@ -42,12 +38,7 @@ $(document).ready(function() {
             datatype: "json",
             data: JSON.stringify(login_details),
             success: function(result) {
-              sessionStorage.user_id = result.user_id;
-              if (windows) {
-                return window.location.href = "C:/Users/Ahmed/Documents/TwitterFrontEnd/LandingPage.html?=" + result.user_id;
-              } else {
-                return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/SignUp.html?=" + result.user_id;
-              }
+              return window.location.href = "LandingPage.html?=" + result.user_id;
             },
             error: function(xhr, status, error) {
               alert("Error");
@@ -96,11 +87,7 @@ $(document).ready(function() {
         data: JSON.stringify(details),
         success: function(result) {
           sessionStorage.user_id = result.user_id;
-          if (windows) {
-            return window.location.href = "C:/Users/Ahmed/Documents/TwitterFrontEnd/LandingPage.html?=" + result.user_id;
-          } else {
-            return window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/SignUp.html?=" + result.user_id;
-          }
+          return window.location.href = "LandingPage.html?=" + result.user_id;
         },
         error: function(xhr, status, error) {
           alert("Error");

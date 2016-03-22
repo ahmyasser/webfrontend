@@ -9,38 +9,57 @@ html
         script(type="text/javascript" src="SignUp.js")
         meta(charset="UTF-8")
         title Twitter
-        
-    body
-        div(id="navbar" class="navbar-collapse collapse")
-            h1(class="text-center")
-                |Welcome To Twitter
+    
+    nav(class="navbar navbar-default")
+        h2(class="text-center") Welcome To Twitter
                 
+    body
         div(class="container")
             div(class="row")            
                 div(class="col-sm-4 col-sm-offset-8 text-center")
-                    div(class="input-group")
-                        form
-                            input(type="text" name="username-login" class="text-input" placeholder="Username" size="30")
-                            br
-                            input(type="password" name="password-login" class="text-input" placeholder="Password" size="30")
-                            br
-                            button(type="submit" name="Login" class="btn btn-default" id="login")
-                                |Login
-        br
-        br                
+                    div(class="panel no-margin panel-default")
+                        div(class="panel-body")
+                            form(role="form")
+                                div(class="form-group")
+                                    div(class="input-group")
+                                        div(class="input-group-addon")
+                                            span(class="glyphicon glyphicon-user" )
+                                        input(type="text" name="username-login" class="form-control" placeholder="Username" size="30")
+                                div(class="form-group")
+                                    div(class="input-group")
+                                        div(class="input-group-addon")
+                                            span(class="glyphicon glyphicon-lock" )
+                                        input(type="password" name="password-login" class="form-control" placeholder="Password" size="30")
+                                        
+                                button(type="submit" name="Login" class="btn btn-default" id="login")
+                                    |Login
+                      
         div(class="container")
             div(class="row")            
                 div(class="col-sm-4 col-sm-offset-8 text-center")
-                    div(class="input-group")
-                        form
-                            input(type="text" name="username-signup" class="text-input" placeholder="Username"  size="30")
-                            br
-                            input(type="email" name="email-signup" class="text-input" placeholder="Email" size="30" pattern="[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}")
-                            br
-                            input(type="password" name="password-signup" class="text-input" placeholder="Password" size="30")
-                            br
-                            input(type="text" name="name-signup" class="text-input" placeholder="Name" size="30")
-                            br
-                            button(type="submit" name="Submit" class="btn btn-default" id="signup")
-                                |Sign Up
-                            
+                    div(class="panel no-margin panel-default")
+                        div(class="panel-body")
+                            form(role="form")
+                                div(class="form-group")
+                                    div(class="input-group")
+                                        div(class="input-group-addon")
+                                            span(class="glyphicon glyphicon-user" )
+                                        input(type="text" name="username-signup" class="form-control" placeholder="Username"  size="30")
+                                div(class="form-group")
+                                    div(class="input-group")    
+                                        div(class="input-group-addon")
+                                            span(class="glyphicon glyphicon-envelope" )    
+                                        input(type="email" name="email-signup" class="form-control" placeholder="Email" size="30" pattern="[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}")
+                                div(class="form-group")
+                                    div(class="input-group")
+                                        div(class="input-group-addon")
+                                            span(class="glyphicon glyphicon-lock" )
+                                        input(type="password" name="password-signup" class="form-control" placeholder="Password" size="30")
+                                div(class="form-group")
+                                    div(class="input-group")
+                                        div(class="input-group-addon")
+                                            span(class="glyphicon glyphicon-font" )
+                                        input(type="text" name="name-signup" class="form-control" placeholder="Name" size="30")
+                                button(type="submit" name="Submit" class="btn btn-default" id="signup")
+                                    |Sign Up
+                                    

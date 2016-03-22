@@ -1,4 +1,3 @@
-windows = true
 $(document).ready () ->
     $("#signup").click (event) ->
         event.preventDefault()
@@ -39,11 +38,7 @@ $(document).ready () ->
                         datatype: "json",
                         data: JSON.stringify(login_details),
                         success: (result) ->
-                            sessionStorage.user_id = result.user_id
-                            if windows
-                                window.location.href = "C:/Users/Ahmed/Documents/TwitterFrontEnd/LandingPage.html?="+result.user_id
-                            else
-                                window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/SignUp.html?="+result.user_id
+                            window.location.href = "LandingPage.html?="+result.user_id
 
                         error: (xhr,status,error) ->
                             alert("Error")
@@ -85,10 +80,7 @@ $(document).ready () ->
                 data: JSON.stringify(details),
                 success: (result) ->
                     sessionStorage.user_id = result.user_id
-                    if windows
-                        window.location.href = "C:/Users/Ahmed/Documents/TwitterFrontEnd/LandingPage.html?="+result.user_id
-                    else
-                        window.location.href = "/home/ahmed/Documents/Bachelor/TwitterFrontEnd/SignUp.html?="+result.user_id
+                    window.location.href = "LandingPage.html?="+result.user_id
 
                 error: (xhr,status,error) ->
                     alert("Error")
