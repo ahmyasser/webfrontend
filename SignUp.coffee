@@ -92,4 +92,4 @@ $(document).ready () ->
 $(document).ready () ->
     $("input[name=email-signup]").change
         if( $("input[name=email-signup]").val().match(///[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}///))
-            f
+            $("input[name=email-signup]").addClass()
