@@ -88,3 +88,8 @@ $(document).ready () ->
                     console.log "Status: " + status
                     console.dir xhr.status
                     console.log details
+
+$(document).ready () ->
+    $("input[name=email-signup]").change
+        if( $("input[name=email-signup]").val().match(///[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}///))
+            f
