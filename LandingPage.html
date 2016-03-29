@@ -2,8 +2,8 @@
 <html>
   <head>
     <link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css">
-    <link type="text/css" rel="stylesheet" href="LandingPage.css">
     <link type="text/css" rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="LandingPage.css">
     <script type="text/javascript" src="bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="LandingPage.js"></script>
@@ -35,16 +35,6 @@
           </ul>
         </div>
       </div>
-    </nav>
-    <nav class="navbar navbar-default navbar-fixed-bottom">
-      <ul class="nav nav-pills nav-justified">
-        <li role="presentation" id="timeline" class="active"><a href="#timeline-pane" data-toggle="pill">Timeline</a></li>
-        <li role="presentation" id="notifications"><a href="#notifications-pane" data-toggle="pill">Notifications</a></li>
-        <li role="presentation" id="messages"><a href="#messages-pane" data-toggle="pill">Messages</a></li>
-        <li role="presentation" id="lists"><a href="#lists-pane" data-toggle="pill">Lists</a></li>
-        <li role="presentation" id="profile"><a href="#my-tweets-pane" data-toggle="pill">My Tweets</a></li>
-        <li role="presentation" id="profile"><a href="#profile-pane" data-toggle="pill">Edit Profile</a></li>
-      </ul>
     </nav>
     <div role="dialog" tabindex="-1" class="modal tweet-box">
       <div class="modal-dialog">
@@ -136,20 +126,17 @@
           </div>
         </div>
       </div>
-      <div id="profile-pane" role="tabpanel" class="tab-pane">
-        <div class="row-fluid">
-          <div class="col-sm-6 col-sm-offset-3">
-            <div class="row">
-              <div class="col-sm-2">fdfdd</div>
-              <div class="col-sm-10">
-                <div class="panel panel-default">
-                  <div class="panel-body">prfile</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div id="profile-pane" role="tabpanel" class="tab-pane"></div>
     </div>
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+      <ul class="nav nav-pills nav-justified">
+        <li role="presentation" id="timeline" class="active"><a href="#timeline-pane" data-toggle="pill">Timeline</a></li>
+        <li role="presentation" id="notifications"><a href="#notifications-pane" data-toggle="pill">Notifications</a></li>
+        <li role="presentation" id="messages"><a href="#messages-pane" data-toggle="pill">Messages</a></li>
+        <li role="presentation" id="lists"><a href="#lists-pane" data-toggle="pill">Lists</a></li>
+        <li role="presentation" id="my-tweets"><a href="#my-tweets-pane" data-toggle="pill">My Tweets</a></li>
+        <li role="presentation" id="profile"><a href="#profile-pane" data-toggle="pill">Edit Profile</a></li>
+      </ul>
+    </nav>
   </body>
 </html>

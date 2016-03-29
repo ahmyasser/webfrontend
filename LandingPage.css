@@ -28,6 +28,10 @@
   background: #FF8F1F;
 }
 
+#save-profile {
+  background: #FF8F1F;
+}
+
 textarea {
   resize: none;
 }
@@ -41,10 +45,18 @@ body {
   padding-top: 70px;
 }
 
+#profile-form {
+  padding-bottom: 110px;
+}
+
 .panel-heading {
   font-size: 1.5em;
 }
 
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
   background-color: #FF9933;
+}
+
+.nav-pills a {
+  color: #FFC285;
 }
