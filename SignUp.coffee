@@ -88,3 +88,37 @@ $(document).ready () ->
                     console.log "Status: " + status
                     console.dir xhr.status
                     console.log details
+
+
+$(document).ready () ->
+    $("input[name=email-signup]").change (event) ->
+        if($("input[name=email-signup]").val().match(///[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}///))
+            $("#signup-email").removeClass("has-error")
+            $("#signup-email").addClass("has-success")
+        else
+            $("#signup-email").removeClass("has-success")
+            $("#signup-email").addClass("has-error")
+
+    $("input[name=username-login]").change (event) ->
+        if($("input[name=username-login]").val().match(///\w+///))
+            $("#login-username").removeClass("has-error")
+            $("#login-username").addClass("has-success")
+        else
+            $("#login-username").removeClass("has-success")
+            $("#login-username").addClass("has-error")
+
+    $("input[name=username-signup]").change (event) ->
+        if($("input[name=username-signup]").val().match(///\w+///))
+            $("#signup-username").removeClass("has-error")
+            $("#signup-username").addClass("has-success")
+        else
+            $("#signup-username").removeClass("has-success")
+            $("#signup-username").addClass("has-error")
+
+    $("input[name=name-signup]").change (event) ->
+        if($("input[name=name-signup]").val().match(///\w+///))
+            $("#signup-name").removeClass("has-error")
+            $("#signup-name").addClass("has-success")
+        else
+            $("#signup-name").removeClass("has-success")
+            $("#signup-name").addClass("has-error")

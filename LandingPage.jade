@@ -4,67 +4,153 @@ html
     head
         link(type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css")
         link(type="text/css" rel="stylesheet" href="LandingPage.css")
+        link(type="text/css" rel="stylesheet" href="font-awesome/css/font-awesome.min.css")
         script(type="text/javascript" src="bootstrap/js/jquery.min.js")
         script(type="text/javascript" src="bootstrap/js/bootstrap.min.js")
+        script(type="text/javascript" src="LandingPage.js")
         meta(charset="UTF-8")
         title Twitter
         
-    nav(class="navbar navbar-default")
-        div(class="container-fluid")
-            div(class="navbar-header")
-                button(type="button" class ="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false")
-                    span(class="sr-only")   
-                        |Toggle Navigation
-                    span(class="icon-bar")
-                    span(class="icon-bar")
-                    span(class="icon-bar")
-                                        
-                a(class="navbar-brand")
-                    |Twitter
-        
-            div(class="collapse navbar-collapse")
-                form(class="navbar-form navbar-center" role="search")
-                    div(class="form-group")
-                        input(type="text" class="form-control" placeholder="Search")
-                    button(type="submit" class="btn btn-default")
-                        |Submit
-                
-                ul(class="nav navbar-nav navbar-right")
-                    li(class="dropdown")
-                        a(class="dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" aria-expanded="false")
-                            |dropdown
-                            span(class="caret")
-                                                
-                        ul(class="dropdown-menu")
-                            li
-                                a(href="#" id="logout-button")
-                                    |Logout
-                            li
-                                a(href="#")
-                                    |Edit Profile
-                                    
-    
-    nav(class="navbar navbar-default navbar-fixed-bottom")
-        ul(class="nav nav-pills nav-justified")
-            li(role="presentation" class="active")
-                a
-                    |Timeline
-            li(role="presentation")
-                a
-                    |Notifications
-            
-            li(role="presentation")
-                a
-                    |Messages
-                
-            li(role="presentation")
-                a
-                    |Lists
-            
-            li(role="presentation")
-                a
-                    |Profile
-                               
+                                   
     body
-        div(class="row")
-            div(class="col-")
+        nav(class="navbar navbar-default navbar-fixed-top ")
+            div(class="container-fluid")
+                div(class="navbar-header")
+                    button(type="button" class ="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false")
+                        span(class="sr-only")   
+                            |Toggle Navigation
+                        span(class="icon-bar")
+                        span(class="icon-bar")
+                        span(class="icon-bar")
+                                            
+                    a(class="navbar-brand")
+                        |Twitter
+            
+                div(class="collapse navbar-collapse")
+                    form(class="navbar-form navbar-center" role="search")
+                        div(class="form-group")
+                            input(type="text" class="form-control" placeholder="Search")
+                        button(type="submit" class="btn btn-default")
+                            |Submit
+                    
+                    ul(class="nav navbar-nav navbar-right")
+                        li
+                            button(id="tweet" type="button" data-toggle="modal" data-target=".tweet-box")
+                                span(class="glyphicon glyphicon-pencil" style="font-size:2em;")
+                        li
+                            button(id="signout" type="button" data-toggle="modal" data-target=".signout-box")
+                                i(class="fa fa-sign-out" style="font-size:2em;")
+                                                
+                                        
+        
+        nav(class="navbar navbar-default navbar-fixed-bottom")
+            ul(class="nav nav-pills nav-justified")
+                li(role="presentation" class="active" id="timeline")
+                    a(href="#timeline-pane" data-toggle="pill")
+                        |Timeline
+                li(role="presentation" id="notifications")
+                    a(href="#notifications-pane" data-toggle="pill")
+                        |Notifications
+                
+                li(role="presentation" id="messages")
+                    a(href="#messages-pane" data-toggle="pill")
+                        |Messages
+                    
+                li(role="presentation" id="lists")
+                    a(href="#lists-pane" data-toggle="pill")
+                        |Lists
+                
+                li(role="presentation" id="profile")
+                    a(href="#my-tweets-pane" data-toggle="pill")
+                        |My Tweets
+                        
+                li(role="presentation" id="profile")
+                    a(href="#profile-pane" data-toggle="pill")
+                        |Edit Profile
+                        
+        div(class="modal tweet-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h4(class="text-title") New Tweet
+                    div(class="modal-body")
+                        form
+                            div(class="form-group")
+                                textarea(class="form-control" id="tweet-text")
+                    div(class="modal-footer")
+                        button(class="btn btn-default" type="button" data-dismiss="modal" id="create-tweet")
+                            span(class="glyphicon glyphicon-send" style="font-size:2em;" class="text-center")
+                            
+        div(class="modal signout-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    div(class="modal-body")
+                        h4 Signout?
+                    div(class="modal-footer")
+                        button(class="btn btn-default" type="button" data-dismiss="modal" id="cancel-signout")
+                            |Cancel
+                        button(class="btn btn-default" type="button" data-dismiss="modal" id="confirm-signout")
+                            |Confirm
+                            
+        div(class="tab-content")  
+            div(class="tab-pane active" id="timeline-pane" role="tabpanel")
+                
+            
+            div(class="tab-pane" id="notifications-pane" role="tabpanel")
+                div(class="row-fluid")
+                    div(class="col-sm-6 col-sm-offset-3")
+                        div(class="row")
+                            div(class="col-sm-2")
+                                |ggfgf
+                            div(class="col-sm-10")
+                                div(class="panel panel-default")
+                                    div(class="panel-body")
+                                        |notif
+
+         
+            div(class="tab-pane" id="messages-pane" role="tabpanel")
+                div(class="row-fluid")
+                    div(class="col-sm-6 col-sm-offset-3")
+                        div(class="row")
+                            div(class="col-sm-2")
+                                |fdfdd
+                            div(class="col-sm-10")
+                                div(class="panel panel-default")
+                                    div(class="panel-body")
+                                        |message
+            
+            div(class="tab-pane" id="lists-pane" role="tabpanel")
+                div(class="row-fluid")
+                    div(class="col-sm-6 col-sm-offset-3")
+                        div(class="row")
+                            div(class="col-sm-2")
+                                |ggfgf
+                            div(class="col-sm-10")
+                                div(class="panel panel-default")
+                                    div(class="panel-body")
+                                        |list
+                                        
+            div(class="tab-pane" id="my-tweets-pane" role="tabpanel")
+                div(class="row-fluid")
+                    div(class="col-sm-6 col-sm-offset-3")
+                        div(class="row")
+                            div(class="col-sm-2")
+                                |fdfdd
+                            div(class="col-sm-10")
+                                div(class="panel panel-default")
+                                    div(class="panel-body")
+                                        |my Tweets
+    
+    
+    
+            div(class="tab-pane" id="profile-pane" role="tabpanel")
+                div(class="row-fluid")
+                    div(class="col-sm-6 col-sm-offset-3")
+                        div(class="row")
+                            div(class="col-sm-2")
+                                |fdfdd
+                            div(class="col-sm-10")
+                                div(class="panel panel-default")
+                                    div(class="panel-body")
+                                        |prfile
+            
