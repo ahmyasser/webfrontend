@@ -5,6 +5,7 @@ html
         link(type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css")
         link(type="text/css" rel="stylesheet" href="SignUp.css")
         script(type="text/javascript" src="bootstrap/js/jquery.min.js")
+        script(type="text/javascript" src="bootstrap/js/jquery.validate.min.js")
         script(type="text/javascript" src="bootstrap/js/bootstrap.min.js")
         script(type="text/javascript" src="SignUp.js")
         meta(charset="UTF-8")
@@ -19,8 +20,9 @@ html
                 div(class="col-sm-4 col-sm-offset-8 text-center")
                     div(class="panel no-margin panel-default")
                         div(class="panel-body")
-                            form(role="form")
-                                div(class="form-group" id="login-username")
+
+                            form(role="form" id="login-form")
+                                div(class="form-group")
                                     div(class="input-group")
                                         div(class="input-group-addon")
                                             span(class="glyphicon glyphicon-user" )
@@ -39,8 +41,9 @@ html
                 div(class="col-sm-4 col-sm-offset-8 text-center")
                     div(class="panel no-margin panel-default")
                         div(class="panel-body")
-                            form(role="form")
-                                div(class="form-group" id="signup-username")
+
+                            form(role="form" id="signup-form")
+                                div(class="form-group")
                                     div(class="input-group")
                                         div(class="input-group-addon")
                                             span(class="glyphicon glyphicon-user" )
@@ -59,7 +62,7 @@ html
                                     div(class="input-group")
                                         div(class="input-group-addon")
                                             span(class="glyphicon glyphicon-font" )
-                                        input(type="text" name="name-signup" class="form-control" placeholder="Name" size="30")
+                                        input(type="text" name="name-signup" id="ns" class="form-control" placeholder="Name" size="30")
                                 button(type="submit" name="Submit" class="btn btn-default" id="signup")
                                     |Sign Up
                                     
