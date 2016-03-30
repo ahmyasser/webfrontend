@@ -1,42 +1,42 @@
-$(document).ready () ->
-    details = {
-        # user_id: sessionStorage.user_id,
-        user_id: "1",
-        method: "timeline",
-        queue: "USER"
-    }
-
-    $.ajax
-        url: "http://localhost:8080",
-        type: "POST",
-        datatype: "json",
-        data: JSON.stringify(details),
-        success: (result) ->
-            $("#timeline-pane").append("<div class='container'>")
-            for i in result.feeds
-                output += "<div class=\"row-fluid\">
-                      <div class=\"col-sm-6 col-sm-offset-3\">
-                        <div class=\"row\">
-                          <div class=\"col-sm-2\"><img class='center-block' src='#{i.creator.avatar_url}' height='50' width='50'></div>
-                          <div class=\"col-sm-10\">
-                            <div class=\"panel panel-default\">
-                              <div class=\"panel-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </div>
-                              <div class=\"panel-body\">#{i.tweet_text}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>"
-                $("#timeline-pane").append(output)
-            $("#timeline-pane").append("</div>")
-
-
-        error: (xhr,status,error) ->
-            alert("Error")
-            console.log "Error: " + error
-            console.log "Status: " + status
-            console.dir xhr.status
-            console.log details
+# $(document).ready () ->
+#     details = {
+#         # user_id: sessionStorage.user_id,
+#         user_id: "1",
+#         method: "timeline",
+#         queue: "USER"
+#     }
+#
+#     $.ajax
+#         url: "http://localhost:8080",
+#         type: "POST",
+#         datatype: "json",
+#         data: JSON.stringify(details),
+#         success: (result) ->
+#             $("#timeline-pane").append("<div class='container'>")
+#             for i in result.feeds
+#                 output += "<div class=\"row-fluid\">
+#                       <div class=\"col-sm-6 col-sm-offset-3\">
+#                         <div class=\"row\">
+#                           <div class=\"col-sm-2\"><img class='center-block' src='#{i.creator.avatar_url}' height='50' width='50'></div>
+#                           <div class=\"col-sm-10\">
+#                             <div class=\"panel panel-default\">
+#                               <div class=\"panel-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </div>
+#                               <div class=\"panel-body\">#{i.tweet_text}</div>
+#                             </div>
+#                           </div>
+#                         </div>
+#                       </div>
+#                     </div>"
+#                 $("#timeline-pane").append(output)
+#             $("#timeline-pane").append("</div>")
+#
+#
+#         error: (xhr,status,error) ->
+#             alert("Error")
+#             console.log "Error: " + error
+#             console.log "Status: " + status
+#             console.dir xhr.status
+#             console.log details
 
 $(document).ready () ->
     $("#confirm-signout").click (event) ->
@@ -219,7 +219,9 @@ $(document).ready () ->
             data: JSON.stringify(details),
             success: (result) ->
                 $("#profile-pane").empty()
-                details_form = "<div class='row-fluid'>
+                details_form = "
+                <div class='container'>
+                <div class='row-fluid'>
                     <div class='col-sm-2 col-sm-offset-2'>
                     <img src='#{result.user.avatar_url}' width='150' height='150'>
                     </div>
@@ -232,7 +234,7 @@ $(document).ready () ->
                             <input type='text' name='username' value='#{result.user.username}' size='30' class='form-control'>
                             <br>
                             <label>Email</label>
-                            <input type='text' name='username' value='#{result.user.email}' size='30' class='form-control'>
+                            <input type='text' name='email' value='#{result.user.email}' size='30' class='form-control'>
                             <br>
                             <label>Language</label>
                             <input type='text' name='language' value='#{result.user.language}' size='30' class='form-control'>
@@ -264,6 +266,7 @@ $(document).ready () ->
                             <button type='submit' name='Submit'id='save-profile' class='btn btn-default pull-right'>Save Changes</button>
                         </form>
                     </div>
+                    </div>
                     </div>"
                 $("#profile-pane").append(details_form)
 
@@ -275,12 +278,25 @@ $(document).ready () ->
                 console.log details
 
 $(document).ready () ->
-    $("#confirm-signout").click (event) ->
+    $("#save-profile").click (event) ->
         event.preventDefault()
         details = {
-            user_id: sessionStorage.user_id,
-            method: "logout",
-            queue: "USER"
+            user_id:1,
+            method: "update_user",
+            queue: "USER",
+            username: $('input[name=username]').val(),
+            email: $('input[name=email]').val(),
+            name: $('input[name=name]').val(),
+            language: $('input[name=language]').val(),
+            country: $('input[name=country]').val(),
+            bio: $('input[name=bio]').val(),
+            website: $('input[name=website]').val(),
+            created_at: $('input[name=created_at]').val(),
+            avatar_url: $('input[name=avatar_url]').val(),
+            overlay: $('input[name=overlay]').val(),
+            link_color: $('input[name=link_color]').val(),
+            background_color: $('input[name=background_color]').val(),
+            protected_tweets: $('input[name=protected_tweets]').val()
         }
 
         $.ajax
@@ -289,8 +305,7 @@ $(document).ready () ->
             datatype: "json",
             data: JSON.stringify(details),
             success: (result) ->
-                sessionStorage.user_id = null
-                window.location.href = "SignUp.html"
+                console.log "success"
 
             error: (xhr,status,error) ->
                 alert("Error")
@@ -298,8 +313,6 @@ $(document).ready () ->
                 console.log "Status: " + status
                 console.dir xhr.status
                 console.log details
-
-
 
 capitalize = (string) ->
     return string.charAt(0).toUpperCase() + string.slice(1)
