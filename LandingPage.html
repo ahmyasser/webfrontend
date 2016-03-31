@@ -126,7 +126,22 @@
           </div>
         </div>
       </div>
-      <div id="profile-pane" role="tabpanel" class="tab-pane"></div>
+      <div id="profile-pane" role="tabpanel" class="tab-pane">
+        <div class="container">
+          <div class="row-fluid">
+            <div class="col-sm-2 col-sm-offset-2"><img name="profile-image" width="150" height="150"></div>
+            <div class="col-sm-4">
+              <form id="profile-form" method="POST">
+                <div class="form-group">
+                  <label>Name</label>
+                  <input type="text" name="name" size="30" class="form-control"><br>
+                  <button id="save-profile" name="Submit" class="btn btn-default pull-right">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <nav class="navbar navbar-default navbar-fixed-bottom">
       <ul class="nav nav-pills nav-justified">

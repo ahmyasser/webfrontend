@@ -118,7 +118,51 @@ html
     
     
             div(class="tab-pane" id="profile-pane" role="tabpanel")
-                
+                .container
+                    .row-fluid
+                        .col-sm-2.col-sm-offset-2
+                            img(name="profile-image" width='150' height='150')
+                        .col-sm-4
+                            form#profile-form(method='POST')
+                                .form-group
+                                    label Name
+                                    input.form-control(type='text', name='name', size='30')
+                                    br
+                                    //- label Username
+                                    //- input.form-control(type='text', name='username', value='#{result.user.username}', size='30')
+                                    //- br
+                                    //- label Email
+                                    //- input.form-control(type='text', name='email', value='#{result.user.email}', size='30')
+                                    //- br
+                                    //- label Language
+                                    //- input.form-control(type='text', name='language', value='#{result.user.language}', size='30')
+                                    //- br
+                                    //- label Country
+                                    //- input.form-control(type='text', name='country', value='#{result.user.country}', size='30')
+                                    //- br
+                                    //- label Description
+                                    //- input.form-control(type='text', name='bio', value='#{result.user.bio}', size='30')
+                                    //- br
+                                    //- label Website
+                                    //- input.form-control(type='text', name='website', value='#{result.user.website}', size='30')
+                                    //- br
+                                    //- label Picture link
+                                    //- input.form-control(type='text', name='avatar_url', value='#{result.user.avatar_url}', size='30')
+                                    //- br
+                                    //- label Overlay
+                                    //- input.form-control(type='text', name='overlay', value='#{result.user.overlay}', size='30')
+                                    //- br
+                                    //- label Link_color
+                                    //- input.form-control(type='text', name='link_color', value='#{result.user.link_color}', size='30')
+                                    //- br
+                                    //- label Background_color
+                                    //- input.form-control(type='text', name='background_color', value='#{result.user.background_color}', size='30')
+                                    //- br
+                                    //- label Private Account?
+                                    //- input.form-control(type='text', name='protected_tweets', value='#{result.user.protected_tweets}', size='30')
+                                    //- br
+                                    button#save-profile.btn.btn-default.pull-right(name='Submit') Save Changes
+                                         
 
         nav(class="navbar navbar-default navbar-fixed-bottom")
             ul(class="nav nav-pills nav-justified")
