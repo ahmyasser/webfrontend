@@ -69,7 +69,9 @@
       </div>
     </div>
     <div class="tab-content"> 
-      <div id="timeline-pane" role="tabpanel" class="tab-pane active"></div>
+      <div id="timeline-pane" role="tabpanel" class="tab-pane active">
+        <div id="timeline-container" class="container"></div>
+      </div>
       <div id="notifications-pane" role="tabpanel" class="tab-pane">
         <div class="row-fluid">
           <div class="col-sm-6 col-sm-offset-3">
@@ -113,18 +115,7 @@
         </div>
       </div>
       <div id="my-tweets-pane" role="tabpanel" class="tab-pane">
-        <div class="row-fluid">
-          <div class="col-sm-6 col-sm-offset-3">
-            <div class="row">
-              <div class="col-sm-2">fdfdd</div>
-              <div class="col-sm-10">
-                <div class="panel panel-default">
-                  <div class="panel-body">my Tweets</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div id="my-tweets-container" class="container"></div>
       </div>
       <div id="profile-pane" role="tabpanel" class="tab-pane">
         <div class="container">
@@ -134,7 +125,49 @@
               <form id="profile-form" method="POST">
                 <div class="form-group">
                   <label>Name</label>
+                  <div id="signup-password" class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-font"></span></div>
+                  </div>
                   <input type="text" name="name" size="30" class="form-control"><br>
+                  <label>Username</label>
+                  <div id="signup-password" class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                  </div>
+                  <input type="text" name="username" size="30" class="form-control"><br>
+                  <label>Email</label>
+                  <div id="signup-password" class="input-group">
+                    <input type="text" name="email" size="30" class="form-control"><span class="input-group-addon glyphicon glyphicon-lock"></span>
+                  </div><br>
+                  <label>Language</label>
+                  <div id="signup-password" class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-globe"></i></div>
+                  </div>
+                  <input type="text" name="language" size="30" class="form-control"><br>
+                  <label>Country</label>
+                  <div id="signup-password" class="input-group">
+                    <div class="input-group-addon"><span class="fa fa-map-pin"></span></div>
+                  </div>
+                  <input type="text" name="country" size="30" class="form-control"><br>
+                  <label>Description</label>
+                  <input type="text" name="bio" size="30" class="form-control"><br>
+                  <label>Website</label>
+                  <div id="signup-password" class="input-group">
+                    <div class="input-group-addon"><span class="fa fa-link"></span></div>
+                  </div>
+                  <input type="text" name="website" size="30" class="form-control"><br>
+                  <label>Picture link</label>
+                  <div id="signup-password" class="input-group">
+                    <div class="input-group-addon"><span class="fa fa-link"></span></div>
+                  </div>
+                  <input type="text" name="avatar_url" size="30" class="form-control"><br>
+                  <label>Overlay</label>
+                  <input type="text" name="overlay" size="30" class="form-control"><br>
+                  <label>Link_color</label>
+                  <input type="text" name="link_color" size="30" class="form-control"><br>
+                  <label>Background_color</label>
+                  <input type="text" name="background_color" size="30" class="form-control"><br>
+                  <label>Private Account?</label>
+                  <input type="text" name="protected_tweets" size="30" class="form-control"><br>
                   <button id="save-profile" name="Submit" class="btn btn-default pull-right">Save Changes</button>
                 </div>
               </form>
