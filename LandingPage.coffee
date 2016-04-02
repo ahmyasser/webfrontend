@@ -30,7 +30,7 @@ $(document).ready () ->
 
 
         error: (xhr,status,error) ->
-            alert("Error")
+
             console.log "Error: " + error
             console.log "Status: " + status
             console.dir xhr.status
@@ -55,7 +55,7 @@ $(document).ready () ->
                 window.location.href = "SignUp.html"
 
             error: (xhr,status,error) ->
-                alert("Error")
+
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
@@ -81,7 +81,7 @@ $(document).ready () ->
 
 
             error: (xhr,status,error) ->
-                alert("Error")
+
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
@@ -109,7 +109,7 @@ $(document).ready () ->
 #         #
 #         #
 #         #     error: (xhr,status,error) ->
-#         #         alert("Error")
+#         #
 #         #         console.log "Error: " + error
 #         #         console.log "Status: " + status
 #         #         console.dir xhr.status
@@ -137,7 +137,7 @@ $(document).ready () ->
 #         #
 #         #
 #         #     error: (xhr,status,error) ->
-#         #         alert("Error")
+#         #
 #         #         console.log "Error: " + error
 #         #         console.log "Status: " + status
 #         #         console.dir xhr.status
@@ -165,7 +165,7 @@ $(document).ready () ->
 #         #
 #         #
 #         #     error: (xhr,status,error) ->
-#         #         alert("Error")
+#         #
 #         #         console.log "Error: " + error
 #         #         console.log "Status: " + status
 #         #         console.dir xhr.status
@@ -194,7 +194,7 @@ $(document).ready () ->
 #         #
 #         #
 #         #     error: (xhr,status,error) ->
-#         #         alert("Error")
+#         #
 #         #         console.log "Error: " + error
 #         #         console.log "Status: " + status
 #         #         console.dir xhr.status
@@ -231,7 +231,7 @@ $(document).ready () ->
                 $('input[name=protected_tweets]').val(result.user.protected_tweets)
 
             error: (xhr,status,error) ->
-                alert("Error")
+
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
@@ -268,7 +268,7 @@ $(document).ready () ->
                 console.log "success"
 
             error: (xhr,status,error) ->
-                alert("Error")
+
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
@@ -305,6 +305,39 @@ $(document).ready () ->
                           </div>
                         </div>"
                     $("#my-tweets-container").append(output)
+
+$(document).ready () ->
+    $("#notifications").click (event)->
+        event.preventDefault()
+        details = {
+            # username: sessionStorage.user_id,
+            username: "magda",
+            method: "get_mentions",
+            queue: "USER"
+        }
+
+        $.ajax
+            url: "http://localhost:8080",
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify(details),
+            success: (result) ->
+                console.log result
+                for i in result.mentions
+                    output = "<div class=\"row-fluid\">
+                          <div class=\"col-sm-6 col-sm-offset-3\">
+                            <div class=\"row\">
+                              <div class=\"col-sm-2\"><img class='center-block' src='#{i.creator.avatar_url}' height='50' width='50'></div>
+                              <div class=\"col-sm-10\">
+                                <div class=\"panel panel-default\">
+                                  <div class=\"panel-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </div>
+                                  <div class=\"panel-body\">#{i.tweet_text}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>"
+                    $("#notifications-container").append(output)
 
 
 capitalize = (string) ->

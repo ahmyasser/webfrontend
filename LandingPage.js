@@ -25,7 +25,6 @@
         return _results;
       },
       error: function(xhr, status, error) {
-        alert("Error");
         console.log("Error: " + error);
         console.log("Status: " + status);
         console.dir(xhr.status);
@@ -53,7 +52,6 @@
           return window.location.href = "SignUp.html";
         },
         error: function(xhr, status, error) {
-          alert("Error");
           console.log("Error: " + error);
           console.log("Status: " + status);
           console.dir(xhr.status);
@@ -80,7 +78,6 @@
         data: JSON.stringify(details),
         success: function(result) {},
         error: function(xhr, status, error) {
-          alert("Error");
           console.log("Error: " + error);
           console.log("Status: " + status);
           console.dir(xhr.status);
@@ -120,7 +117,6 @@
           return $('input[name=protected_tweets]').val(result.user.protected_tweets);
         },
         error: function(xhr, status, error) {
-          alert("Error");
           console.log("Error: " + error);
           console.log("Status: " + status);
           console.dir(xhr.status);
@@ -161,7 +157,6 @@
           return console.log("success");
         },
         error: function(xhr, status, error) {
-          alert("Error");
           console.log("Error: " + error);
           console.log("Status: " + status);
           console.dir(xhr.status);
@@ -193,6 +188,36 @@
             i = _ref[_i];
             output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-3\"> <div class=\"row\"> <div class=\"col-sm-2\"><img class='center-block' src='" + i.creator.avatar_url + "' height='50' width='50'></div> <div class=\"col-sm-10\"> <div class=\"panel panel-default\"> <div class=\"panel-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </div> <div class=\"panel-body\">" + i.tweet_text + "</div> </div> </div> </div> </div> </div>";
             _results.push($("#my-tweets-container").append(output));
+          }
+          return _results;
+        }
+      });
+    });
+  });
+
+  $(document).ready(function() {
+    return $("#notifications").click(function(event) {
+      var details;
+      event.preventDefault();
+      details = {
+        username: "magda",
+        method: "get_mentions",
+        queue: "USER"
+      };
+      return $.ajax({
+        url: "http://localhost:8080",
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify(details),
+        success: function(result) {
+          var i, output, _i, _len, _ref, _results;
+          console.log(result);
+          _ref = result.mentions;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            i = _ref[_i];
+            output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-3\"> <div class=\"row\"> <div class=\"col-sm-2\"><img class='center-block' src='" + i.creator.avatar_url + "' height='50' width='50'></div> <div class=\"col-sm-10\"> <div class=\"panel panel-default\"> <div class=\"panel-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </div> <div class=\"panel-body\">" + i.tweet_text + "</div> </div> </div> </div> </div> </div>";
+            _results.push($("#notifications-container").append(output));
           }
           return _results;
         }
