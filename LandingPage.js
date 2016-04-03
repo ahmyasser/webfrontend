@@ -2,34 +2,8 @@
   var capitalize;
 
   $(document).ready(function() {
-    var details;
-    details = {
-      user_id: "1",
-      method: "timeline",
-      queue: "USER"
-    };
-    return $.ajax({
-      url: "http://localhost:8080",
-      type: "POST",
-      datatype: "json",
-      data: JSON.stringify(details),
-      success: function(result) {
-        var i, output, _i, _len, _ref, _results;
-        _ref = result.feeds;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          i = _ref[_i];
-          output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-3\"> <div class=\"row\"> <div class=\"col-sm-2\"><img class='center-block' src='" + i.creator.avatar_url + "' height='50' width='50'></div> <div class=\"col-sm-10\"> <div class=\"panel panel-default\"> <div class=\"panel-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </div> <div class=\"panel-body\">" + i.tweet_text + "</div> </div> </div> </div> </div> </div>";
-          _results.push($("#timeline-container").append(output));
-        }
-        return _results;
-      },
-      error: function(xhr, status, error) {
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
-      }
+    return $("a").click(function(e) {
+      return console.log($(this));
     });
   });
 
@@ -218,6 +192,36 @@
             i = _ref[_i];
             output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-3\"> <div class=\"row\"> <div class=\"col-sm-2\"><img class='center-block' src='" + i.creator.avatar_url + "' height='50' width='50'></div> <div class=\"col-sm-10\"> <div class=\"panel panel-default\"> <div class=\"panel-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </div> <div class=\"panel-body\">" + i.tweet_text + "</div> </div> </div> </div> </div> </div>";
             _results.push($("#notifications-container").append(output));
+          }
+          return _results;
+        }
+      });
+    });
+  });
+
+  $(document).ready(function() {
+    return $("#messages").click(function(event) {
+      var details;
+      event.preventDefault();
+      details = {
+        user_id: "1",
+        method: "get_convs",
+        queue: "DM"
+      };
+      return $.ajax({
+        url: "http://localhost:8080",
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify(details),
+        success: function(result) {
+          var i, output, _i, _len, _ref, _results;
+          console.log(result);
+          _ref = result.convs;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            i = _ref[_i];
+            output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-3\"> <div class=\"panel panel-default\"> <div class=\"panel-heading\"><a href='javascript:void(null)' data-toggle='modal' data-target='#thread-" + i.id + "' id='thread-link-" + i.id + "'>" + i.lastDM.dm_text + "</a></div> </div> </div> </div> <div role='dialog' tabindex='-1' class='modal' id='thread-" + i.id + "'> <div class='modal-dialog'> <div class='modal-content'> <div class='modal-header'> <h4 class='text-title'></h4> </div> <div class='modal-body'> <form> <div class='form-group'> <textarea id='tweet-text' class='form-control'></textarea> </div> </form> </div> <div class='modal-footer'> <button type='button' data-dismiss='modal' id='create-tweet' class='btn btn-default'><span style='font-size:2em;' class='glyphicon glyphicon-send text-center'></span></button> </div> </div> </div> </div> <script> $(document).ready(function() { return $('thread-link-" + i.id + "').click(function(event) { var details; event.preventDefault(); details = { conv_id: '" + i.id + "', method: 'get_conv', queue: 'DM' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { console.log(result); } return _results; } }); }); }); </script>";
+            _results.push($("#messages-container").append(output));
           }
           return _results;
         }

@@ -1,40 +1,44 @@
 $(document).ready () ->
-    details = {
-        # user_id: sessionStorage.user_id,
-        user_id: "1",
-        method: "timeline",
-        queue: "USER"
-    }
+    $("a").click (e) ->
+        # e.preventDefault()
+        console.log $(this)
 
-    $.ajax
-        url: "http://localhost:8080",
-        type: "POST",
-        datatype: "json",
-        data: JSON.stringify(details),
-        success: (result) ->
-            for i in result.feeds
-                output = "<div class=\"row-fluid\">
-                      <div class=\"col-sm-6 col-sm-offset-3\">
-                        <div class=\"row\">
-                          <div class=\"col-sm-2\"><img class='center-block' src='#{i.creator.avatar_url}' height='50' width='50'></div>
-                          <div class=\"col-sm-10\">
-                            <div class=\"panel panel-default\">
-                              <div class=\"panel-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </div>
-                              <div class=\"panel-body\">#{i.tweet_text}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>"
-                $("#timeline-container").append(output)
-
-
-        error: (xhr,status,error) ->
-
-            console.log "Error: " + error
-            console.log "Status: " + status
-            console.dir xhr.status
-            console.log details
+    # details = {
+    #     # user_id: sessionStorage.user_id,
+    #     user_id: "1",
+    #     method: "timeline",
+    #     queue: "USER"
+    # }
+    #
+    # $.ajax
+    #     url: "http://localhost:8080",
+    #     type: "POST",
+    #     datatype: "json",
+    #     data: JSON.stringify(details),
+    #     success: (result) ->
+    #         for i in result.feeds
+    #             output = "<div class=\"row-fluid\">
+    #                   <div class=\"col-sm-6 col-sm-offset-3\">
+    #                     <div class=\"row\">
+    #                       <div class=\"col-sm-2\"><img class='center-block' src='#{i.creator.avatar_url}' height='50' width='50'></div>
+    #                       <div class=\"col-sm-10\">
+    #                         <div class=\"panel panel-default\">
+    #                           <div class=\"panel-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </div>
+    #                           <div class=\"panel-body\">#{i.tweet_text}</div>
+    #                         </div>
+    #                       </div>
+    #                     </div>
+    #                   </div>
+    #                 </div>"
+    #             $("#timeline-container").append(output)
+    #
+    #
+    #     error: (xhr,status,error) ->
+    #
+    #         console.log "Error: " + error
+    #         console.log "Status: " + status
+    #         console.dir xhr.status
+    #         console.log details
 
 $(document).ready () ->
     $("#confirm-signout").click (event) ->
@@ -86,119 +90,6 @@ $(document).ready () ->
                 console.log "Status: " + status
                 console.dir xhr.status
                 console.log details
-
-# $(document).ready () ->
-#     $("#notifications").click (event) ->
-#         event.preventDefault()
-#         details = {
-#             # creator_id: sessionStorage.user_id,
-#             creator_id: "1",
-#             tweet_text: $("#tweet-text").val(),
-#             method: "tweet",
-#             queue: "TWEET"
-#         }
-#
-#         switch_pill("#notifications")
-#
-#         # $.ajax
-#         #     url: "http://localhost:8080",
-#         #     type: "POST",
-#         #     datatype: "json",
-#         #     data: JSON.stringify(details),
-#         #     success: (result) ->
-#         #
-#         #
-#         #     error: (xhr,status,error) ->
-#         #
-#         #         console.log "Error: " + error
-#         #         console.log "Status: " + status
-#         #         console.dir xhr.status
-#         #         console.log details
-#
-# $(document).ready () ->
-#     $("#timeline").click (event) ->
-#         event.preventDefault()
-#         details = {
-#             # creator_id: sessionStorage.user_id,
-#             creator_id: "1",
-#             tweet_text: $("#tweet-text").val(),
-#             method: "tweet",
-#             queue: "TWEET"
-#         }
-#
-#         switch_pill("#timeline")
-#
-#         # $.ajax
-#         #     url: "http://localhost:8080",
-#         #     type: "POST",
-#         #     datatype: "json",
-#         #     data: JSON.stringify(details),
-#         #     success: (result) ->
-#         #
-#         #
-#         #     error: (xhr,status,error) ->
-#         #
-#         #         console.log "Error: " + error
-#         #         console.log "Status: " + status
-#         #         console.dir xhr.status
-#         #         console.log details
-#
-# $(document).ready () ->
-#     $("#messages").click (event) ->
-#         event.preventDefault()
-#         details = {
-#             # creator_id: sessionStorage.user_id,
-#             creator_id: "1",
-#             tweet_text: $("#tweet-text").val(),
-#             method: "tweet",
-#             queue: "TWEET"
-#         }
-#
-#         switch_pill("#messages")
-#
-#         # $.ajax
-#         #     url: "http://localhost:8080",
-#         #     type: "POST",
-#         #     datatype: "json",
-#         #     data: JSON.stringify(details),
-#         #     success: (result) ->
-#         #
-#         #
-#         #     error: (xhr,status,error) ->
-#         #
-#         #         console.log "Error: " + error
-#         #         console.log "Status: " + status
-#         #         console.dir xhr.status
-#         #         console.log details
-#
-#
-# $(document).ready () ->
-#     $("#lists").click (event) ->
-#         event.preventDefault()
-#         details = {
-#             # creator_id: sessionStorage.user_id,
-#             creator_id: "1",
-#             tweet_text: $("#tweet-text").val(),
-#             method: "tweet",
-#             queue: "TWEET"
-#         }
-#
-#         switch_pill("#lists")
-#
-#         # $.ajax
-#         #     url: "http://localhost:8080",
-#         #     type: "POST",
-#         #     datatype: "json",
-#         #     data: JSON.stringify(details),
-#         #     success: (result) ->
-#         #
-#         #
-#         #     error: (xhr,status,error) ->
-#         #
-#         #         console.log "Error: " + error
-#         #         console.log "Status: " + status
-#         #         console.dir xhr.status
-#         #         console.log details
 
 $(document).ready () ->
     $("#profile").click (event) ->
@@ -339,6 +230,77 @@ $(document).ready () ->
                         </div>"
                     $("#notifications-container").append(output)
 
+$(document).ready () ->
+    $("#messages").click (event)->
+        event.preventDefault()
+        details = {
+            # username: sessionStorage.user_id,
+            user_id: "1",
+            method: "get_convs",
+            queue: "DM"
+        }
+
+        $.ajax
+            url: "http://localhost:8080",
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify(details),
+            success: (result) ->
+                console.log result
+                for i in result.convs
+                    output = "<div class=\"row-fluid\">
+                          <div class=\"col-sm-6 col-sm-offset-3\">
+                                <div class=\"panel panel-default\">
+                                  <div class=\"panel-heading\"><a href='javascript:void(null)' data-toggle='modal' data-target='#thread-#{i.id}' id='thread-link-#{i.id}'>#{i.lastDM.dm_text}</a></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div role='dialog' tabindex='-1' class='modal' id='thread-#{i.id}'>
+                          <div class='modal-dialog'>
+                            <div class='modal-content'>
+                              <div class='modal-header'>
+                                <h4 class='text-title'></h4>
+                              </div>
+                              <div class='modal-body'>
+                                <form>
+                                  <div class='form-group'>
+                                    <textarea id='tweet-text' class='form-control'></textarea>
+                                  </div>
+                                </form>
+                              </div>
+                              <div class='modal-footer'>
+                                <button type='button' data-dismiss='modal' id='create-tweet' class='btn btn-default'><span style='font-size:2em;' class='glyphicon glyphicon-send text-center'></span></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+<script>
+$(document).ready(function() {
+  return $('thread-link-#{i.id}').click(function(event) {
+    var details;
+    event.preventDefault();
+    details = {
+      conv_id: '#{i.id}',
+      method: 'get_conv',
+      queue: 'DM'
+    };
+    return $.ajax({
+      url: 'http://localhost:8080',
+      type: 'POST',
+      datatype: 'json',
+      data: JSON.stringify(details),
+      success: function(result) {
+          console.log(result);
+        }
+        return _results;
+      }
+    });
+  });
+});
+</script>
+
+                        "
+                    $("#messages-container").append(output)
 
 capitalize = (string) ->
     return string.charAt(0).toUpperCase() + string.slice(1)
