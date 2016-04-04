@@ -254,52 +254,8 @@ $(document).ready () ->
                                   <div class=\"panel-heading\"><a href='javascript:void(null)' data-toggle='modal' data-target='#thread-#{i.id}' id='thread-link-#{i.id}'>#{i.lastDM.dm_text}</a></div>
                             </div>
                           </div>
-                        </div>
-                        <div role='dialog' tabindex='-1' class='modal' id='thread-#{i.id}'>
-                          <div class='modal-dialog'>
-                            <div class='modal-content'>
-                              <div class='modal-header'>
-                                <h4 class='text-title'></h4>
-                              </div>
-                              <div class='modal-body'>
-                                <form>
-                                  <div class='form-group'>
-                                    <textarea id='tweet-text' class='form-control'></textarea>
-                                  </div>
-                                </form>
-                              </div>
-                              <div class='modal-footer'>
-                                <button type='button' data-dismiss='modal' id='create-tweet' class='btn btn-default'><span style='font-size:2em;' class='glyphicon glyphicon-send text-center'></span></button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-<script>
-$(document).ready(function() {
-  return $('thread-link-#{i.id}').click(function(event) {
-    var details;
-    event.preventDefault();
-    details = {
-      conv_id: '#{i.id}',
-      method: 'get_conv',
-      queue: 'DM'
-    };
-    return $.ajax({
-      url: 'http://localhost:8080',
-      type: 'POST',
-      datatype: 'json',
-      data: JSON.stringify(details),
-      success: function(result) {
-          console.log(result);
-        }
-        return _results;
-      }
-    });
-  });
-});
-</script>
-
-                        "
+                        </div>"
+                        
                     $("#messages-container").append(output)
 
 capitalize = (string) ->
