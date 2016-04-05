@@ -1,3 +1,5 @@
+var capitalize;
+
 $(document).ready(function() {
   return $("#signup").click(function(event) {
     var check, details;
@@ -8,7 +10,7 @@ $(document).ready(function() {
       username: $("input[name=username-signup]").val(),
       password: $("input[name=password-signup]").val(),
       email: $("input[name=email-signup]").val(),
-      name: $("input[name=name-signup]").val()
+      name: capitalize($("input[name=name-signup]").val())
     };
     check = true;
     $.each(details, function(key, value) {
@@ -38,7 +40,12 @@ $(document).ready(function() {
             datatype: "json",
             data: JSON.stringify(login_details),
             success: function(result) {
-              return window.location.href = "LandingPage.html?=" + result.user_id;
+              localStorage.user_id = result.user_id;
+              localStorage.username = result.user.username;
+              localStorage.session = result.user.session_id;
+              localStorage.name = result.user.name;
+              localStorage.avatar = result.user.avatar_url;
+              return window.location.href = "LandingPage.html";
             },
             error: function(xhr, status, error) {
               alert("Error");
@@ -86,8 +93,12 @@ $(document).ready(function() {
         datatype: "json",
         data: JSON.stringify(details),
         success: function(result) {
-          sessionStorage.user_id = result.user_id;
-          return window.location.href = "LandingPage.html?=" + result.user_id;
+          localStorage.user_id = result.user_id;
+          localStorage.username = result.user.username;
+          localStorage.name = result.user.name;
+          localStorage.session = result.user.session_id;
+          localStorage.avatar = result.user.avatar_url;
+          return window.location.href = "LandingPage.html";
         },
         error: function(xhr, status, error) {
           alert("Error");
@@ -139,3 +150,7 @@ $(document).ready(function() {
     }
   });
 });
+
+capitalize = function(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};

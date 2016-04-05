@@ -84,10 +84,17 @@
     <div role="dialog" tabindex="-1" class="modal message">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div id="message" class="modal-header"></div>
-          <div class="modal-body"></div>
+          <div id="message-header" class="modal-header"></div>
+          <div id="message-body" class="modal-body"></div>
           <div class="modal-footer">
-            <button type="button" data-dismiss="modal" id="dm-reply" class="btn btn-default">Reply</button>
+            <form>
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="dm" class="form-control"><span class="input-group-btn">
+                    <button type="button" id="send-dm" class="btn btn-default">Reply</button></span>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

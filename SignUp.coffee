@@ -7,7 +7,7 @@ $(document).ready () ->
             username: $("input[name=username-signup]").val(),
             password: $("input[name=password-signup]").val(),
             email: $("input[name=email-signup]").val(),
-            name: $("input[name=name-signup]").val()
+            name: capitalize($("input[name=name-signup]").val())
         }
 
         check = true
@@ -38,7 +38,12 @@ $(document).ready () ->
                         datatype: "json",
                         data: JSON.stringify(login_details),
                         success: (result) ->
-                            window.location.href = "LandingPage.html?="+result.user_id
+                            localStorage.user_id = result.user_id
+                            localStorage.username = result.user.username
+                            localStorage.session = result.user.session_id
+                            localStorage.name = result.user.name
+                            localStorage.avatar = result.user.avatar_url
+                            window.location.href = "LandingPage.html"
 
                         error: (xhr,status,error) ->
                             alert("Error")
@@ -79,8 +84,12 @@ $(document).ready () ->
                 datatype: "json",
                 data: JSON.stringify(details),
                 success: (result) ->
-                    sessionStorage.user_id = result.user_id
-                    window.location.href = "LandingPage.html?="+result.user_id
+                    localStorage.user_id = result.user_id
+                    localStorage.username = result.user.username
+                    localStorage.name = result.user.name
+                    localStorage.session = result.user.session_id
+                    localStorage.avatar = result.user.avatar_url
+                    window.location.href = "LandingPage.html"
 
                 error: (xhr,status,error) ->
                     alert("Error")
@@ -121,3 +130,7 @@ $(document).ready () ->
         else
             $("#signup-name").removeClass("has-success")
             $("#signup-name").addClass("has-error")
+
+
+capitalize = (string) ->
+    return string.charAt(0).toUpperCase() + string.slice(1)

@@ -1,7 +1,7 @@
-$(document).ready () ->
-    $("a").click (e) ->
-        # e.preventDefault()
-        console.log $(this)
+# $(document).ready () ->
+#     $("a").click (e) ->
+#         # e.preventDefault()
+#         console.log $(this)
 
     # details = {
     #     # user_id: sessionStorage.user_id,
@@ -55,7 +55,9 @@ $(document).ready () ->
             datatype: "json",
             data: JSON.stringify(details),
             success: (result) ->
-                sessionStorage.user_id = null
+                localStorage.session = null
+                localStorage.user_id = null
+                localStorage.username = null
                 window.location.href = "SignUp.html"
 
             error: (xhr,status,error) ->
@@ -69,8 +71,7 @@ $(document).ready () ->
     $("#create-tweet").click (event) ->
         event.preventDefault()
         details = {
-            # creator_id: sessionStorage.user_id,
-            creator_id: "1",
+            creator_id: localStorage.user_id,
             tweet_text: $("#tweet-text").val(),
             method: "tweet",
             queue: "TWEET"
@@ -95,8 +96,7 @@ $(document).ready () ->
     $("#profile").click (event) ->
         event.preventDefault()
         details = {
-            # creator_id: sessionStorage.user_id,
-            user_id: "3",
+            user_id: localStorage.user_id,
             method: "get_user",
             queue: "USER"
         }
@@ -132,7 +132,7 @@ $(document).ready () ->
     $("#save-profile").click (event) ->
         event.preventDefault()
         details = {
-            user_id:1,
+            user_id: localStorage.user_id,
             method: "update_user",
             queue: "USER",
             username: $('input[name=username]').val(),
@@ -157,6 +157,7 @@ $(document).ready () ->
             data: JSON.stringify(details),
             success: (result) ->
                 console.log "success"
+                localStorage.username = $('input[name=username]').val()
 
             error: (xhr,status,error) ->
 
@@ -169,8 +170,7 @@ $(document).ready () ->
     $("#my-tweets").click (event)->
         event.preventDefault()
         details = {
-            # user_id: sessionStorage.user_id,
-            user_id: "1",
+            user_id: localStorage.user_id,
             method: "user_tweets",
             queue: "USER"
         }
@@ -201,8 +201,7 @@ $(document).ready () ->
     $("#notifications").click (event)->
         event.preventDefault()
         details = {
-            # username: sessionStorage.user_id,
-            username: "magda",
+            username: localStorage.username,
             method: "get_mentions",
             queue: "USER"
         }
@@ -234,11 +233,11 @@ $(document).ready () ->
     $("#messages").click (event)->
         event.preventDefault()
         details = {
-            # username: sessionStorage.user_id,
-            user_id: "1",
+            user_id: localStorage.user_id,
             method: "get_convs",
             queue: "DM"
         }
+        console.log localStorage.user_id
 
         $.ajax
             url: "http://localhost:8080",
@@ -251,12 +250,55 @@ $(document).ready () ->
                     output = "<div class=\"row-fluid\">
                           <div class=\"col-sm-6 col-sm-offset-3\">
                                 <div class=\"panel panel-default\">
-                                  <div class=\"panel-heading\"><a href='javascript:void(null)' data-toggle='modal' data-target='#thread-#{i.id}' id='thread-link-#{i.id}'>#{i.lastDM.dm_text}</a></div>
+                                  <div class=\"panel-heading thread\" data-toggle='modal' data-target='.message' id='thread-#{i.id}'> #{i.lastDM.dm_text}</div>
                             </div>
                           </div>
                         </div>"
-                        
+
                     $("#messages-container").append(output)
+                $("#messages-container").append("<script>
+                 $('.thread').click(function(event) {
+                   var details, thread_id;
+                   event.preventDefault();
+                   thread_id = $(this).attr('id').substring(7);
+                   details = {
+                     conv_id: thread_id,
+                     method: 'get_conv',
+                     queue: 'DM'
+                   };
+                   return $.ajax({
+                     url: 'http://localhost:8080',
+                     type: 'POST',
+                     datatype: 'json',
+                     data: JSON.stringify(details),
+                     success: function(result) {
+                       var i, j, len, other, ref, results;
+                       console.log(result);
+                       other = '';
+                       if (result.conv.dms[0].sender.name === localStorage.name) {
+                         $('#message-header').empty();
+                         $('#message-header').append(\"<h3>\" + result.conv.dms[0].reciever.name + \"</h3>\");
+                         other = result.conv.dms[0].reciever.name;
+                       } else {
+                         $('#message-header').empty();
+                         $('#message-header').append(\"<h3>\" + result.conv.dms[0].sender.name + \"</h3>\");
+                         other = result.conv.dms[0].sender.name;
+                       }
+                       ref = result.conv.dms;
+                       results = [];
+                       $('#message-body').empty();
+                       for (j = 0, len = ref.length; j < len; j++) {
+                         i = ref[j];
+                         results.push($('#message-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + localStorage.avatar +\"' alt='Profile'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.sender.name + \"</h4> \" + i.dm_text + \" </div> </div>\"));
+                       }
+                       return results;
+                     }
+                   });
+                 });
+                    </script>")
+
+
+
 
 capitalize = (string) ->
     return string.charAt(0).toUpperCase() + string.slice(1)
