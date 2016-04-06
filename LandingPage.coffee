@@ -1,44 +1,42 @@
-# $(document).ready () ->
-#     $("a").click (e) ->
-#         # e.preventDefault()
-#         console.log $(this)
+$(document).ready () ->
+    
 
-    # details = {
-    #     # user_id: sessionStorage.user_id,
-    #     user_id: "1",
-    #     method: "timeline",
-    #     queue: "USER"
-    # }
-    #
-    # $.ajax
-    #     url: "http://localhost:8080",
-    #     type: "POST",
-    #     datatype: "json",
-    #     data: JSON.stringify(details),
-    #     success: (result) ->
-    #         for i in result.feeds
-    #             output = "<div class=\"row-fluid\">
-    #                   <div class=\"col-sm-6 col-sm-offset-3\">
-    #                     <div class=\"row\">
-    #                       <div class=\"col-sm-2\"><img class='center-block' src='#{i.creator.avatar_url}' height='50' width='50'></div>
-    #                       <div class=\"col-sm-10\">
-    #                         <div class=\"panel panel-default\">
-    #                           <div class=\"panel-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </div>
-    #                           <div class=\"panel-body\">#{i.tweet_text}</div>
-    #                         </div>
-    #                       </div>
-    #                     </div>
-    #                   </div>
-    #                 </div>"
-    #             $("#timeline-container").append(output)
-    #
-    #
-    #     error: (xhr,status,error) ->
-    #
-    #         console.log "Error: " + error
-    #         console.log "Status: " + status
-    #         console.dir xhr.status
-    #         console.log details
+    details = {
+        # user_id: sessionStorage.user_id,
+        user_id: "1",
+        method: "timeline",
+        queue: "USER"
+    }
+
+    $.ajax
+        url: "http://localhost:8080",
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify(details),
+        success: (result) ->
+            for i in result.feeds
+                output = "<div class=\"row-fluid\">
+                      <div class=\"col-sm-6 col-sm-offset-3\">
+                        <div class=\"row\">
+                          <div class=\"col-sm-2\"><img class='center-block' src='#{i.creator.avatar_url}' height='50' width='50'></div>
+                          <div class=\"col-sm-10\">
+                            <div class=\"panel panel-default\">
+                              <div class=\"panel-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </div>
+                              <div class=\"panel-body\">#{i.tweet_text}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>"
+                $("#timeline-container").append(output)
+
+
+        error: (xhr,status,error) ->
+
+            console.log "Error: " + error
+            console.log "Status: " + status
+            console.dir xhr.status
+            console.log details
 
 $(document).ready () ->
     $("#confirm-signout").click (event) ->
@@ -249,10 +247,15 @@ $(document).ready () ->
                 for i in result.convs
                     output = "<div class=\"row-fluid\">
                           <div class=\"col-sm-6 col-sm-offset-3\">
-                                <div class=\"panel panel-default\">
-                                  <div class=\"panel-heading thread\" data-toggle='modal' data-target='.message' id='thread-#{i.id}'> #{i.lastDM.dm_text}</div>
-                            </div>
-                          </div>
+                                <div class=\"media thread\" data-toggle='modal' data-target='.message' id='thread-#{i.id}'>
+                                    <div class=\"media-left\">
+                                    <img class=\"media-object\" src='#{i.lastDM.sender.avatar_url}' alt='DM Image' width='64' height='64'>
+                                    </div>
+                                    <div class=\"media-body\">
+                                    <h4 class=\"media-heading\">Media heading</h4>
+                                    #{i.lastDM.dm_text}
+                                    </div>
+                                        </div>
                         </div>"
 
                     $("#messages-container").append(output)
@@ -289,7 +292,7 @@ $(document).ready () ->
                        $('#message-body').empty();
                        for (j = 0, len = ref.length; j < len; j++) {
                          i = ref[j];
-                         results.push($('#message-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + localStorage.avatar +\"' alt='Profile'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.sender.name + \"</h4> \" + i.dm_text + \" </div> </div>\"));
+                         results.push($('#message-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.sender.avatar_url +\"' alt='Profile' width='42' height='42'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.sender.name + \"</h4> \" + i.dm_text + \" </div> </div>\"));
                        }
                        return results;
                      }
@@ -298,6 +301,78 @@ $(document).ready () ->
                     </script>")
 
 
+$(document).ready () ->
+    $("#lists").click (event)->
+        event.preventDefault()
+        details = {
+            user_id: localStorage.user_id,
+            method: "get_convs",
+            queue: "DM"
+        }
+        console.log localStorage.user_id
+
+        $.ajax
+            url: "http://localhost:8080",
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify(details),
+            success: (result) ->
+                console.log result
+                for i in result.convs
+                    output = "<div class=\"row-fluid\">
+                          <div class=\"col-sm-6 col-sm-offset-3\">
+                                <div class=\"media thread\" data-toggle='modal' data-target='.message' id='thread-#{i.id}'>
+                                    <div class=\"media-left\">
+                                    <img class=\"media-object\" src='#{i.lastDM.sender.avatar_url}' alt='DM Image' width='64' height='64'>
+                                    </div>
+                                    <div class=\"media-body\">
+                                    <h4 class=\"media-heading\">Media heading</h4>
+                                    #{i.lastDM.dm_text}
+                                    </div>
+                                        </div>
+                        </div>"
+
+                    $("#lists-container").append(output)
+                $("#lists-container").append("<script>
+                 $('.thread').click(function(event) {
+                   var details, thread_id;
+                   event.preventDefault();
+                   thread_id = $(this).attr('id').substring(7);
+                   details = {
+                     conv_id: thread_id,
+                     method: 'get_conv',
+                     queue: 'DM'
+                   };
+                   return $.ajax({
+                     url: 'http://localhost:8080',
+                     type: 'POST',
+                     datatype: 'json',
+                     data: JSON.stringify(details),
+                     success: function(result) {
+                       var i, j, len, other, ref, results;
+                       console.log(result);
+                       other = '';
+                       if (result.conv.dms[0].sender.name === localStorage.name) {
+                         $('#message-header').empty();
+                         $('#message-header').append(\"<h3>\" + result.conv.dms[0].reciever.name + \"</h3>\");
+                         other = result.conv.dms[0].reciever.name;
+                       } else {
+                         $('#message-header').empty();
+                         $('#message-header').append(\"<h3>\" + result.conv.dms[0].sender.name + \"</h3>\");
+                         other = result.conv.dms[0].sender.name;
+                       }
+                       ref = result.conv.dms;
+                       results = [];
+                       $('#message-body').empty();
+                       for (j = 0, len = ref.length; j < len; j++) {
+                         i = ref[j];
+                         results.push($('#message-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.sender.avatar_url +\"' alt='Profile' width='42' height='42'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.sender.name + \"</h4> \" + i.dm_text + \" </div> </div>\"));
+                       }
+                       return results;
+                     }
+                   });
+                 });
+                    </script>")
 
 
 capitalize = (string) ->
