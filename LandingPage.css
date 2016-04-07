@@ -42,7 +42,7 @@ textarea {
 }
 
 body {
-  padding-top: 110px;
+  padding-top: 90px;
 }
 
 #profile-form {
@@ -82,5 +82,9 @@ body {
 }
 
 .thread {
+  margin: 20px;
+}
+
+.timeline {
   margin: 20px;
 }
