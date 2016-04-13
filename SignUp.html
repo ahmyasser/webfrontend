@@ -7,6 +7,7 @@
     <script type="text/javascript" src="bootstrap/js/jquery.validate.min.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="SignUp.js"></script>
+    <script type="text/javascript" src="noty/packaged/jquery.noty.packaged.min.js"></script>
     <meta charset="UTF-8">
     <title>Twitter</title>
   </head>
@@ -21,7 +22,7 @@
           <div class="panel no-margin panel-default">
             <div class="panel-body">
               <form role="form" id="login-form">
-                <div class="form-group">
+                <div id="login-username" class="form-group">
                   <div class="input-group">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
                     <input type="text" name="username-login" placeholder="Username" size="30" class="form-control">
@@ -42,7 +43,7 @@
               <div class="panel no-margin panel-default">
                 <div class="panel-body">
                   <form role="form" id="signup-form">
-                    <div class="form-group">
+                    <div id="signup-username" class="form-group">
                       <div class="input-group">
                         <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
                         <input type="text" name="username-signup" placeholder="Username" size="30" class="form-control">

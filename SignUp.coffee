@@ -13,7 +13,7 @@ $(document).ready () ->
         check = true
         $.each details, (key,value) ->
             if((value == null) || (value == ""))
-                alert(key+" cannot be empty")
+                noty({text: "#{capitalize(key)} Cannot be empty", timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                 check = false
                 return false
 
@@ -38,22 +38,21 @@ $(document).ready () ->
                         datatype: "json",
                         data: JSON.stringify(login_details),
                         success: (result) ->
-                            localStorage.user_id = result.user_id
-                            localStorage.username = result.user.username
+                            noty({text: 'Signup successful! You will be redirected shortly', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
                             localStorage.session = result.user.session_id
-                            localStorage.name = result.user.name
-                            localStorage.avatar = result.user.avatar_url
-                            window.location.href = "LandingPage.html"
+                            window.setTimeout(  ->
+                                window.location.href = "LandingPage.html"
+                            , 3000)
 
                         error: (xhr,status,error) ->
-                            alert("Error")
+                            noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                             console.log "Error: " + error
                             console.log "Status: " + status
                             console.dir xhr.status
                             console.log details
 
                 error: (xhr,status,error) ->
-                    alert("Error")
+                    noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                     console.log "Error: " + error
                     console.log "Status: " + status
                     console.dir xhr.status
@@ -73,7 +72,7 @@ $(document).ready () ->
         check = true
         $.each details, (key,value) ->
             if((value == null) || (value == ""))
-                alert(key+" cannot be empty")
+                noty({text: "#{capitalize(key)} Cannot be empty", timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                 check = false
                 return false
 
@@ -84,52 +83,71 @@ $(document).ready () ->
                 datatype: "json",
                 data: JSON.stringify(details),
                 success: (result) ->
-                    localStorage.user_id = result.user_id
-                    localStorage.username = result.user.username
-                    localStorage.name = result.user.name
                     localStorage.session = result.user.session_id
-                    localStorage.avatar = result.user.avatar_url
-                    window.location.href = "LandingPage.html"
+                    noty({text: 'Login successful! You will be redirected shortly', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
+                    window.setTimeout(  ->
+                        window.location.href = "LandingPage.html"
+                    , 3000)
 
                 error: (xhr,status,error) ->
-                    alert("Error")
+                    noty({text: 'An error occured, please try again', timeout: 2000, type:"error"})
                     console.log "Error: " + error
                     console.log "Status: " + status
                     console.dir xhr.status
                     console.log details
 
 $(document).ready () ->
-    $("input[name=email-signup]").change (event) ->
-        if($("input[name=email-signup]").val().match(///[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}///))
+    $("input[name=email-signup]").keyup (event) ->
+        if($("input[name=email-signup]").val().match(///^[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}$///))
+            if(!$("#signup-email").hasClass("has-success"))
+                $("#signup-email").addClass("has-success")
+
             $("#signup-email").removeClass("has-error")
-            $("#signup-email").addClass("has-success")
+
         else
+            if(!$("#signup-email").hasClass("has-error"))
+                $("#signup-email").addClass("has-error")
+
             $("#signup-email").removeClass("has-success")
-            $("#signup-email").addClass("has-error")
 
-    $("input[name=username-login]").change (event) ->
-        if($("input[name=username-login]").val().match(///\w+///))
+    $("input[name=username-login]").keyup (event) ->
+        if($("input[name=username-login]").val().match(///^\w+$///))
+            if(!$("#login-username").hasClass("has-success"))
+                $("#login-username").addClass("has-success")
+
             $("#login-username").removeClass("has-error")
-            $("#login-username").addClass("has-success")
+
         else
+            if(!$("#login-username").hasClass("has-error"))
+                $("#login-username").addClass("has-error")
+
             $("#login-username").removeClass("has-success")
-            $("#login-username").addClass("has-error")
 
-    $("input[name=username-signup]").change (event) ->
-        if($("input[name=username-signup]").val().match(///\w+///))
+    $("input[name=username-signup]").keyup (event) ->
+        if($("input[name=username-signup]").val().match(///^\w+$///))
+            if(!$("#signup-username").hasClass("has-success"))
+                $("#signup-username").addClass("has-success")
+
             $("#signup-username").removeClass("has-error")
-            $("#signup-username").addClass("has-success")
-        else
-            $("#signup-username").removeClass("has-success")
-            $("#signup-username").addClass("has-error")
 
-    $("input[name=name-signup]").change (event) ->
-        if($("input[name=name-signup]").val().match(///\w+///))
-            $("#signup-name").removeClass("has-error")
-            $("#signup-name").addClass("has-success")
         else
+            if(!$("#signup-username").hasClass("has-error"))
+                $("#signup-username").addClass("has-error")
+
+            $("#signup-username").removeClass("has-success")
+
+    $("input[name=name-signup]").keyup (event) ->
+        if($("input[name=username-signup]").val().match(///^\w+$///))
+            if(!$("#signup-name").hasClass("has-success"))
+                $("#signup-name").addClass("has-success")
+
+            $("#signup-name").removeClass("has-error")
+
+        else
+            if(!$("#signup-name").hasClass("has-error"))
+                $("#signup-name").addClass("has-error")
+
             $("#signup-name").removeClass("has-success")
-            $("#signup-name").addClass("has-error")
 
 
 capitalize = (string) ->
