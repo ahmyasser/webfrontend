@@ -15,7 +15,12 @@ $(document).ready(function() {
     check = true;
     $.each(details, function(key, value) {
       if ((value === null) || (value === "")) {
-        alert(key + " cannot be empty");
+        noty({
+          text: "" + (capitalize(key)) + " Cannot be empty",
+          timeout: 2000,
+          type: "error",
+          theme: 'bootstrapTheme'
+        });
         check = false;
         return false;
       }
@@ -40,15 +45,24 @@ $(document).ready(function() {
             datatype: "json",
             data: JSON.stringify(login_details),
             success: function(result) {
-              localStorage.user_id = result.user_id;
-              localStorage.username = result.user.username;
+              noty({
+                text: 'Signup successful! You will be redirected shortly',
+                timeout: 1500,
+                type: "success",
+                theme: 'bootstrapTheme'
+              });
               localStorage.session = result.user.session_id;
-              localStorage.name = result.user.name;
-              localStorage.avatar = result.user.avatar_url;
-              return window.location.href = "LandingPage.html";
+              return window.setTimeout(function() {
+                return window.location.href = "LandingPage.html";
+              }, 3000);
             },
             error: function(xhr, status, error) {
-              alert("Error");
+              noty({
+                text: 'An error occured, please try again',
+                timeout: 2000,
+                type: "error",
+                theme: 'bootstrapTheme'
+              });
               console.log("Error: " + error);
               console.log("Status: " + status);
               console.dir(xhr.status);
@@ -57,7 +71,12 @@ $(document).ready(function() {
           });
         },
         error: function(xhr, status, error) {
-          alert("Error");
+          noty({
+            text: 'An error occured, please try again',
+            timeout: 2000,
+            type: "error",
+            theme: 'bootstrapTheme'
+          });
           console.log("Error: " + error);
           console.log("Status: " + status);
           console.dir(xhr.status);
@@ -81,7 +100,12 @@ $(document).ready(function() {
     check = true;
     $.each(details, function(key, value) {
       if ((value === null) || (value === "")) {
-        alert(key + " cannot be empty");
+        noty({
+          text: "" + (capitalize(key)) + " Cannot be empty",
+          timeout: 2000,
+          type: "error",
+          theme: 'bootstrapTheme'
+        });
         check = false;
         return false;
       }
@@ -93,15 +117,23 @@ $(document).ready(function() {
         datatype: "json",
         data: JSON.stringify(details),
         success: function(result) {
-          localStorage.user_id = result.user_id;
-          localStorage.username = result.user.username;
-          localStorage.name = result.user.name;
           localStorage.session = result.user.session_id;
-          localStorage.avatar = result.user.avatar_url;
-          return window.location.href = "LandingPage.html";
+          noty({
+            text: 'Login successful! You will be redirected shortly',
+            timeout: 1500,
+            type: "success",
+            theme: 'bootstrapTheme'
+          });
+          return window.setTimeout(function() {
+            return window.location.href = "LandingPage.html";
+          }, 3000);
         },
         error: function(xhr, status, error) {
-          alert("Error");
+          noty({
+            text: 'An error occured, please try again',
+            timeout: 2000,
+            type: "error"
+          });
           console.log("Error: " + error);
           console.log("Status: " + status);
           console.dir(xhr.status);
@@ -113,40 +145,56 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-  $("input[name=email-signup]").change(function(event) {
-    if ($("input[name=email-signup]").val().match(/[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}/)) {
-      $("#signup-email").removeClass("has-error");
-      return $("#signup-email").addClass("has-success");
+  $("input[name=email-signup]").keyup(function(event) {
+    if ($("input[name=email-signup]").val().match(/^[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}$/)) {
+      if (!$("#signup-email").hasClass("has-success")) {
+        $("#signup-email").addClass("has-success");
+      }
+      return $("#signup-email").removeClass("has-error");
     } else {
-      $("#signup-email").removeClass("has-success");
-      return $("#signup-email").addClass("has-error");
+      if (!$("#signup-email").hasClass("has-error")) {
+        $("#signup-email").addClass("has-error");
+      }
+      return $("#signup-email").removeClass("has-success");
     }
   });
-  $("input[name=username-login]").change(function(event) {
-    if ($("input[name=username-login]").val().match(/\w+/)) {
-      $("#login-username").removeClass("has-error");
-      return $("#login-username").addClass("has-success");
+  $("input[name=username-login]").keyup(function(event) {
+    if ($("input[name=username-login]").val().match(/^\w+$/)) {
+      if (!$("#login-username").hasClass("has-success")) {
+        $("#login-username").addClass("has-success");
+      }
+      return $("#login-username").removeClass("has-error");
     } else {
-      $("#login-username").removeClass("has-success");
-      return $("#login-username").addClass("has-error");
+      if (!$("#login-username").hasClass("has-error")) {
+        $("#login-username").addClass("has-error");
+      }
+      return $("#login-username").removeClass("has-success");
     }
   });
-  $("input[name=username-signup]").change(function(event) {
-    if ($("input[name=username-signup]").val().match(/\w+/)) {
-      $("#signup-username").removeClass("has-error");
-      return $("#signup-username").addClass("has-success");
+  $("input[name=username-signup]").keyup(function(event) {
+    if ($("input[name=username-signup]").val().match(/^\w+$/)) {
+      if (!$("#signup-username").hasClass("has-success")) {
+        $("#signup-username").addClass("has-success");
+      }
+      return $("#signup-username").removeClass("has-error");
     } else {
-      $("#signup-username").removeClass("has-success");
-      return $("#signup-username").addClass("has-error");
+      if (!$("#signup-username").hasClass("has-error")) {
+        $("#signup-username").addClass("has-error");
+      }
+      return $("#signup-username").removeClass("has-success");
     }
   });
-  return $("input[name=name-signup]").change(function(event) {
-    if ($("input[name=name-signup]").val().match(/\w+/)) {
-      $("#signup-name").removeClass("has-error");
-      return $("#signup-name").addClass("has-success");
+  return $("input[name=name-signup]").keyup(function(event) {
+    if ($("input[name=username-signup]").val().match(/^\w+$/)) {
+      if (!$("#signup-name").hasClass("has-success")) {
+        $("#signup-name").addClass("has-success");
+      }
+      return $("#signup-name").removeClass("has-error");
     } else {
-      $("#signup-name").removeClass("has-success");
-      return $("#signup-name").addClass("has-error");
+      if (!$("#signup-name").hasClass("has-error")) {
+        $("#signup-name").addClass("has-error");
+      }
+      return $("#signup-name").removeClass("has-success");
     }
   });
 });

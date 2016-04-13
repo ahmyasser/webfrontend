@@ -1,9 +1,11 @@
 $(document).ready () ->
     details = {
-        user_id: localStorage.user_id,
+        session_id: localStorage.session,
         method: "timeline",
         queue: "USER"
     }
+
+    noty({text: 'Loading Timeline', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
 
     $.ajax
         url: "http://localhost:8080",
@@ -31,7 +33,7 @@ $(document).ready () ->
 
 
         error: (xhr,status,error) ->
-
+            noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
             console.log "Error: " + error
             console.log "Status: " + status
             console.dir xhr.status
@@ -42,11 +44,12 @@ $(document).ready () ->
         event.preventDefault()
 
         details = {
-            user_id: localStorage.user_id,
+            session_id: localStorage.session,
             method: "timeline",
             queue: "USER"
         }
-
+        console.log details
+        console.log localStorage.session
         $.ajax
             url: "http://localhost:8080",
             type: "POST",
@@ -71,7 +74,7 @@ $(document).ready () ->
 
 
             error: (xhr,status,error) ->
-
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
@@ -81,7 +84,7 @@ $(document).ready () ->
     $("#confirm-signout").click (event) ->
         event.preventDefault()
         details = {
-            user_id: sessionStorage.user_id,
+            session_id: localStorage.session,
             method: "logout",
             queue: "USER"
         }
@@ -93,12 +96,10 @@ $(document).ready () ->
             data: JSON.stringify(details),
             success: (result) ->
                 localStorage.session = null
-                localStorage.user_id = null
-                localStorage.username = null
                 window.location.href = "SignUp.html"
 
             error: (xhr,status,error) ->
-
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
@@ -108,7 +109,7 @@ $(document).ready () ->
     $("#create-tweet").click (event) ->
         event.preventDefault()
         details = {
-            creator_id: localStorage.user_id,
+            session_id: localStorage.session,
             tweet_text: $("#tweet-text").val(),
             method: "tweet",
             queue: "TWEET"
@@ -120,10 +121,11 @@ $(document).ready () ->
             datatype: "json",
             data: JSON.stringify(details),
             success: (result) ->
-
+                $("#tweet-text").val("")
+                noty({text: 'Tweet Sent!', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
 
             error: (xhr,status,error) ->
-
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
@@ -133,10 +135,11 @@ $(document).ready () ->
     $("#profile").click (event) ->
         event.preventDefault()
         details = {
-            user_id: localStorage.user_id,
-            method: "get_user",
+            session_id: localStorage.session,
+            method: "my_profile",
             queue: "USER"
         }
+
 
         $.ajax
             url: "http://localhost:8080",
@@ -159,7 +162,7 @@ $(document).ready () ->
                 $('input[name=protected_tweets]').val(result.user.protected_tweets)
 
             error: (xhr,status,error) ->
-
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
@@ -169,7 +172,7 @@ $(document).ready () ->
     $("#save-profile").click (event) ->
         event.preventDefault()
         details = {
-            user_id: localStorage.user_id,
+            session_id: localStorage.session,
             method: "update_user",
             queue: "USER",
             username: $('input[name=username]').val(),
@@ -193,11 +196,11 @@ $(document).ready () ->
             datatype: "json",
             data: JSON.stringify(details),
             success: (result) ->
-                console.log "success"
+                noty({text: 'Profile Saved!', timeout: 2000, type:"success", theme: 'bootstrapTheme'})
                 localStorage.username = $('input[name=username]').val()
 
             error: (xhr,status,error) ->
-
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
@@ -207,7 +210,7 @@ $(document).ready () ->
     $("#my-tweets").click (event)->
         event.preventDefault()
         details = {
-            user_id: localStorage.user_id,
+            session_id: localStorage.session,
             method: "user_tweets",
             queue: "USER"
         }
@@ -231,6 +234,10 @@ $(document).ready () ->
                           </div>
                         </div>"
                     $("#my-tweets-container").append(output)
+
+            error: (xhr, status, error) ->
+            noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+
 
 $(document).ready () ->
     $("#notifications").click (event)->
@@ -264,11 +271,14 @@ $(document).ready () ->
                         </div>"
                     $("#notifications-container").append(output)
 
+            error: (xhr,status,error) ->
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+
 $(document).ready () ->
     $("#messages").click (event)->
         event.preventDefault()
         details = {
-            user_id: localStorage.user_id,
+            session_id: localStorage.session,
             method: "get_convs",
             queue: "DM"
         }
@@ -338,17 +348,22 @@ $(document).ready () ->
                          results.push($('#message-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.sender.avatar_url +\"' alt='Profile' width='42' height='42'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.sender.name + \"</h4> \" + i.dm_text + \" </div> </div>\"));
                        }
                        return results;
+                     },
+                     error: function(xhr,status,result) {
+                         noty({text: 'An error occured, please try again', timeout: 2000, type:'error'});
                      }
                    });
                  });
                     </script>")
 
+            error: (xhr,status,error) ->
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
 
 $(document).ready () ->
     $("#lists").click (event)->
         event.preventDefault()
         details = {
-            user_id: localStorage.user_id,
+            session_id: localStorage.session,
             method: "get_subscribed_lists",
             queue: "USER"
         }
@@ -413,12 +428,60 @@ $(document).ready () ->
                             <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\"));
                        }
                        return results;
+                     },
+                     error: function(xhr,status,error) {
+                         noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'});
                      }
                    });
                  });
-                 console.log('finished loop');
                     </script>")
 
+            error: (xhr,status,error)->
+                noty({text: 'An error occured, please try again', timeout: 2000, type:'error'}, theme: 'bootstrapTheme')
+
+
+$(document).ready () ->
+    details = {
+        session_id: localStorage.session,
+        dm_text: $('input[name=name]').val(),
+
+        method: "create_dm",
+        queue: "DM"
+    }
+
+    noty({text: 'Loading Timeline', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
+
+    $.ajax
+        url: "http://localhost:8080",
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify(details),
+        success: (result) ->
+            $("#timeline-container").empty()
+            for i in result.feeds
+                output = "<div class=\"row-fluid\">
+                      <div class=\"col-sm-6 col-sm-offset-4\">
+                        <div class=\"media timeline\">
+                          <div class=\"media-left\">
+                          <img class='media-object' src='#{i.creator.avatar_url}' height='50' width='50'></div>
+                          <div class=\"media-body\">
+                            <h4 class='media-heading'>
+                            #{capitalize(i.creator.username)} (@#{i.creator.username})</h4>
+                            #{i.tweet_text}
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>"
+                $("#timeline-container").append(output)
+
+
+        error: (xhr,status,error) ->
+            noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+            console.log "Error: " + error
+            console.log "Status: " + status
+            console.dir xhr.status
+            console.log details
 
 capitalize = (string) ->
     return string.charAt(0).toUpperCase() + string.slice(1)

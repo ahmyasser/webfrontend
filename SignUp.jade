@@ -8,6 +8,7 @@ html
         script(type="text/javascript" src="bootstrap/js/jquery.validate.min.js")
         script(type="text/javascript" src="bootstrap/js/bootstrap.min.js")
         script(type="text/javascript" src="SignUp.js")
+        script(type="text/javascript" src="noty/packaged/jquery.noty.packaged.min.js")
         meta(charset="UTF-8")
         title Twitter
     
@@ -24,7 +25,7 @@ html
                         div(class="panel-body")
 
                             form(role="form" id="login-form")
-                                div(class="form-group")
+                                div(class="form-group" id="login-username")
                                     div(class="input-group")
                                         div(class="input-group-addon")
                                             span(class="glyphicon glyphicon-user" )
@@ -44,7 +45,7 @@ html
                                 div(class="panel-body")
 
                                     form(role="form" id="signup-form")
-                                        div(class="form-group")
+                                        div(class="form-group" id="signup-username")
                                             div(class="input-group")
                                                 div(class="input-group-addon")
                                                     span(class="glyphicon glyphicon-user" )
