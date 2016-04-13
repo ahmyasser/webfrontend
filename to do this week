@@ -1,6 +1,6 @@
-time and date of message
+$time and date of message
 change timeline to media
-add icon next message to indicate opening
+$add icon next message to indicate opening
 notifications for success
 disable redis
 send screenshots of UI
@@ -8,6 +8,18 @@ handle stupid user login
 add sessions table and map to user id
 
 send email about typical sessions table
-handle non logged in requests
+$handle non logged in requests
 
 winrunner front end testing
+
+===================================
+
+current.com design and feel
+
+monitor message use
+
+send new screenshots
+
+fix error messages in server
+
+upgrade cookies

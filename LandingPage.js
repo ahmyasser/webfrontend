@@ -130,8 +130,8 @@
       var details;
       event.preventDefault();
       details = {
-        user_id: localStorage.user_id,
-        method: "get_user",
+        session_id: localStorage.session,
+        method: "my_profile",
         queue: "USER"
       };
       return $.ajax({
