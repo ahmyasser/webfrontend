@@ -2,51 +2,6 @@
   var capitalize;
 
   $(document).ready(function() {
-    var details;
-    details = {
-      session_id: localStorage.session,
-      method: "timeline",
-      queue: "USER"
-    };
-    noty({
-      text: 'Loading Timeline',
-      timeout: 1500,
-      type: "success",
-      theme: 'bootstrapTheme'
-    });
-    return $.ajax({
-      url: "http://localhost:8080",
-      type: "POST",
-      datatype: "json",
-      data: JSON.stringify(details),
-      success: function(result) {
-        var i, output, _i, _len, _ref, _results;
-        $("#timeline-container").empty();
-        _ref = result.feeds;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          i = _ref[_i];
-          output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-4\"> <div class=\"media timeline\"> <div class=\"media-left\"> <img class='media-object' src='" + i.creator.avatar_url + "' height='50' width='50'></div> <div class=\"media-body\"> <h4 class='media-heading'> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ")</h4> " + i.tweet_text + " </div> </div> </div> </div>";
-          _results.push($("#timeline-container").append(output));
-        }
-        return _results;
-      },
-      error: function(xhr, status, error) {
-        noty({
-          text: 'An error occured, please try again',
-          timeout: 2000,
-          type: "error",
-          theme: 'bootstrapTheme'
-        });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
-      }
-    });
-  });
-
-  $(document).ready(function() {
     return $("#timeline").click(function(event) {
       var details;
       event.preventDefault();
@@ -280,7 +235,7 @@
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             i = _ref[_i];
-            output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-4\"> <div class=\"media\"> <div class=\"media-left\"><img class='media-object' src='" + i.creator.avatar_url + "' height='50' width='50'></div> <div class=\"media-body\"> <h4 class=\"media-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </h4> " + i.tweet_text + " </div> </div> </div> </div>";
+            output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-4\"> <div class=\"media\"> <div class=\"media-left\"><img class='media-object' src='" + i.creator.avatar_url + "' height='64' width='64'></div> <div class=\"media-body\"> <h4 class=\"media-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </h4> " + i.tweet_text + " </div> </div> </div> </div>";
             _results.push($("#my-tweets-container").append(output));
           }
           return _results;
@@ -300,7 +255,7 @@
       var details;
       event.preventDefault();
       details = {
-        username: localStorage.username,
+        session_id: localStorage.session,
         method: "get_mentions",
         queue: "USER"
       };
@@ -316,7 +271,7 @@
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             i = _ref[_i];
-            output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-3\"> <div class=\"row\"> <div class=\"col-sm-2\"><img class='center-block' src='" + i.creator.avatar_url + "' height='50' width='50'></div> <div class=\"col-sm-10\"> <div class=\"panel panel-default\"> <div class=\"panel-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </div> <div class=\"panel-body\">" + i.tweet_text + "</div> </div> </div> </div> </div> </div>";
+            output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-4\"> <div class=\"media timeline\"> <div class=\"media-left\"><img class='media-object' src='" + i.creator.avatar_url + "' height='64' width='64'></div> <div class=\"media-body\"> <h4 class=\"media-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </h4> " + i.tweet_text + " </div> </div> </div> </div>";
             _results.push($("#notifications-container").append(output));
           }
           return _results;
@@ -342,7 +297,6 @@
         method: "get_convs",
         queue: "DM"
       };
-      console.log(localStorage.user_id);
       return $.ajax({
         url: "http://localhost:8080",
         type: "POST",
@@ -417,48 +371,82 @@
   });
 
   $(document).ready(function() {
-    var details;
-    details = {
-      session_id: localStorage.session,
-      dm_text: $('input[name=name]').val(),
-      method: "create_dm",
-      queue: "DM"
-    };
-    noty({
-      text: 'Loading Timeline',
-      timeout: 1500,
-      type: "success",
-      theme: 'bootstrapTheme'
-    });
-    return $.ajax({
-      url: "http://localhost:8080",
-      type: "POST",
-      datatype: "json",
-      data: JSON.stringify(details),
-      success: function(result) {
-        var i, output, _i, _len, _ref, _results;
-        $("#timeline-container").empty();
-        _ref = result.feeds;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          i = _ref[_i];
-          output = "<div class=\"row-fluid\"> <div class=\"col-sm-6 col-sm-offset-4\"> <div class=\"media timeline\"> <div class=\"media-left\"> <img class='media-object' src='" + i.creator.avatar_url + "' height='50' width='50'></div> <div class=\"media-body\"> <h4 class='media-heading'> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ")</h4> " + i.tweet_text + " </div> </div> </div> </div>";
-          _results.push($("#timeline-container").append(output));
+    return $("#followers").click(function(event) {
+      var details;
+      event.preventDefault();
+      details = {
+        session_id: localStorage.session,
+        method: "followers",
+        queue: "USER"
+      };
+      return $.ajax({
+        url: "http://localhost:8080",
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify(details),
+        success: function(result) {
+          var i, _i, _len, _ref, _results;
+          _ref = result.followers;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            i = _ref[_i];
+            _results.push($("#followers-pane").append("<div class=\"media\"> <div class=\"media-left\"> <img class='media-object' src='" + i.avatar_url + "' height='64' width='64'></div> <div class=\"media-body\"> <h4> " + (capitalize(i.username)) + " (@" + i.username + ")</h4> </div> </div>"));
+          }
+          return _results;
+        },
+        error: function(xhr, status, error) {
+          noty({
+            text: 'An error occured, please try again',
+            timeout: 2000,
+            type: "error",
+            theme: 'bootstrapTheme'
+          });
+          console.log("Error: " + error);
+          console.log("Status: " + status);
+          console.dir(xhr.status);
+          return console.log(details);
         }
-        return _results;
-      },
-      error: function(xhr, status, error) {
-        noty({
-          text: 'An error occured, please try again',
-          timeout: 2000,
-          type: "error",
-          theme: 'bootstrapTheme'
-        });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
-      }
+      });
+    });
+  });
+
+  $(document).ready(function() {
+    return $("#searh").click(function(event) {
+      var details;
+      event.preventDefault();
+      details = {
+        user_substring: $('input[name=search]').val(),
+        method: "followers",
+        queue: "USER"
+      };
+      return $.ajax({
+        url: "http://localhost:8080",
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify(details),
+        success: function(result) {
+          var i, _i, _len, _ref, _results;
+          _ref = result.users;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            i = _ref[_i];
+            _results.push($("#search-pane").append("<div class=\"media\"> <div class=\"media-left\"> <img class='media-object' src='" + i.avatar_url + "' height='64' width='64'></div> <div class=\"media-body\"> <h4> " + (capitalize(i.username)) + " (@" + i.username + ")</h4> </div> </div>"));
+          }
+          return _results;
+        },
+        error: function(xhr, status, error) {
+          noty({
+            text: 'An error occured, please try again',
+            timeout: 2000,
+            type: "error",
+            theme: 'bootstrapTheme'
+          });
+          console.log("Error: " + error);
+          console.log("Status: " + status);
+          console.dir(xhr.status);
+          return console.log(details);
+        }
+      });
     });
   });
 

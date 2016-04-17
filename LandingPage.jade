@@ -28,7 +28,15 @@ html
                         |Twitter
             
                 div(class="collapse navbar-collapse")
+                    form(class="navbar-form navbar-center" role="search" method="POST")
+                        div(class="form-group")
+                            input(type="text" class="form-control" placeholder="Search" name="search")
+                            button(class="btn btn-default" id="search" data-toggle="modal" data-target=".search-box")
+                                |Submit
                     ul(class="nav navbar-nav navbar-right")
+                        li
+                            button(id="followers" type="button" data-toggle="modal" data-target=".followers-box")
+                                i(class="fa fa-users" style="font-size:2em;")
                         li
                             button(id="tweet" type="button" data-toggle="modal" data-target=".tweet-box")
                                 span(class="glyphicon glyphicon-pencil" style="font-size:2em;")
@@ -59,6 +67,16 @@ html
                             |Cancel
                         button(class="btn btn-default" type="button" data-dismiss="modal" id="confirm-signout")
                             |Confirm
+                            
+        div(class="modal followers-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    #followers-pane.modal-body
+            
+        div(class="modal search-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    #search-pane.modal-body        
                             
         div(class="modal user-details" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
