@@ -1,3 +1,4 @@
+dm_conversation = 0
 # $(document).ready () ->
 #     details = {
 #         session_id: localStorage.session,
@@ -150,7 +151,8 @@ $(document).ready () ->
                 $('img[name=profile-image]').prop("src",result.user.avatar_url)
                 $('input[name=name]').val(result.user.name)
                 $('input[name=username]').val(result.user.username)
-                $('input[name=email]').val(result.user.email)
+                $('input[name=email-1]').val(result.user.email.split("@")[0])
+                $('input[name=email-2]').val(result.user.email.split("@")[1])
                 $('input[name=language]').val(result.user.language)
                 $('input[name=country]').val(result.user.country)
                 $('input[name=bio]').val(result.user.bio)
@@ -176,7 +178,7 @@ $(document).ready () ->
             method: "update_user",
             queue: "USER",
             username: $('input[name=username]').val(),
-            email: $('input[name=email]').val(),
+            email: $('input[name=email-1]').val() + "@" + $('input[name=email-2]').val(),
             name: $('input[name=name]').val(),
             language: $('input[name=language]').val(),
             country: $('input[name=country]').val(),
@@ -236,7 +238,7 @@ $(document).ready () ->
                     $("#my-tweets-container").append(output)
 
             error: (xhr, status, error) ->
-            noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
 
 
 $(document).ready () ->
@@ -294,8 +296,7 @@ $(document).ready () ->
                     else
                        other = i.lastDM.sender.name
 
-                    output = "<div class=\"row-fluid\">
-                          <div class=\"col-sm-6 col-sm-offset-3\">
+                    output = "
                                 <div class=\"media thread\" data-toggle='modal' data-target='.message' id='thread-#{i.id}'>
                                     <div class=\"media-left\">
                                     <img class=\"media-object\" src='#{i.lastDM.sender.avatar_url}' alt='DM Image' width='64' height='64'>
@@ -303,8 +304,7 @@ $(document).ready () ->
                                     <div class=\"media-body\">
                                     <h4 class=\"media-heading\">#{other}</h4>
                                     #{i.lastDM.dm_text}
-                                    </div>
-                                        </div>
+
                         </div>"
 
                     $("#messages-container").append(output)
@@ -313,6 +313,8 @@ $(document).ready () ->
                    var details, thread_id;
                    event.preventDefault();
                    thread_id = $(this).attr('id').substring(7);
+                   dm_conversation = thread_id;
+                   console.log('thread id ' + dm_conversation);
                    details = {
                      conv_id: thread_id,
                      method: 'get_conv',
@@ -374,8 +376,7 @@ $(document).ready () ->
                 console.log result
                 $("#lists-container").empty()
                 for i in result.subscribed_lists
-                    output = "<div class=\"row-fluid\">
-                          <div class=\"col-sm-6 col-sm-offset-4\">
+                    output = "
                                 <div class=\"media list-entry\" data-toggle='modal' data-target='.list' id='list-#{i.id}'>
                                     <div class=\"media-left\">
                                     <img class=\"media-object\" src='#{i.creator.avatar_url}' alt='Image' width='64' height='64'>
@@ -383,8 +384,6 @@ $(document).ready () ->
                                     <div class=\"media-body\">
                                     <h4 class=\"media-heading\">#{capitalize(i.name)} @#{i.creator.username}</h4>
                                     #{i.description}
-                                    </div>
-                                        </div>
                         </div>"
 
                     $("#lists-container").append(output)
@@ -436,48 +435,56 @@ $(document).ready () ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:'error'}, theme: 'bootstrapTheme')
 
 
-# $(document).ready () ->
-#     details = {
-#         session_id: localStorage.session,
-#         dm_text: $('input[name=name]').val(),
-#
-#         method: "create_dm",
-#         queue: "DM"
-#     }
-#
-#     noty({text: 'Loading Timeline', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
-#
-#     $.ajax
-#         url: "http://localhost:8080",
-#         type: "POST",
-#         datatype: "json",
-#         data: JSON.stringify(details),
-#         success: (result) ->
-#             $("#timeline-container").empty()
-#             for i in result.feeds
-#                 output = "<div class=\"row-fluid\">
-#                       <div class=\"col-sm-6 col-sm-offset-4\">
-#                         <div class=\"media timeline\">
-#                           <div class=\"media-left\">
-#                           <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'></div>
-#                           <div class=\"media-body\">
-#                             <h4 class='media-heading'>
-#                             #{capitalize(i.creator.username)} (@#{i.creator.username})</h4>
-#                             #{i.tweet_text}
-#
-#                           </div>
-#                         </div>
-#                       </div>
-#                     </div>"
-#                 $("#timeline-container").append(output)
-#
-#
-#         error: (xhr,status,error) ->
-#             noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-#             console.log "Error: " + error
-#             console.log "Status: " + status
-#             console.dir xhr.status
-#             console.log details
+$(document).ready () ->
+    $("#send-dm").click (event)->
+        event.preventDefault()
+        console.log dm_conversation
+        details = {
+            session_id: localStorage.session,
+            dm_text: $('input[name=dm]').val(),
+            conv_id: dm_conversation,
+            method: "create_dm2",
+            queue: "DM"
+        }
+
+        if $('input[name=dm]').val() == null || $('input[name=dm]').val() == ""
+            noty({text: 'Cannot send empty Message', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+        else
+
+            $.ajax
+                url: "http://localhost:8080",
+                type: "POST",
+                datatype: "json",
+                data: JSON.stringify(details),
+                success: (result) ->
+                    $('input[name=dm]').val("")
+                    noty({text: 'Message Sent!', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
+
+                    conv = {
+                    conv_id: dm_conversation,
+                    method: 'get_conv',
+                    queue: 'DM'
+                    }
+
+                    $.ajax
+                        url: "http://localhost:8080",
+                        type: "POST",
+                        datatype: "json",
+                        data: JSON.stringify(conv),
+                        success: (result) ->
+                            $('#message-body').empty()
+                            for i in result.conv.dms
+                                $('#message-body').append("<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='#{i.sender.avatar_url}' alt='Profile' width='42' height='42'> </a> </div> <div class='media-body'> <h4 class='media-heading'> #{i.sender.name} </h4>  #{i.dm_text}  </div> </div>")
+
+                        error: (xhr,status,result) ->
+                            noty({text: 'Please refresh browser', timeout: 2000, type:'error', theme: 'bootstrapTheme'})
+
+                error: (xhr,status,error) ->
+                    noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+                    console.log "Error: " + error
+                    console.log "Status: " + status
+                    console.dir xhr.status
+                    console.log details
 
 $(document).ready () ->
     $("#followers").click (event) ->
@@ -512,11 +519,46 @@ $(document).ready () ->
                 console.log details
 
 $(document).ready () ->
-    $("#searh").click (event) ->
+    $("#following").click (event) ->
         event.preventDefault()
         details = {
+            session_id: localStorage.session,
+            method: "following",
+            queue: "USER"
+        }
+
+        $.ajax
+            url: "http://localhost:8080",
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify(details),
+            success: (result) ->
+                for i in result.following
+                    $("#followers-pane").append("<div class=\"media\">
+                          <div class=\"media-left\">
+                          <img class='media-object' src='#{i.avatar_url}' height='64' width='64'></div>
+                          <div class=\"media-body\">
+                            <h4>
+                            #{capitalize(i.username)} (@#{i.username})</h4>
+                      </div>
+                    </div>")
+
+            error: (xhr,status,error) ->
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+                console.log "Error: " + error
+                console.log "Status: " + status
+                console.dir xhr.status
+                console.log details
+
+
+
+$(document).ready () ->
+    $("#search").click (event) ->
+        event.preventDefault()
+        console.log "entered"
+        details = {
             user_substring: $('input[name=search]').val(),
-            method: "followers",
+            method: "get_users",
             queue: "USER"
         }
 

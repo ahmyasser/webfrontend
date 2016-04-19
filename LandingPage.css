@@ -20,6 +20,22 @@
   margin-top: 37%;
 }
 
+#following {
+  background: transparent;
+  border: none;
+  margin-top: 37%;
+}
+
+#new-conv {
+  background: transparent;
+  border: none;
+}
+
+#new-list {
+  background: transparent;
+  border: none;
+}
+
 #create-tweet {
   background: #FF8F1F;
 }

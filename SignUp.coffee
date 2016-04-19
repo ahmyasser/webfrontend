@@ -90,7 +90,13 @@ $(document).ready () ->
                     , 3000)
 
                 error: (xhr,status,error) ->
-                    noty({text: 'An error occured, please try again', timeout: 2000, type:"error"})
+                    if error.contains "username"
+                        noty({text: 'Wrong Username', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+                    else if error.contains "Password"
+                        noty({text: 'Wrong Password', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+                    else
+                        noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+
                     console.log "Error: " + error
                     console.log "Status: " + status
                     console.dir xhr.status

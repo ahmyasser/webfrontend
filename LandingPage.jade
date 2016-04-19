@@ -35,6 +35,9 @@ html
                                 |Submit
                     ul(class="nav navbar-nav navbar-right")
                         li
+                            button(id="following" type="button" data-toggle="modal" data-target=".followers-box")
+                                i(class="fa fa-check" style="font-size:2em;")
+                        li
                             button(id="followers" type="button" data-toggle="modal" data-target=".followers-box")
                                 i(class="fa fa-users" style="font-size:2em;")
                         li
@@ -44,6 +47,20 @@ html
                             button(id="signout" type="button" data-toggle="modal" data-target=".signout-box")
                                 i(class="fa fa-sign-out" style="font-size:2em;")
         
+        div(class="modal new-conv-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h4(class="text-title") New Conversation
+                    div(class="modal-body")
+                        form
+                            div(class="form-group")
+                            label Username:
+                                input(class="form-control" name="conv-username")
+                    div(class="modal-footer")
+                        button(class="btn btn-default" type="button" data-toggle="modal" id="create-tweet")
+                            span(class="glyphicon glyphicon-send" style="font-size:2em;" class="text-center")
+                            
         div(class="modal tweet-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
@@ -54,7 +71,7 @@ html
                             div(class="form-group")
                                 textarea(class="form-control" id="tweet-text")
                     div(class="modal-footer")
-                        button(class="btn btn-default" type="button" data-dismiss="modal" id="create-tweet")
+                        button(class="btn btn-default" type="button" data-toggle="modal" id="create-tweet")
                             span(class="glyphicon glyphicon-send" style="font-size:2em;" class="text-center")
                             
         div(class="modal signout-box" role="dialog" tabindex="-1")
@@ -106,7 +123,7 @@ html
                                 div(class="input-group")
                                     input.form-control(type='text', name='dm')
                                     span.input-group-btn
-                                        button.btn.btn-default(type="button" id="send-dm") Reply
+                                        button.btn.btn-default(type="submit" id="send-dm") Reply
                             
                         
         div(class="modal list" role="dialog" tabindex="-1")
@@ -114,8 +131,10 @@ html
                 div(class="modal-content")
                     //- div(class="modal-header" id="list-header")
                         
-                    div(class="modal-body" id="list-body")
-
+                    div(class="modal-body")
+                        .row
+                            .col-sm-6.col-sm-offset-3
+                                #list-body
                     //- div(class="list-footer")
                     //-     form
                     //-         .form-group
@@ -132,11 +151,21 @@ html
                 #notifications-container.container
          
             div(class="tab-pane" id="messages-pane" role="tabpanel")
-                #messages-container.container
-            
+                .container
+                    .row-fluid
+                        #messages-container.col-sm-6.col-sm-offset-4
+                        .col-sm-1
+                            button(id="new-conv" type="button" data-toggle="modal" data-target=".new-conv-box")
+                                i(class="fa fa-plus-circle" style="font-size:2em;")
+                                
             div(class="tab-pane" id="lists-pane" role="tabpanel")
-                #lists-container.container
-                
+                .container
+                    .row-fluid
+                        #lists-container.col-sm-6.col-sm-offset-4
+                        .col-sm-1
+                            button(id="new-list" type="button" data-toggle="modal" data-target=".new-conv-box")
+                                i(class="fa fa-plus-circle" style="font-size:2em;")
+                            
             div(class="tab-pane" id="my-tweets-pane" role="tabpanel")
                 #my-tweets-container.container
     

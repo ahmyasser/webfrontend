@@ -112,7 +112,7 @@ $(document).ready(function() {
     });
     if (check) {
       return $.ajax({
-        url: "https://localhost:8443",
+        url: "http://localhost:8080",
         type: "POST",
         datatype: "json",
         data: JSON.stringify(details),
@@ -129,11 +129,28 @@ $(document).ready(function() {
           }, 3000);
         },
         error: function(xhr, status, error) {
-          noty({
-            text: 'An error occured, please try again',
-            timeout: 2000,
-            type: "error"
-          });
+          if (error.contains("username")) {
+            noty({
+              text: 'Wrong Username',
+              timeout: 2000,
+              type: "error",
+              theme: 'bootstrapTheme'
+            });
+          } else if (error.contains("Password")) {
+            noty({
+              text: 'Wrong Password',
+              timeout: 2000,
+              type: "error",
+              theme: 'bootstrapTheme'
+            });
+          } else {
+            noty({
+              text: 'An error occured, please try again',
+              timeout: 2000,
+              type: "error",
+              theme: 'bootstrapTheme'
+            });
+          }
           console.log("Error: " + error);
           console.log("Status: " + status);
           console.dir(xhr.status);
