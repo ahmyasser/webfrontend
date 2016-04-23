@@ -8,6 +8,10 @@
   height: 100%;
 }
 
+.button-colour {
+  background: #FF8F1F;
+}
+
 #tweet {
   background: transparent;
   border: none;
@@ -36,22 +40,10 @@
   border: none;
 }
 
-#create-tweet {
-  background: #FF8F1F;
-}
-
 #signout {
   background: transparent;
   border: none;
   margin-top: 37%;
-}
-
-#confirm-signout {
-  background: #FF8F1F;
-}
-
-#save-profile {
-  background: #FF8F1F;
 }
 
 textarea {

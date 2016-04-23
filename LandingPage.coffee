@@ -1,4 +1,11 @@
 dm_conversation = 0
+users_added = 2
+
+$(document).ready () ->
+    if(isEmpty(localStorage.session))
+        noty({text: 'You are not signed in, please sign in', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+
+
 # $(document).ready () ->
 #     details = {
 #         session_id: localStorage.session,
@@ -124,6 +131,7 @@ $(document).ready () ->
             success: (result) ->
                 $("#tweet-text").val("")
                 noty({text: 'Tweet Sent!', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
+                $(".tweet-box").modal('hide')
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
@@ -348,7 +356,7 @@ $(document).ready () ->
                        return results;
                      },
                      error: function(xhr,status,result) {
-                         noty({text: 'An error occured, please try again', timeout: 2000, type:'error'});
+                         noty({text: 'An error occured, please try again', timeout: 2000, type:'error', , theme: 'bootstrapTheme'});
                      }
                    });
                  });
@@ -432,7 +440,7 @@ $(document).ready () ->
                     </script>")
 
             error: (xhr,status,error)->
-                noty({text: 'An error occured, please try again', timeout: 2000, type:'error'}, theme: 'bootstrapTheme')
+                noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'})
 
 
 $(document).ready () ->
@@ -447,7 +455,7 @@ $(document).ready () ->
             queue: "DM"
         }
 
-        if $('input[name=dm]').val() == null || $('input[name=dm]').val() == ""
+        if isEmpty($('input[name=dm]').val())
             noty({text: 'Cannot send empty Message', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
         else
 
@@ -573,7 +581,7 @@ $(document).ready () ->
                           <div class=\"media-left\">
                           <img class='media-object' src='#{i.avatar_url}' height='64' width='64'></div>
                           <div class=\"media-body\">
-                            <h4>
+                            <h4 class='user'>
                             #{capitalize(i.username)} (@#{i.username})</h4>
                       </div>
                     </div>")
@@ -585,5 +593,103 @@ $(document).ready () ->
                 console.dir xhr.status
                 console.log details
 
+$(document).ready () ->
+    $("#create-conversation").click (event) ->
+        event.preventDefault()
+        details = {
+            session_id: localStorage.session,
+            username:  $('input[name=conv-username]').val(),
+            dm_text:  $('input[name=conv-message]').val(),
+            method: "create_conversation",
+            queue: "DM"
+        }
+        if(isEmpty($('input[name=conv-username]').val()))
+            noty({text: 'Username cannot be empty', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+        else if isEmpty($('input[name=conv-message]').val())
+            noty({text: 'Message cannot be empty', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+        else
+            $.ajax
+            url: "http://localhost:8080",
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify(details),
+            success: (result) ->
+                noty({text: 'Conversation created!', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
+                $('input[name=conv-username]').val("")
+                $('input[name=conv-message]').val("")
+                $(".new-conv-box").modal('hide')
+            error: (xhr,status,error) ->
+                if error.contains "exists"
+                    noty({text: 'Username wrong or conversation already exists', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+                else
+                    noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+                    console.log "Error: " + error
+                    console.log "Status: " + status
+                    console.dir xhr.status
+                    console.log details
+
+
+$(document).ready () ->
+    $("#add-user").click (event) ->
+        $("#list-users").append("
+        <div class=\"form-group\">
+          <label id=\"user-#{users_added}\" class=\"control-label col-sm-2\">User #{users_added}:</label>
+          <div class=\"col-sm-10\">
+            <input name=\"user-#{users_added}\" class=\"form-control\">
+          </div>
+        </div>")
+
+        users_added += 1
+
+$(document).ready () ->
+    $("#create-list").click (event) ->
+        event.preventDefault()
+        console.log "entered"
+        users_in_list = []
+        for i in [1...users_added]
+            if(!isEmpty($("input[name=user-#{i}]").val()))
+                users_in_list.push($("input[name=user-#{i}]").val())
+
+        details = {
+            session_id: localStorage.session,
+            name:  $('input[name=list-name]').val(),
+            description:  $('input[name=list-description]').val(),
+            method: "create_list_with_members",
+            queue: "LIST"
+        }
+        if(isEmpty($('input[name=conv-username]').val()))
+            noty({text: 'Username cannot be empty', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+        else if isEmpty($('input[name=conv-message]').val())
+            noty({text: 'Message cannot be empty', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+        else
+            $.ajax
+            url: "http://localhost:8080",
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify(details),
+            success: (result) ->
+                noty({text: 'Conversation created!', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
+                $('input[name=conv-username]').val("")
+                $('input[name=conv-message]').val("")
+                $(".new-conv-box").modal('hide')
+            error: (xhr,status,error) ->
+                if error.contains "exists"
+                    noty({text: 'Username wrong or conversation already exists', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+                else
+                    noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+                    console.log "Error: " + error
+                    console.log "Status: " + status
+                    console.dir xhr.status
+                    console.log details
+
+
+
+
 capitalize = (string) ->
     return string.charAt(0).toUpperCase() + string.slice(1)
+
+isEmpty = (string) ->
+    if(string == null || string == "")
+        return true
+    else
+        return false

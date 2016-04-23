@@ -47,21 +47,71 @@ html
                             button(id="signout" type="button" data-toggle="modal" data-target=".signout-box")
                                 i(class="fa fa-sign-out" style="font-size:2em;")
         
-        div(class="modal new-conv-box" role="dialog" tabindex="-1")
+        div(class="modal fade new-conv-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
                     div(class="modal-header")
                         h4(class="text-title") New Conversation
                     div(class="modal-body")
-                        form
-                            div(class="form-group")
-                            label Username:
-                                input(class="form-control" name="conv-username")
+                        form.form-horizontal
+                            .form-group
+                                label.control-label.col-sm-2 Username:
+                                .col-sm-10
+                                    input.form-control(name="conv-username")
+                                    
+                            .form-group
+                                label.control-label.col-sm-2 Message:
+                                .col-sm-10
+                                    input.form-control(name="conv-message")            
                     div(class="modal-footer")
-                        button(class="btn btn-default" type="button" data-toggle="modal" id="create-tweet")
+                        button(class="btn btn-default button-colour" type="button" id="create-conversation")
                             span(class="glyphicon glyphicon-send" style="font-size:2em;" class="text-center")
                             
-        div(class="modal tweet-box" role="dialog" tabindex="-1")
+        div(class="modal fade user-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    div(class="modal-header")
+                        button(class="btn btn-default button-colour" type="button" id="toggle-follow")
+                            i(class="fa " style="font-size:2em;" class="text-center")
+                        button(class="btn btn-default button-colour" type="button" id="report")
+                            i(class="fa fa-warning" style="font-size:2em;" class="text-center")
+                                
+                    div(class="modal-body")
+                        .row
+                            #user-avatar.col-sm-3
+                            
+                            #user-tweets.col-sm-9
+                            
+        div(class="modal fade new-list-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h4(class="text-title") New Conversation
+                    div(class="modal-body")
+                        form#list-users.form-horizontal
+                            .form-group
+                                label.control-label.col-sm-2 Name:
+                                .col-sm-10
+                                    input.form-control(name="list-name")
+                                    
+                            .form-group
+                                label.control-label.col-sm-2 Description:
+                                .col-sm-10
+                                    textarea.form-control(name="list-description" row="4")            
+                            
+                            .form-group
+                                label#user-1.control-label.col-sm-2 User 1:
+                                .col-sm-10
+                                    input.form-control(name="user-1") 
+                            
+                    div(class="modal-footer")
+                        button(class="btn btn-default" type="button" id="add-user")
+                            i(class="fa fa-user-plus" style="font-size:2em;" class="text-center")
+                            
+                        button(class="btn btn-default button-colour" type="button" id="create-list")
+                            span(class="glyphicon glyphicon-send" style="font-size:2em;" class="text-center")
+                            
+        div(class="modal fade tweet-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
                     div(class="modal-header")
@@ -71,10 +121,10 @@ html
                             div(class="form-group")
                                 textarea(class="form-control" id="tweet-text")
                     div(class="modal-footer")
-                        button(class="btn btn-default" type="button" data-toggle="modal" id="create-tweet")
+                        button(class="btn btn-default button-colour" type="button" data-toggle="modal" id="create-tweet")
                             span(class="glyphicon glyphicon-send" style="font-size:2em;" class="text-center")
                             
-        div(class="modal signout-box" role="dialog" tabindex="-1")
+        div(class="modal fade signout-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
                     div(class="modal-body")
@@ -82,20 +132,20 @@ html
                     div(class="modal-footer")
                         button(class="btn btn-default" type="button" data-dismiss="modal" id="cancel-signout")
                             |Cancel
-                        button(class="btn btn-default" type="button" data-dismiss="modal" id="confirm-signout")
+                        button(class="btn btn-default button-colour" type="button" data-dismiss="modal" id="confirm-signout")
                             |Confirm
                             
-        div(class="modal followers-box" role="dialog" tabindex="-1")
+        div(class="modal fade followers-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
                     #followers-pane.modal-body
             
-        div(class="modal search-box" role="dialog" tabindex="-1")
+        div(class="modal fade search-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
                     #search-pane.modal-body        
                             
-        div(class="modal user-details" role="dialog" tabindex="-1")
+        div(class="modal fade user-details" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
                     #user.modal-header
@@ -110,7 +160,7 @@ html
                         button(class="btn btn-default" type="button" data-dismiss="modal" id="report")
                             |Report
                             
-        div(class="modal message" role="dialog" tabindex="-1")
+        div(class="modal fade message" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
                     div(class="modal-header" id="message-header")
@@ -126,7 +176,7 @@ html
                                         button.btn.btn-default(type="submit" id="send-dm") Reply
                             
                         
-        div(class="modal list" role="dialog" tabindex="-1")
+        div(class="modal fade list" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
                     //- div(class="modal-header" id="list-header")
@@ -163,7 +213,7 @@ html
                     .row-fluid
                         #lists-container.col-sm-6.col-sm-offset-4
                         .col-sm-1
-                            button(id="new-list" type="button" data-toggle="modal" data-target=".new-conv-box")
+                            button(id="new-list" type="button" data-toggle="modal" data-target=".new-list-box")
                                 i(class="fa fa-plus-circle" style="font-size:2em;")
                             
             div(class="tab-pane" id="my-tweets-pane" role="tabpanel")
@@ -242,7 +292,7 @@ html
                                     label Private Account?
                                     input.form-control(type='text', name='protected_tweets', size='30')
                                     br
-                                    button#save-profile.btn.btn-default.pull-right(name='Submit') Save Changes
+                                    button#save-profile.btn.btn-default.pull-right.button-colour(name='Submit') Save Changes
                                          
 
         nav(class="navbar navbar-default navbar-fixed-bottom")

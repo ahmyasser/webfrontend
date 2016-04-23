@@ -43,27 +43,86 @@
         </div>
       </div>
     </nav>
-    <div role="dialog" tabindex="-1" class="modal new-conv-box">
+    <div role="dialog" tabindex="-1" class="modal fade new-conv-box">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="text-title">New Conversation</h4>
           </div>
           <div class="modal-body">
-            <form>
-              <div class="form-group"></div>
-              <label>Username:
-                <input name="conv-username" class="form-control">
-              </label>
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="control-label col-sm-2">Username:</label>
+                <div class="col-sm-10">
+                  <input name="conv-username" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2">Message:</label>
+                <div class="col-sm-10">
+                  <input name="conv-message" class="form-control">
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" data-toggle="modal" id="create-tweet" class="btn btn-default"><span style="font-size:2em;" class="glyphicon glyphicon-send text-center"></span></button>
+            <button type="button" id="create-conversation" class="btn btn-default button-colour"><span style="font-size:2em;" class="glyphicon glyphicon-send text-center"></span></button>
           </div>
         </div>
       </div>
     </div>
-    <div role="dialog" tabindex="-1" class="modal tweet-box">
+    <div role="dialog" tabindex="-1" class="modal fade user-box">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" id="toggle-follow" class="btn btn-default button-colour"><i style="font-size:2em;" class="fa  text-center"></i></button>
+            <button type="button" id="report" class="btn btn-default button-colour"><i style="font-size:2em;" class="fa fa-warning text-center"></i></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div id="user-avatar" class="col-sm-3"></div>
+              <div id="user-tweets" class="col-sm-9"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div role="dialog" tabindex="-1" class="modal fade new-list-box">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="text-title">New Conversation</h4>
+          </div>
+          <div class="modal-body">
+            <form id="list-users" class="form-horizontal">
+              <div class="form-group">
+                <label class="control-label col-sm-2">Name:</label>
+                <div class="col-sm-10">
+                  <input name="list-name" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2">Description:</label>
+                <div class="col-sm-10">
+                  <textarea name="list-description" row="4" class="form-control">           </textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label id="user-1" class="control-label col-sm-2">User 1:</label>
+                <div class="col-sm-10">
+                  <input name="user-1" class="form-control">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="add-user" class="btn btn-default"><i style="font-size:2em;" class="fa fa-user-plus text-center"></i></button>
+            <button type="button" id="create-list" class="btn btn-default button-colour"><span style="font-size:2em;" class="glyphicon glyphicon-send text-center"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div role="dialog" tabindex="-1" class="modal fade tweet-box">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -77,12 +136,12 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" data-toggle="modal" id="create-tweet" class="btn btn-default"><span style="font-size:2em;" class="glyphicon glyphicon-send text-center"></span></button>
+            <button type="button" data-toggle="modal" id="create-tweet" class="btn btn-default button-colour"><span style="font-size:2em;" class="glyphicon glyphicon-send text-center"></span></button>
           </div>
         </div>
       </div>
     </div>
-    <div role="dialog" tabindex="-1" class="modal signout-box">
+    <div role="dialog" tabindex="-1" class="modal fade signout-box">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body">
@@ -90,26 +149,26 @@
           </div>
           <div class="modal-footer">
             <button type="button" data-dismiss="modal" id="cancel-signout" class="btn btn-default">Cancel</button>
-            <button type="button" data-dismiss="modal" id="confirm-signout" class="btn btn-default">Confirm</button>
+            <button type="button" data-dismiss="modal" id="confirm-signout" class="btn btn-default button-colour">Confirm</button>
           </div>
         </div>
       </div>
     </div>
-    <div role="dialog" tabindex="-1" class="modal followers-box">
+    <div role="dialog" tabindex="-1" class="modal fade followers-box">
       <div class="modal-dialog">
         <div class="modal-content">
           <div id="followers-pane" class="modal-body"></div>
         </div>
       </div>
     </div>
-    <div role="dialog" tabindex="-1" class="modal search-box">
+    <div role="dialog" tabindex="-1" class="modal fade search-box">
       <div class="modal-dialog">
         <div class="modal-content">
           <div id="search-pane" class="modal-body">       </div>
         </div>
       </div>
     </div>
-    <div role="dialog" tabindex="-1" class="modal user-details">
+    <div role="dialog" tabindex="-1" class="modal fade user-details">
       <div class="modal-dialog">
         <div class="modal-content">
           <div id="user" class="modal-header"></div>
@@ -122,7 +181,7 @@
         </div>
       </div>
     </div>
-    <div role="dialog" tabindex="-1" class="modal message">
+    <div role="dialog" tabindex="-1" class="modal fade message">
       <div class="modal-dialog">
         <div class="modal-content">
           <div id="message-header" class="modal-header"></div>
@@ -140,7 +199,7 @@
         </div>
       </div>
     </div>
-    <div role="dialog" tabindex="-1" class="modal list">
+    <div role="dialog" tabindex="-1" class="modal fade list">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body">
@@ -175,7 +234,7 @@
           <div class="row-fluid">
             <div id="lists-container" class="col-sm-6 col-sm-offset-4"></div>
             <div class="col-sm-1">
-              <button id="new-list" type="button" data-toggle="modal" data-target=".new-conv-box"><i style="font-size:2em;" class="fa fa-plus-circle"></i></button>
+              <button id="new-list" type="button" data-toggle="modal" data-target=".new-list-box"><i style="font-size:2em;" class="fa fa-plus-circle"></i></button>
             </div>
           </div>
         </div>
@@ -240,7 +299,7 @@
                   <input type="text" name="background_color" size="30" class="form-control"><br>
                   <label>Private Account?</label>
                   <input type="text" name="protected_tweets" size="30" class="form-control"><br>
-                  <button id="save-profile" name="Submit" class="btn btn-default pull-right">Save Changes</button>
+                  <button id="save-profile" name="Submit" class="btn btn-default pull-right button-colour">Save Changes</button>
                 </div>
               </form>
             </div>

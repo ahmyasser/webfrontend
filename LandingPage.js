@@ -1,6 +1,19 @@
-var capitalize, dm_conversation;
+var capitalize, dm_conversation, isEmpty, users_added;
 
 dm_conversation = 0;
+
+users_added = 2;
+
+$(document).ready(function() {
+  if (isEmpty(localStorage.session)) {
+    return noty({
+      text: 'You are not signed in, please sign in',
+      timeout: 2000,
+      type: "error",
+      theme: 'bootstrapTheme'
+    });
+  }
+});
 
 $(document).ready(function() {
   return $("#timeline").click(function(event) {
@@ -96,12 +109,13 @@ $(document).ready(function() {
       data: JSON.stringify(details),
       success: function(result) {
         $("#tweet-text").val("");
-        return noty({
+        noty({
           text: 'Tweet Sent!',
           timeout: 1500,
           type: "success",
           theme: 'bootstrapTheme'
         });
+        return $(".tweet-box").modal('hide');
       },
       error: function(xhr, status, error) {
         noty({
@@ -321,7 +335,7 @@ $(document).ready(function() {
           output = "<div class=\"media thread\" data-toggle='modal' data-target='.message' id='thread-" + i.id + "'> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.lastDM.sender.avatar_url + "' alt='DM Image' width='64' height='64'> </div> <div class=\"media-body\"> <h4 class=\"media-heading\">" + other + "</h4> " + i.lastDM.dm_text + " </div>";
           $("#messages-container").append(output);
         }
-        return $("#messages-container").append("<script> $('.thread').click(function(event) { var details, thread_id; event.preventDefault(); thread_id = $(this).attr('id').substring(7); dm_conversation = thread_id; console.log('thread id ' + dm_conversation); details = { conv_id: thread_id, method: 'get_conv', queue: 'DM' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); other = ''; if (result.conv.dms[0].sender.name === localStorage.name) { $('#message-header').empty(); $('#message-header').append(\"<h3>\" + result.conv.dms[0].reciever.name + \"</h3>\"); other = result.conv.dms[0].reciever.name; } else { $('#message-header').empty(); $('#message-header').append(\"<h3>\" + result.conv.dms[0].sender.name + \"</h3>\"); other = result.conv.dms[0].sender.name; } ref = result.conv.dms; results = []; $('#message-body').empty(); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#message-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.sender.avatar_url +\"' alt='Profile' width='42' height='42'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.sender.name + \"</h4> \" + i.dm_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,result) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error'}); } }); }); </script>");
+        return $("#messages-container").append("<script> $('.thread').click(function(event) { var details, thread_id; event.preventDefault(); thread_id = $(this).attr('id').substring(7); dm_conversation = thread_id; console.log('thread id ' + dm_conversation); details = { conv_id: thread_id, method: 'get_conv', queue: 'DM' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); other = ''; if (result.conv.dms[0].sender.name === localStorage.name) { $('#message-header').empty(); $('#message-header').append(\"<h3>\" + result.conv.dms[0].reciever.name + \"</h3>\"); other = result.conv.dms[0].reciever.name; } else { $('#message-header').empty(); $('#message-header').append(\"<h3>\" + result.conv.dms[0].sender.name + \"</h3>\"); other = result.conv.dms[0].sender.name; } ref = result.conv.dms; results = []; $('#message-body').empty(); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#message-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.sender.avatar_url +\"' alt='Profile' width='42' height='42'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.sender.name + \"</h4> \" + i.dm_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,result) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', , theme: 'bootstrapTheme'}); } }); }); </script>");
       },
       error: function(xhr, status, error) {
         return noty({
@@ -365,8 +379,7 @@ $(document).ready(function() {
         return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
-          type: 'error'
-        }, {
+          type: 'error',
           theme: 'bootstrapTheme'
         });
       }
@@ -386,7 +399,7 @@ $(document).ready(function() {
       method: "create_dm2",
       queue: "DM"
     };
-    if ($('input[name=dm]').val() === null || $('input[name=dm]').val() === "") {
+    if (isEmpty($('input[name=dm]').val())) {
       return noty({
         text: 'Cannot send empty Message',
         timeout: 2000,
@@ -557,7 +570,7 @@ $(document).ready(function() {
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           i = _ref[_i];
-          _results.push($("#search-pane").append("<div class=\"media\"> <div class=\"media-left\"> <img class='media-object' src='" + i.avatar_url + "' height='64' width='64'></div> <div class=\"media-body\"> <h4> " + (capitalize(i.username)) + " (@" + i.username + ")</h4> </div> </div>"));
+          _results.push($("#search-pane").append("<div class=\"media\"> <div class=\"media-left\"> <img class='media-object' src='" + i.avatar_url + "' height='64' width='64'></div> <div class=\"media-body\"> <h4 class='user'> " + (capitalize(i.username)) + " (@" + i.username + ")</h4> </div> </div>"));
         }
         return _results;
       },
@@ -577,6 +590,166 @@ $(document).ready(function() {
   });
 });
 
+$(document).ready(function() {
+  return $("#create-conversation").click(function(event) {
+    var details;
+    event.preventDefault();
+    details = {
+      session_id: localStorage.session,
+      username: $('input[name=conv-username]').val(),
+      dm_text: $('input[name=conv-message]').val(),
+      method: "create_conversation",
+      queue: "DM"
+    };
+    if (isEmpty($('input[name=conv-username]').val())) {
+      return noty({
+        text: 'Username cannot be empty',
+        timeout: 2000,
+        type: "error",
+        theme: 'bootstrapTheme'
+      });
+    } else if (isEmpty($('input[name=conv-message]').val())) {
+      return noty({
+        text: 'Message cannot be empty',
+        timeout: 2000,
+        type: "error",
+        theme: 'bootstrapTheme'
+      });
+    } else {
+      $.ajax;
+      return {
+        url: "http://localhost:8080",
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify(details),
+        success: function(result) {
+          noty({
+            text: 'Conversation created!',
+            timeout: 1500,
+            type: "success",
+            theme: 'bootstrapTheme'
+          });
+          $('input[name=conv-username]').val("");
+          $('input[name=conv-message]').val("");
+          return $(".new-conv-box").modal('hide');
+        },
+        error: function(xhr, status, error) {
+          if (error.contains("exists")) {
+            return noty({
+              text: 'Username wrong or conversation already exists',
+              timeout: 2000,
+              type: "error",
+              theme: 'bootstrapTheme'
+            });
+          } else {
+            noty({
+              text: 'An error occured, please try again',
+              timeout: 2000,
+              type: "error",
+              theme: 'bootstrapTheme'
+            });
+            console.log("Error: " + error);
+            console.log("Status: " + status);
+            console.dir(xhr.status);
+            return console.log(details);
+          }
+        }
+      };
+    }
+  });
+});
+
+$(document).ready(function() {
+  return $("#add-user").click(function(event) {
+    $("#list-users").append("<div class=\"form-group\"> <label id=\"user-" + users_added + "\" class=\"control-label col-sm-2\">User " + users_added + ":</label> <div class=\"col-sm-10\"> <input name=\"user-" + users_added + "\" class=\"form-control\"> </div> </div>");
+    return users_added += 1;
+  });
+});
+
+$(document).ready(function() {
+  return $("#create-list").click(function(event) {
+    var details, i, users_in_list, _i;
+    event.preventDefault();
+    console.log("entered");
+    users_in_list = [];
+    for (i = _i = 1; 1 <= users_added ? _i < users_added : _i > users_added; i = 1 <= users_added ? ++_i : --_i) {
+      if (!isEmpty($("input[name=user-" + i + "]").val())) {
+        users_in_list.push($("input[name=user-" + i + "]").val());
+      }
+    }
+    details = {
+      session_id: localStorage.session,
+      name: $('input[name=list-name]').val(),
+      description: $('input[name=list-description]').val(),
+      method: "create_list_with_members",
+      queue: "LIST"
+    };
+    if (isEmpty($('input[name=conv-username]').val())) {
+      return noty({
+        text: 'Username cannot be empty',
+        timeout: 2000,
+        type: "error",
+        theme: 'bootstrapTheme'
+      });
+    } else if (isEmpty($('input[name=conv-message]').val())) {
+      return noty({
+        text: 'Message cannot be empty',
+        timeout: 2000,
+        type: "error",
+        theme: 'bootstrapTheme'
+      });
+    } else {
+      $.ajax;
+      return {
+        url: "http://localhost:8080",
+        type: "POST",
+        datatype: "json",
+        data: JSON.stringify(details),
+        success: function(result) {
+          noty({
+            text: 'Conversation created!',
+            timeout: 1500,
+            type: "success",
+            theme: 'bootstrapTheme'
+          });
+          $('input[name=conv-username]').val("");
+          $('input[name=conv-message]').val("");
+          return $(".new-conv-box").modal('hide');
+        },
+        error: function(xhr, status, error) {
+          if (error.contains("exists")) {
+            return noty({
+              text: 'Username wrong or conversation already exists',
+              timeout: 2000,
+              type: "error",
+              theme: 'bootstrapTheme'
+            });
+          } else {
+            noty({
+              text: 'An error occured, please try again',
+              timeout: 2000,
+              type: "error",
+              theme: 'bootstrapTheme'
+            });
+            console.log("Error: " + error);
+            console.log("Status: " + status);
+            console.dir(xhr.status);
+            return console.log(details);
+          }
+        }
+      };
+    }
+  });
+});
+
 capitalize = function(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+isEmpty = function(string) {
+  if (string === null || string === "") {
+    return true;
+  } else {
+    return false;
+  }
 };
