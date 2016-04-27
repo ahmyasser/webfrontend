@@ -57,30 +57,22 @@ $(document).ready(function() {
               }, 3000);
             },
             error: function(xhr, status, error) {
-              noty({
+              return noty({
                 text: 'An error occured, please try again',
                 timeout: 2000,
                 type: "error",
                 theme: 'bootstrapTheme'
               });
-              console.log("Error: " + error);
-              console.log("Status: " + status);
-              console.dir(xhr.status);
-              return console.log(details);
             }
           });
         },
         error: function(xhr, status, error) {
-          noty({
+          return noty({
             text: 'An error occured, please try again',
             timeout: 2000,
             type: "error",
             theme: 'bootstrapTheme'
           });
-          console.log("Error: " + error);
-          console.log("Status: " + status);
-          console.dir(xhr.status);
-          return console.log(details);
         }
       });
     }
@@ -130,31 +122,27 @@ $(document).ready(function() {
         },
         error: function(xhr, status, error) {
           if (error.contains("username")) {
-            noty({
+            return noty({
               text: 'Wrong Username',
               timeout: 2000,
               type: "error",
               theme: 'bootstrapTheme'
             });
           } else if (error.contains("Password")) {
-            noty({
+            return noty({
               text: 'Wrong Password',
               timeout: 2000,
               type: "error",
               theme: 'bootstrapTheme'
             });
           } else {
-            noty({
+            return noty({
               text: 'An error occured, please try again',
               timeout: 2000,
               type: "error",
               theme: 'bootstrapTheme'
             });
           }
-          console.log("Error: " + error);
-          console.log("Status: " + status);
-          console.dir(xhr.status);
-          return console.log(details);
         }
       });
     }

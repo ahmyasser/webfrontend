@@ -5,7 +5,7 @@ html
         link(type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css")
         link(type="text/css" rel="stylesheet" href="font-awesome/css/font-awesome.min.css")
         link(type="text/css" rel="stylesheet" href="LandingPage.css")
-        script(type="text/javascript" src="bootstrap/js/jquery.min.js")
+        script(type="text/javascript" src="bootstrap/js/jquery.js")
         script(type="text/javascript" src="bootstrap/js/bootstrap.min.js")
         script(type="text/javascript" src="LandingPage.js")
         script(type="text/javascript" src="noty/packaged/jquery.noty.packaged.min.js")
@@ -64,8 +64,11 @@ html
                                 .col-sm-10
                                     input.form-control(name="conv-message")            
                     div(class="modal-footer")
+                        button(class="btn btn-default" type="button" data-dismiss="modal")
+                            span(class="fa fa-close" style="font-size:2em;" class="text-center")
+                            
                         button(class="btn btn-default button-colour" type="button" id="create-conversation")
-                            span(class="glyphicon glyphicon-send" style="font-size:2em;" class="text-center")
+                            span(class="fa fa-check" style="font-size:2em;" class="text-center")
                             
         div(class="modal fade user-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
@@ -86,7 +89,7 @@ html
             div(class="modal-dialog" )
                 div(class="modal-content")
                     div(class="modal-header")
-                        h4(class="text-title") New Conversation
+                        h4(class="text-title") New List
                     div(class="modal-body")
                         form#list-users.form-horizontal
                             .form-group
@@ -105,11 +108,14 @@ html
                                     input.form-control(name="user-1") 
                             
                     div(class="modal-footer")
-                        button(class="btn btn-default" type="button" id="add-user")
+                        button(class="btn btn-default" type="button")
                             i(class="fa fa-user-plus" style="font-size:2em;" class="text-center")
-                            
+                        
+                        button(class="btn btn-default" type="button" data-dismiss="modal")
+                            span(class="fa fa-close" style="font-size:2em;" class="text-center")
+                        
                         button(class="btn btn-default button-colour" type="button" id="create-list")
-                            span(class="glyphicon glyphicon-send" style="font-size:2em;" class="text-center")
+                            span(class="fa fa-check" style="font-size:2em;" class="text-center")
                             
         div(class="modal fade tweet-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
@@ -121,8 +127,10 @@ html
                             div(class="form-group")
                                 textarea(class="form-control" id="tweet-text")
                     div(class="modal-footer")
+                        button(class="btn btn-default" type="button" data-dismiss="modal")
+                            span(class="fa fa-close" style="font-size:2em;" class="text-center")
                         button(class="btn btn-default button-colour" type="button" data-toggle="modal" id="create-tweet")
-                            span(class="glyphicon glyphicon-send" style="font-size:2em;" class="text-center")
+                            span(class="fa fa-send" style="font-size:2em;" class="text-center")
                             
         div(class="modal fade signout-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
@@ -133,6 +141,17 @@ html
                         button(class="btn btn-default" type="button" data-dismiss="modal" id="cancel-signout")
                             |Cancel
                         button(class="btn btn-default button-colour" type="button" data-dismiss="modal" id="confirm-signout")
+                            |Confirm
+                            
+        div(class="modal fade delete-list-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    div(class="modal-body")
+                        h4 Delete List?
+                    div(class="modal-footer")
+                        button(class="btn btn-default" type="button" data-dismiss="modal" id="cancel-delete-list")
+                            |Cancel
+                        button(class="btn btn-default button-colour" type="button" data-dismiss="modal" id="confirm-delete-list")
                             |Confirm
                             
         div(class="modal fade followers-box" role="dialog" tabindex="-1")
@@ -179,8 +198,8 @@ html
         div(class="modal fade list" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
-                    //- div(class="modal-header" id="list-header")
-                        
+                    div(class="modal-header" id="list-header")
+                            
                     div(class="modal-body")
                         .row
                             .col-sm-6.col-sm-offset-3
@@ -211,9 +230,9 @@ html
             div(class="tab-pane" id="lists-pane" role="tabpanel")
                 .container
                     .row-fluid
-                        #lists-container.col-sm-6.col-sm-offset-4
-                        .col-sm-1
-                            button(id="new-list" type="button" data-toggle="modal" data-target=".new-list-box")
+                        #lists-container.col-sm-4.col-sm-offset-4
+                        .col-sm-1.col-sm-offset-2
+                            button(class="button-transparent" id="new-list" type="button" data-toggle="modal" data-target=".new-list-box")
                                 i(class="fa fa-plus-circle" style="font-size:2em;")
                             
             div(class="tab-pane" id="my-tweets-pane" role="tabpanel")

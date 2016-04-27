@@ -12,6 +12,11 @@
   background: #FF8F1F;
 }
 
+.button-transparent {
+  background: transparent;
+  border: none;
+}
+
 #tweet {
   background: transparent;
   border: none;
@@ -31,11 +36,6 @@
 }
 
 #new-conv {
-  background: transparent;
-  border: none;
-}
-
-#new-list {
   background: transparent;
   border: none;
 }
@@ -88,6 +88,10 @@ body {
 }
 
 #messages-container {
+  padding-bottom: 110px;
+}
+
+#lists-container {
   padding-bottom: 110px;
 }
 

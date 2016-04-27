@@ -46,17 +46,10 @@ $(document).ready () ->
 
                         error: (xhr,status,error) ->
                             noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                            console.log "Error: " + error
-                            console.log "Status: " + status
-                            console.dir xhr.status
-                            console.log details
 
                 error: (xhr,status,error) ->
                     noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                    console.log "Error: " + error
-                    console.log "Status: " + status
-                    console.dir xhr.status
-                    console.log details
+
 
 
 $(document).ready () ->
@@ -97,11 +90,7 @@ $(document).ready () ->
                     else
                         noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
 
-                    console.log "Error: " + error
-                    console.log "Status: " + status
-                    console.dir xhr.status
-                    console.log details
-
+                
 $(document).ready () ->
     $("input[name=email-signup]").keyup (event) ->
         if($("input[name=email-signup]").val().match(///^[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}$///))

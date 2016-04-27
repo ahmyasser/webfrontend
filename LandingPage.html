@@ -4,7 +4,7 @@
     <link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.css">
     <link type="text/css" rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="LandingPage.css">
-    <script type="text/javascript" src="bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/jquery.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="LandingPage.js"></script>
     <script type="text/javascript" src="noty/packaged/jquery.noty.packaged.min.js"></script>
@@ -66,7 +66,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" id="create-conversation" class="btn btn-default button-colour"><span style="font-size:2em;" class="glyphicon glyphicon-send text-center"></span></button>
+            <button type="button" data-dismiss="modal" class="btn btn-default"><span style="font-size:2em;" class="fa fa-close text-center"></span></button>
+            <button type="button" id="create-conversation" class="btn btn-default button-colour"><span style="font-size:2em;" class="fa fa-check text-center"></span></button>
           </div>
         </div>
       </div>
@@ -91,7 +92,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="text-title">New Conversation</h4>
+            <h4 class="text-title">New List</h4>
           </div>
           <div class="modal-body">
             <form id="list-users" class="form-horizontal">
@@ -116,8 +117,9 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" id="add-user" class="btn btn-default"><i style="font-size:2em;" class="fa fa-user-plus text-center"></i></button>
-            <button type="button" id="create-list" class="btn btn-default button-colour"><span style="font-size:2em;" class="glyphicon glyphicon-send text-center"></span></button>
+            <button type="button" class="btn btn-default"><i style="font-size:2em;" class="fa fa-user-plus text-center"></i></button>
+            <button type="button" data-dismiss="modal" class="btn btn-default"><span style="font-size:2em;" class="fa fa-close text-center"></span></button>
+            <button type="button" id="create-list" class="btn btn-default button-colour"><span style="font-size:2em;" class="fa fa-check text-center"></span></button>
           </div>
         </div>
       </div>
@@ -136,7 +138,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" data-toggle="modal" id="create-tweet" class="btn btn-default button-colour"><span style="font-size:2em;" class="glyphicon glyphicon-send text-center"></span></button>
+            <button type="button" data-dismiss="modal" class="btn btn-default"><span style="font-size:2em;" class="fa fa-close text-center"></span></button>
+            <button type="button" data-toggle="modal" id="create-tweet" class="btn btn-default button-colour"><span style="font-size:2em;" class="fa fa-send text-center"></span></button>
           </div>
         </div>
       </div>
@@ -150,6 +153,19 @@
           <div class="modal-footer">
             <button type="button" data-dismiss="modal" id="cancel-signout" class="btn btn-default">Cancel</button>
             <button type="button" data-dismiss="modal" id="confirm-signout" class="btn btn-default button-colour">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div role="dialog" tabindex="-1" class="modal fade delete-list-box">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h4>Delete List?</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" id="cancel-delete-list" class="btn btn-default">Cancel</button>
+            <button type="button" data-dismiss="modal" id="confirm-delete-list" class="btn btn-default button-colour">Confirm</button>
           </div>
         </div>
       </div>
@@ -202,6 +218,7 @@
     <div role="dialog" tabindex="-1" class="modal fade list">
       <div class="modal-dialog">
         <div class="modal-content">
+          <div id="list-header" class="modal-header"></div>
           <div class="modal-body">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
@@ -232,9 +249,9 @@
       <div id="lists-pane" role="tabpanel" class="tab-pane">
         <div class="container">
           <div class="row-fluid">
-            <div id="lists-container" class="col-sm-6 col-sm-offset-4"></div>
-            <div class="col-sm-1">
-              <button id="new-list" type="button" data-toggle="modal" data-target=".new-list-box"><i style="font-size:2em;" class="fa fa-plus-circle"></i></button>
+            <div id="lists-container" class="col-sm-4 col-sm-offset-4"></div>
+            <div class="col-sm-1 col-sm-offset-2">
+              <button id="new-list" type="button" data-toggle="modal" data-target=".new-list-box" class="button-transparent"><i style="font-size:2em;" class="fa fa-plus-circle"></i></button>
             </div>
           </div>
         </div>
