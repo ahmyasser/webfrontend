@@ -23,3 +23,16 @@ send new screenshots
 fix error messages in server
 
 upgrade cookies
+
+=======================
+
+deploy on Heroku
+
+video: in english
+    Describe layout of server in detail starting on website
+    where we use frameworks
+    Show how to use website
+    no or procs, tables, messages, json messages (mention that they map 1 message to 1 proc)
+    compile from command line
+    place all names on project + wael
+    names as a team

@@ -1,10 +1,12 @@
-var capitalize, dm_conversation, isEmpty, list_id, users_added;
+var capitalize, dm_conversation, isEmpty, list_id, username, users_added;
 
 dm_conversation = 0;
 
 users_added = 2;
 
 list_id = 0;
+
+username = "";
 
 $(document).ready(function() {
   if (isEmpty(localStorage.session)) {
@@ -365,16 +367,22 @@ $(document).ready(function() {
       datatype: "json",
       data: JSON.stringify(details),
       success: function(result) {
-        var i, output, _i, _len, _ref;
+        var description, i, output, _i, _len, _ref;
         console.log(result);
         $("#lists-container").empty();
+        description = "";
         _ref = result.subscribed_lists;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           i = _ref[_i];
-          output = "<div class=\"media list-" + i.id + "\"> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.creator.avatar_url + "' alt='Image' width='64' height='64'> </div> <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-" + i.id + "' name='" + i.name + "'> <h4 class=\"media-heading\">" + (capitalize(i.name)) + " @" + i.creator.username + "</h4> " + i.description + " </div> <button class='pull-right button-transparent unsub-list' data-toggle='modal' data-target='.unsub-list-box' type='button' id='list-unsub-" + i.id + "'><i style='font-size:2em;' class='fa fa-close'></i></button> <button class='pull-right button-transparent edit-list' data-toggle='modal' data-target='.edit-list-box' type='button' id='list-edit-" + i.id + "' ><i style='font-size:2em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "' ><i style='font-size:2em;' class='fa fa-trash'></i></button>";
+          description = i.description;
+          if (isEmpty(description) || (description != null)) {
+            console.log("Shit");
+            description = "No Description";
+          }
+          output = "<div class=\"media list-" + i.id + "\"> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.creator.avatar_url + "' alt='Image' width='64' height='64'> </div> <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-" + i.id + "' name='" + i.name + "'> <h4 class=\"media-heading\">" + (capitalize(i.name)) + " @" + i.creator.username + "</h4> " + description + " </div> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "' > <i style='font-size:2em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent edit-list' data-toggle='modal' data-target='.edit-list-box' type='button' id='list-edit-" + i.id + "' > <i style='font-size:2em;' class='fa fa-pencil'></i></button> <button class='pull-right button-transparent unsub-list' data-toggle='modal' data-target='.unsub-list-box' type='button' id='list-unsub-" + i.id + "'> <i style='font-size:2em;' class='fa fa-close'></i></button> </div>";
           $("#lists-container").append(output);
         }
-        return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); console.log($(this)); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); console.log(list_id); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); </script>");
+        return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); console.log($(this)); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); console.log(list_id); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { var details, list_id; event.preventDefault(); list_id = $(this).attr('id').substring(10); console.log('khara'); $('input[name=list-name-edit]').val('khar'); details = { list_id: list_id, method: \"get_list\", queue: \"LIST\" }; return $.ajax({ url: \"http://localhost:8080\", type: \"POST\", datatype: \"json\", data: JSON.stringify(details), success: function(result) { console.log(result); $('input[name=list-name-edit]').val(result.list.name); $('textarea[name=list-description-edit]').val(result.list.description); $('edit-list-box').modal('handleUpdate'); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: \"error\", theme: 'bootstrapTheme' }); } }); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(11); }); </script>");
       },
       error: function(xhr, status, error) {
         return noty({
@@ -567,11 +575,12 @@ $(document).ready(function() {
       data: JSON.stringify(details),
       success: function(result) {
         var i, _i, _len, _ref, _results;
+        $('search-pane').empty();
         _ref = result.users;
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           i = _ref[_i];
-          _results.push($("#search-pane").append("<div class=\"media\"> <div class=\"media-left\"> <img class='media-object' src='" + i.avatar_url + "' height='64' width='64'></div> <div class=\"media-body\"> <h4 class='user'> " + (capitalize(i.username)) + " (@" + i.username + ")</h4> </div> </div>"));
+          _results.push($("#search-pane").append("<div class=\"media\"> <div class=\"media-left\"> <img class='media-object' src='" + i.avatar_url + "' height='64' width='64'></div> <div class=\"media-body user-search\" id='user-search-" + i.username + "'> <h4 class='user'> " + (capitalize(i.username)) + " (@" + i.username + ")</h4> </div> </div> <script> $('user-search').click(function(event) { var details; event.preventDefault(); console.log($(this)); username = $(this).attr('id').substring(11); list_name = $(this).attr('name'); console.log(list_id); details = { username: username, method: 'get_user2', queue: 'USER' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); $('search-box').hide(); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); </script>"));
         }
         return _results;
       },
@@ -718,22 +727,33 @@ $(document).ready(function() {
             method: "get_subscribed_lists",
             queue: "USER"
           };
+          details = {
+            session_id: localStorage.session,
+            method: "get_subscribed_lists",
+            queue: "USER"
+          };
           return $.ajax({
             url: "http://localhost:8080",
             type: "POST",
             datatype: "json",
             data: JSON.stringify(details),
             success: function(result) {
-              var output, _j, _len, _ref;
+              var description, output, _j, _len, _ref;
               console.log(result);
               $("#lists-container").empty();
+              description = "";
               _ref = result.subscribed_lists;
               for (_j = 0, _len = _ref.length; _j < _len; _j++) {
                 i = _ref[_j];
-                output = "<div class=\"media list-" + i.id + "\"> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.creator.avatar_url + "' alt='Image' width='64' height='64'> </div> <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-" + i.id + "' name='" + i.name + "'> <h4 class=\"media-heading\">" + (capitalize(i.name)) + " @" + i.creator.username + "</h4> " + i.description + " </div> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "'' ><i style='font-size:2em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "'' ><i style='font-size:2em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "'' ><i style='font-size:2em;' class='fa fa-trash'></i></button>";
+                description = i.description;
+                if (isEmpty(description) || (description != null)) {
+                  console.log("Shit");
+                  description = "No Description";
+                }
+                output = "<div class=\"media list-" + i.id + "\"> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.creator.avatar_url + "' alt='Image' width='64' height='64'> </div> <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-" + i.id + "' name='" + i.name + "'> <h4 class=\"media-heading\">" + (capitalize(i.name)) + " @" + i.creator.username + "</h4> " + description + " </div> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "' > <i style='font-size:2em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent edit-list' data-toggle='modal' data-target='.edit-list-box' type='button' id='list-edit-" + i.id + "' > <i style='font-size:2em;' class='fa fa-pencil'></i></button> <button class='pull-right button-transparent unsub-list' data-toggle='modal' data-target='.unsub-list-box' type='button' id='list-unsub-" + i.id + "'> <i style='font-size:2em;' class='fa fa-close'></i></button> </div>";
                 $("#lists-container").append(output);
               }
-              return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); console.log($(this)); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); console.log(list_id); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { var details, thread_id; event.preventDefault(); list_id = $(this).attr('id').substring(12); console.log(list_id); details = { list_id: list_id, method: 'delete_list', queue: 'LIST' }; }); </script>");
+              return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); console.log($(this)); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); console.log(list_id); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { var details, list_id; event.preventDefault(); list_id = $(this).attr('id').substring(10); console.log('khara'); $('input[name=list-name-edit]').val('khar'); details = { list_id: list_id, method: \"get_list\", queue: \"LIST\" }; return $.ajax({ url: \"http://localhost:8080\", type: \"POST\", datatype: \"json\", data: JSON.stringify(details), success: function(result) { console.log(result); $('input[name=list-name-edit]').val(result.list.name); $('textarea[name=list-description-edit]').val(result.list.description); $('edit-list-box').modal('handleUpdate'); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: \"error\", theme: 'bootstrapTheme' }); } }); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(11); }); </script>");
             },
             error: function(xhr, status, error) {
               return noty({
@@ -808,6 +828,133 @@ $(document).ready(function() {
         return console.log(details);
       }
     });
+  });
+});
+
+$(document).ready(function() {
+  return $("#confirm-unsub-list").click(function(event) {
+    var details;
+    event.preventDefault();
+    console.log(list_id);
+    details = {
+      method: "unsubscribe",
+      queue: "LIST",
+      list_id: list_id,
+      session_id: localStorage.session
+    };
+    return $.ajax({
+      url: "http://localhost:8080",
+      type: "POST",
+      datatype: "json",
+      data: JSON.stringify(details),
+      success: function(result) {
+        noty({
+          text: 'Unsubscribe Successful!',
+          timeout: 1500,
+          type: "success",
+          theme: 'bootstrapTheme'
+        });
+        return $(".list-" + list_id).hide();
+      },
+      error: function(xhr, status, error) {
+        noty({
+          text: 'An error occured, please try again',
+          timeout: 2000,
+          type: "error",
+          theme: 'bootstrapTheme'
+        });
+        console.log("Error: " + error);
+        console.log("Status: " + status);
+        console.dir(xhr.status);
+        return console.log(details);
+      }
+    });
+  });
+});
+
+$(document).ready(function() {
+  return $("#confirm-edit-list").click(function(event) {
+    var details;
+    event.preventDefault();
+    console.log(list_id);
+    details = {
+      method: "update_list",
+      queue: "LIST",
+      list_id: list_id,
+      name: $('input[name=list-name-edit]').val(),
+      description: $('textarea[name=list-description-edit]').val()
+    };
+    return $.ajax({
+      url: "http://localhost:8080",
+      type: "POST",
+      datatype: "json",
+      data: JSON.stringify(details),
+      success: function(result) {
+        noty({
+          text: 'List Updated!',
+          timeout: 1500,
+          type: "success",
+          theme: 'bootstrapTheme'
+        });
+        details = {
+          session_id: localStorage.session,
+          method: "get_subscribed_lists",
+          queue: "USER"
+        };
+        return $.ajax({
+          url: "http://localhost:8080",
+          type: "POST",
+          datatype: "json",
+          data: JSON.stringify(details),
+          success: function(result) {
+            var description, i, output, _i, _len, _ref;
+            console.log(result);
+            $("#lists-container").empty();
+            description = "";
+            _ref = result.subscribed_lists;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              i = _ref[_i];
+              description = i.description;
+              if (isEmpty(description) || (description != null)) {
+                console.log("Shit");
+                description = "No Description";
+              }
+              output = "<div class=\"media list-" + i.id + "\"> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.creator.avatar_url + "' alt='Image' width='64' height='64'> </div> <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-" + i.id + "' name='" + i.name + "'> <h4 class=\"media-heading\">" + (capitalize(i.name)) + " @" + i.creator.username + "</h4> " + description + " </div> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "' > <i style='font-size:2em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent edit-list' data-toggle='modal' data-target='.edit-list-box' type='button' id='list-edit-" + i.id + "' > <i style='font-size:2em;' class='fa fa-pencil'></i></button> <button class='pull-right button-transparent unsub-list' data-toggle='modal' data-target='.unsub-list-box' type='button' id='list-unsub-" + i.id + "'> <i style='font-size:2em;' class='fa fa-close'></i></button> </div>";
+              $("#lists-container").append(output);
+            }
+            return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); console.log($(this)); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); console.log(list_id); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { var details, list_id; event.preventDefault(); list_id = $(this).attr('id').substring(10); console.log('khara'); $('input[name=list-name-edit]').val('khar'); details = { list_id: list_id, method: \"get_list\", queue: \"LIST\" }; return $.ajax({ url: \"http://localhost:8080\", type: \"POST\", datatype: \"json\", data: JSON.stringify(details), success: function(result) { console.log(result); $('input[name=list-name-edit]').val(result.list.name); $('textarea[name=list-description-edit]').val(result.list.description); $('edit-list-box').modal('handleUpdate'); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: \"error\", theme: 'bootstrapTheme' }); } }); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(11); }); </script>");
+          },
+          error: function(xhr, status, error) {
+            return noty({
+              text: 'An error occured, please try again',
+              timeout: 2000,
+              type: 'error',
+              theme: 'bootstrapTheme'
+            });
+          }
+        });
+      },
+      error: function(xhr, status, error) {
+        noty({
+          text: 'An error occured, please try again',
+          timeout: 2000,
+          type: "error",
+          theme: 'bootstrapTheme'
+        });
+        console.log("Error: " + error);
+        console.log("Status: " + status);
+        console.dir(xhr.status);
+        return console.log(details);
+      }
+    });
+  });
+});
+
+$(document).ready(function() {
+  return $("#back").click(function(event) {
+    event.preventDefault();
+    $('user-box').hide;
+    return $('search-box').show;
   });
 });
 

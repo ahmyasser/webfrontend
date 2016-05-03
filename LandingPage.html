@@ -117,7 +117,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default"><i style="font-size:2em;" class="fa fa-user-plus text-center"></i></button>
+            <button type="button" id="add-user" class="btn btn-default"><i style="font-size:2em;" class="fa fa-user-plus text-center"></i></button>
             <button type="button" data-dismiss="modal" class="btn btn-default"><span style="font-size:2em;" class="fa fa-close text-center"></span></button>
             <button type="button" id="create-list" class="btn btn-default button-colour"><span style="font-size:2em;" class="fa fa-check text-center"></span></button>
           </div>
@@ -164,8 +164,50 @@
             <h4>Delete List?</h4>
           </div>
           <div class="modal-footer">
-            <button type="button" data-dismiss="modal" id="cancel-delete-list" class="btn btn-default">Cancel</button>
+            <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
             <button type="button" data-dismiss="modal" id="confirm-delete-list" class="btn btn-default button-colour">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div role="dialog" tabindex="-1" class="modal fade unsub-list-box">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h4>Unsubscribe From List?</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
+            <button type="button" data-dismiss="modal" id="confirm-unsub-list" class="btn btn-default button-colour">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div role="dialog" tabindex="-1" class="modal fade edit-list-box">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Edit List</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="control-label col-sm-2">Name:</label>
+                <div class="col-sm-10">
+                  <input name="list-name-edit" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2">Description:</label>
+                <div class="col-sm-10">
+                  <textarea name="list-description-edit" rows="4" class="form-control"></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
+            <button type="button" id="confirm-edit-list" class="btn btn-default button-colour">Confirm</button>
           </div>
         </div>
       </div>
@@ -187,8 +229,9 @@
     <div role="dialog" tabindex="-1" class="modal fade user-details">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div id="user" class="modal-header"></div>
-          <div class="modal-body"></div>
+          <button type="button" id="back" class="btn btn-default"><i class="fa fa-left"></i></button>
+          <div id="user-header" class="modal-header"></div>
+          <div id="user-body" class="modal-body"></div>
           <div class="modal-footer">
             <button type="button" data-dismiss="modal" id="follow" class="btn btn-default">Follow</button>
             <button type="button" data-dismiss="modal" id="mention" class="btn btn-default">Mention</button>
