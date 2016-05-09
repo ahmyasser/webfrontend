@@ -205,9 +205,12 @@ html
                         i(class="fa fa-left")
                     #user-header.modal-header
                     
-                        
-                    div(class="modal-body" id="user-body")
-
+                    div(class="modal-body" )
+                        .container
+                            .row
+                                #user-image.col-sm-2
+                                #user-body.col-sm-4
+                                
                     div(class="modal-footer")
                         button(class="btn btn-default" type="button" data-dismiss="modal" id="follow")
                             |Follow
@@ -274,9 +277,7 @@ html
                             
             div(class="tab-pane" id="my-tweets-pane" role="tabpanel")
                 #my-tweets-container.container
-    
-    
-    
+        
             div(class="tab-pane" id="profile-pane" role="tabpanel")
                 .container
                     .row-fluid

@@ -2,6 +2,7 @@
 dm_conversation = 0
 users_added = 2
 list_id = 0
+user_id = 0
 username = ""
 
 $(document).ready () ->
@@ -59,14 +60,14 @@ $(document).ready () ->
             method: "timeline",
             queue: "USER"
         }
-        console.log details
-        console.log localStorage.session
+
         $.ajax
             url: "http://localhost:8080",
             type: "POST",
             datatype: "json",
             data: JSON.stringify(details),
             success: (result) ->
+                $("#timeline-container").empty()
                 for i in result.feeds
                     output = "<div class=\"row-fluid\">
                           <div class=\"col-sm-6 col-sm-offset-4\">
@@ -74,7 +75,7 @@ $(document).ready () ->
                               <div class=\"media-left\">
                               <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'></div>
                               <div class=\"media-body\">
-                                <h4 class='media-heading'>
+                                <h4 class='media-heading user-entry' id='user-#{i.creator.id}' data-toggle='modal' data-target='.user-details' >
                                 #{capitalize(i.creator.username)} (@#{i.creator.username})</h4>
                                 #{i.tweet_text}
                               </div>
@@ -83,6 +84,44 @@ $(document).ready () ->
                         </div>"
                     $("#timeline-container").append(output)
 
+
+                $("#timeline-container").append("<script>
+                console.log('entered');
+                 $('.user-entry').click(function(event) {
+                     console.log('here 2');
+                      var details;
+                      event.preventDefault();
+                      user_id = $(this).attr('id').substring(5);
+                      details = {
+                        user_id: user_id,
+                        method: 'get_user',
+                        queue: 'USER'
+                      };
+                      return $.ajax({
+                        url: 'http://localhost:8080',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: JSON.stringify(details),
+                        success: function(result) {
+                          console.log(result);
+                          $('#user-image').empty();
+                          $('#user-body').empty();
+                          return $('#user-image').append(\"img(name='user-image' alt='user-image' width='150' height='150' src=' \" + result.user.avatar_url + \"')\");
+                        },
+                        error: function(xhr, status, error) {
+                          return noty({
+                            text: 'An error occured, please try again',
+                            timeout: 2000,
+                            type: 'error',
+                            theme: 'bootstrapTheme'
+                          });
+                        }
+                      });
+                    });
+
+
+
+                 </script>")
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
