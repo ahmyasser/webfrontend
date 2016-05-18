@@ -274,6 +274,31 @@ html
                     //-                 span.input-group-btn
                     //-                     button.btn.btn-default(type="button" id="send-dm") Reply                
                     //-     
+                    
+                    
+        div(class="modal fade delete-conv-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    div(class="modal-body")
+                        h4 Delete Conversation?
+                    div(class="modal-footer")
+                        button(class="btn btn-default" type="button" data-dismiss="modal")
+                            |Cancel
+                        button(class="btn btn-default button-colour" type="button" data-dismiss="modal" id="confirm-delete-conv")
+                            |Confirm
+                                        
+        div(class="modal fade delete-tweet-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    div(class="modal-body")
+                        h4 Delete Tweet?
+                    div(class="modal-footer")
+                        button(class="btn btn-default" type="button" data-dismiss="modal")
+                            |Cancel
+                        button(class="btn btn-default button-colour" type="button" data-dismiss="modal" id="confirm-delete-tweet")
+                            |Confirm
+                                                            
+                    
         div(class="tab-content")  
             div(class="tab-pane active" id="timeline-pane" role="tabpanel")
                 #timeline-container.container

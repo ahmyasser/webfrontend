@@ -1,4 +1,4 @@
-var capitalize, dm_conversation, isEmpty, list_id, user_id, username, users_added;
+var capitalize, conv_id, dm_conversation, isEmpty, list_id, user_id, username, users_added;
 
 dm_conversation = 0;
 
@@ -9,6 +9,8 @@ list_id = 0;
 user_id = 0;
 
 username = "";
+
+conv_id = 0;
 
 $(document).ready(function() {
   if (isEmpty(localStorage.session)) {
@@ -36,11 +38,9 @@ $(document).ready(function() {
       datatype: "json",
       data: JSON.stringify(details),
       success: function(result) {
-        var favorited, i, output, retweeted, star, _i, _len, _ref;
+        var favorited, i, output, _i, _len, _ref;
         $("#timeline-container").empty();
         favorited = "fav";
-        retweeted = "retweet";
-        star = "star";
         _ref = result.feeds;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           i = _ref[_i];
@@ -52,19 +52,15 @@ $(document).ready(function() {
           output = "<div class=\"row-fluid\"> <div class=\"col-sm-4 col-sm-offset-4\"> <div class=\"media timeline\"> <div class=\"media-left\"> <img class='media-object' src='" + i.creator.avatar_url + "' height='64' width='64'> </div> <div class=\"media-body\"> <h4 class='media-heading user-entry' id='user-" + i.creator.id + "' data-toggle='modal' data-target='.user-details' > " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ")</h4> " + i.tweet_text + " </div> <button class='pull-right button-transparent " + favorited + "-tweet' type='button' id='tweet-fav-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-star'></i></button> <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-retweet'></i></button> <button class='pull-right button-transparent reply-tweet' data-toggle='modal' data-target='.reply-box' type='button' id='tweet-reply-" + i.id + "'> <i style='font-size:1.5em;' class='fa fa-reply'></i></button> </div> </div> </div>";
           $("#timeline-container").append(output);
         }
-        return $("#timeline-container").append("<script> $('.user-entry').click(function(event) { console.log('here 2'); var details; event.preventDefault(); user_id = $(this).attr('id').substring(5); details = { user_id: user_id, method: 'get_user', queue: 'USER' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { console.log(result); $('#user-image').empty(); $('#user-body').empty(); return $('#user-image').append(\"img(name='user-image' alt='user-image' width='150' height='150' src=' \" + result.user.avatar_url + \"')\"); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.fav-tweet').click(function(event) { console.log('fav'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'favorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { console.log(result); $(this).removeClass('fav-tweet'); $(this).addClass('unfav-tweet'); $(this).text(0); return noty({ text: 'Favorite successful!', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.unfav-tweet').click(function(event) { console.log('unfav'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'unfavorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $(this).removeClass('unfav-tweet'); $(this).addClass('fav-tweet'); $(this).text(0); return noty({ text: 'Unfavorite successful!', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.retweet-tweet').click(function(event) { console.log('here 2'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(14); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'retweet', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { console.log(result); return noty({ text: 'Retweet successful!', timeout: 2000, type: 'success', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { if (error.includes(\"retweet\")) { return noty({ text: 'This tweet, is already retweeted', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } else { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } } }); }); $('.reply-tweet').click(function(event) { console.log('here 2'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(12); }); </script>");
+        return $("#timeline-container").append("<script> $('.user-entry').click(function(event) { var details; event.preventDefault(); user_id = $(this).attr('id').substring(5); details = { user_id: user_id, method: 'get_user', queue: 'USER' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $('#user-image').empty(); $('#user-body').empty(); return $('#user-image').append(\"img(name='user-image' alt='user-image' width='150' height='150' src=' \" + result.user.avatar_url + \"')\"); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.fav-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'favorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $(this).removeClass('fav-tweet'); $(this).addClass('unfav-tweet'); $(this).text(0); return noty({ text: 'Tweet favorited!', timeout: 2000, type: 'success', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { if(error.includes('tweet')){ return noty({ text: 'Tweet already favorited', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } else { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } } }); }); $('.unfav-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'unfavorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $(this).removeClass('unfav-tweet'); $(this).addClass('fav-tweet'); $(this).text(0); return noty({ text: 'Unfavorite successful!', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.retweet-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(14); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'retweet', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { return noty({ text: 'Retweet successful!', timeout: 2000, type: 'success', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { if (error.includes(\"retweet\")) { return noty({ text: 'This tweet, is already retweeted', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } else { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } } }); }); $('.reply-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(12); }); </script>");
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -89,16 +85,12 @@ $(document).ready(function() {
         return window.location.href = "SignUp.html";
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -130,16 +122,12 @@ $(document).ready(function() {
         return $(".tweet-box").modal('hide');
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -176,16 +164,12 @@ $(document).ready(function() {
         return $('input[name=protected_tweets]').val(result.user.protected_tweets);
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -228,16 +212,12 @@ $(document).ready(function() {
         return localStorage.username = $('input[name=username]').val();
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -258,15 +238,21 @@ $(document).ready(function() {
       datatype: "json",
       data: JSON.stringify(details),
       success: function(result) {
-        var i, output, _i, _len, _ref;
+        var favorited, i, output, _i, _len, _ref;
         $("#my-tweets-container").empty();
+        favorited = "fav";
         _ref = result.tweets;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           i = _ref[_i];
-          output = "<div class=\"row-fluid\"> <div class=\"col-sm-4 col-sm-offset-4\"> <div class=\"media my-tweet\"> <div class=\"media-left\"> <img class='media-object' src='" + i.creator.avatar_url + "' height='64' width='64'> </div> <div class=\"media-body\"> <h4 class=\"media-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </h4> " + i.tweet_text + " </div> <button class='pull-right button-transparent delete-tweet' data-toggle='modal' data-target='.delete-tweet-box' type='button' id='tweet-delete-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent " + favorited + "-tweet' type='button' id='tweet-fav-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-star'></i></button> <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-retweet'></i></button> </div> </div> </div>";
+          if (i.is_favorited) {
+            favorited = "unfav";
+          } else {
+            favorited = "fav";
+            output = "<div class=\"row-fluid my-tweet-" + i.id + "\"> <div class=\"col-sm-4 col-sm-offset-4\"> <div class=\"media my-tweet\"> <div class=\"media-left\"> <img class='media-object' src='" + i.creator.avatar_url + "' height='64' width='64'> </div> <div class=\"media-body\"> <h4 class=\"media-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </h4> " + i.tweet_text + " </div> <button class='pull-right button-transparent delete-tweet' data-toggle='modal' data-target='.delete-tweet-box' type='button' id='tweet-delete-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent " + favorited + "-tweet' type='button' id='tweet-fav-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-star'></i></button> <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-retweet'></i></button> </div> </div> </div>";
+          }
           $("#my-tweets-container").append(output);
         }
-        return $().append("<script> $('.fav-tweet').click(function(event) { console.log('fav'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'favorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { console.log(result); $(this).removeClass('fav-tweet'); $(this).addClass('unfav-tweet'); $(this).text(0); return noty({ text: 'Favorite successful!', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.unfav-tweet').click(function(event) { console.log('unfav'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'unfavorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $(this).removeClass('unfav-tweet'); $(this).addClass('fav-tweet'); $(this).text(0); return noty({ text: 'Unfavorite successful!', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.retweet-tweet').click(function(event) { console.log('here 2'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(14); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'retweet', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { console.log(result); return noty({ text: 'Retweet successful!', timeout: 2000, type: 'success', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { if (error.includes(\"retweet\")) { return noty({ text: 'This tweet, is already retweeted', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } else { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } } }); }); </script>");
+        return $("#my-tweets-container").append("<script> $('.fav-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'favorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $(this).removeClass('fav-tweet'); $(this).addClass('unfav-tweet'); $(this).text(0); return noty({ text: 'Tweet favorited!', timeout: 2000, type: 'success', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { if(error.includes('tweet')){ return noty({ text: 'Tweet already favorited', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } else { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } } }); }); $('.unfav-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'unfavorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $(this).removeClass('unfav-tweet'); $(this).addClass('fav-tweet'); $(this).text(0); return noty({ text: 'Unfavorite successful!', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.retweet-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(14); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'retweet', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { return noty({ text: 'Retweet successful!', timeout: 2000, type: 'success', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { if (error.includes(\"retweet\")) { return noty({ text: 'This tweet, is already retweeted', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } else { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } } }); }); $('.delete-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(13); }); </script>");
       },
       error: function(xhr, status, error) {
         return noty({
@@ -300,10 +286,10 @@ $(document).ready(function() {
         _ref = result.mentions;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           i = _ref[_i];
-          output = "<div class=\"row-fluid\"> <div class=\"col-sm-4 col-sm-offset-4\"> <div class=\"media timeline\"> <div class=\"media-left\"> <img class='media-object' src='" + i.creator.avatar_url + "' height='64' width='64'> </div> <div class=\"media-body\"> <h4 class=\"media-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </h4> " + i.tweet_text + " </div> <button class='pull-right button-transparent fav-tweet' type='button' id='tweet-fav-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-star'></i></button> <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-retweet'></i></button> <button class='pull-right button-transparent reply-tweet' data-toggle='modal' data-target='.unsub-list-box' type='button' id='tweet-reply-" + i.id + "'> <i style='font-size:1.5em;' class='fa fa-reply'></i></button> </div> </div> </div>";
+          output = "<div class=\"row-fluid\"> <div class=\"col-sm-4 col-sm-offset-4\"> <div class=\"media timeline\"> <div class=\"media-left\"> <img class='media-object' src='" + i.creator.avatar_url + "' height='64' width='64'> </div> <div class=\"media-body\"> <h4 class=\"media-heading\"> " + (capitalize(i.creator.username)) + " (@" + i.creator.username + ") </h4> " + i.tweet_text + " </div> </div> <button class='pull-right button-transparent fav-tweet' type='button' id='tweet-fav-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-star'></i></button> <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-retweet'></i></button> <button class='pull-right button-transparent reply-tweet' data-toggle='modal' data-target='.reply-box' type='button' id='tweet-reply-" + i.id + "'> <i style='font-size:1.5em;' class='fa fa-reply'></i></button> </div> </div>";
           $("#notifications-container").append(output);
         }
-        return $("#notifications-container").append("<script> $('.fav-tweet').click(function(event) { console.log('fav'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'favorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { console.log(result); $(this).removeClass('fav-tweet'); $(this).addClass('unfav-tweet'); $(this).text(0); return noty({ text: 'Favorite successful!', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.unfav-tweet').click(function(event) { console.log('unfav'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'unfavorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $(this).removeClass('unfav-tweet'); $(this).addClass('fav-tweet'); $(this).text(0); return noty({ text: 'Unfavorite successful!', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.retweet-tweet').click(function(event) { console.log('here 2'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(14); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'retweet', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { console.log(result); return noty({ text: 'Retweet successful!', timeout: 2000, type: 'success', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { if (error.includes(\"retweet\")) { return noty({ text: 'This tweet, is already retweeted', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } else { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } } }); }); $('.reply-tweet').click(function(event) { console.log('here 2'); var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(14); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'retweet', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); </script>");
+        return $("#notifications-container").append("<script> $('.fav-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'favorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $(this).removeClass('fav-tweet'); $(this).addClass('unfav-tweet'); $(this).text(0); return noty({ text: 'Tweet favorited!', timeout: 2000, type: 'success', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { if(error.includes('tweet')){ return noty({ text: 'Tweet already favorited', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } else { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } } }); }); $('.unfav-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(10); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'unfavorite', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { $(this).removeClass('unfav-tweet'); $(this).addClass('fav-tweet'); $(this).text(0); return noty({ text: 'Unfavorite successful!', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } }); }); $('.retweet-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(14); details = { session_id: localStorage.session, tweet_id: tweet_id, method: 'retweet', queue: 'TWEET' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { return noty({ text: 'Retweet successful!', timeout: 2000, type: 'success', theme: 'bootstrapTheme' }); }, error: function(xhr, status, error) { if (error.includes(\"retweet\")) { return noty({ text: 'This tweet, is already retweeted', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } else { return noty({ text: 'An error occured, please try again', timeout: 2000, type: 'error', theme: 'bootstrapTheme' }); } } }); }); $('.reply-tweet').click(function(event) { var details; event.preventDefault(); tweet_id = $(this).attr('id').substring(12); }); </script>");
       },
       error: function(xhr, status, error) {
         return noty({
@@ -333,6 +319,7 @@ $(document).ready(function() {
       data: JSON.stringify(details),
       success: function(result) {
         var i, other, output, _i, _len, _ref;
+        $("#messages-container").empty();
         other = '';
         _ref = result.convs;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -342,10 +329,10 @@ $(document).ready(function() {
           } else {
             other = i.lastDM.sender.name;
           }
-          output = "<div class=\"media thread\" data-toggle='modal' data-target='.message' id='thread-" + i.id + "'> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.lastDM.sender.avatar_url + "' alt='DM Image' width='64' height='64'> </div> <div class=\"media-body\"> <h4 class=\"media-heading\">" + other + "</h4> " + i.lastDM.dm_text + " <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-trash'></i></button> </div>";
+          output = "<div class=\"media thread-" + i.id + "\" > <div class=\"media-left\"> <img class=\"media-object\" src='" + i.lastDM.sender.avatar_url + "' alt='DM Image' width='64' height='64'> </div> <div class=\"media-body thread\" id='thread-" + i.id + "' data-toggle='modal' data-target='.message' > <h4 class=\"media-heading\">" + other + "</h4> " + i.lastDM.dm_text + " </div> <button class='pull-right button-transparent delete-conversation' data-toggle='modal' data-target='.delete-conv-box' type='button' id='conv-delete-" + i.id + "' > <i style='font-size:1.5em;' class='fa fa-trash'></i></button> </div>";
           $("#messages-container").append(output);
         }
-        return $("#messages-container").append("<script> $('.thread').click(function(event) { var details, thread_id; event.preventDefault(); console.log($(this)); thread_id = $(this).attr('id').substring(7); dm_conversation = thread_id; console.log('thread id ' + dm_conversation); details = { conv_id: thread_id, method: 'get_conv', queue: 'DM' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); other = ''; if (result.conv.dms[0].sender.name === localStorage.name) { $('#message-header').empty(); $('#message-header').append(\"<h3>\" + result.conv.dms[0].reciever.name + \"</h3>\"); other = result.conv.dms[0].reciever.name; } else { $('#message-header').empty(); $('#message-header').append(\"<h3>\" + result.conv.dms[0].sender.name + \"</h3>\"); other = result.conv.dms[0].sender.name; } ref = result.conv.dms; results = []; $('#message-body').empty(); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#message-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.sender.avatar_url +\"' alt='Profile' width='42' height='42'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.sender.name + \"</h4> \" + i.dm_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,result) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); </script>");
+        return $("#messages-container").append("<script> $('.thread').click(function(event) { var details, thread_id; event.preventDefault(); thread_id = $(this).attr('id').substring(7); dm_conversation = thread_id; details = { conv_id: thread_id, method: 'get_conv', queue: 'DM' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; other = ''; if (result.conv.dms[0].sender.name === localStorage.name) { $('#message-header').empty(); $('#message-header').append(\"<h3>\" + result.conv.dms[0].reciever.name + \"</h3>\"); other = result.conv.dms[0].reciever.name; } else { $('#message-header').empty(); $('#message-header').append(\"<h3>\" + result.conv.dms[0].sender.name + \"</h3>\"); other = result.conv.dms[0].sender.name; } ref = result.conv.dms; results = []; $('#message-body').empty(); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#message-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.sender.avatar_url +\"' alt='Profile' width='42' height='42'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.sender.name + \"</h4> \" + i.dm_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,result) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-conversation').click(function(event) { var details; event.preventDefault(); conv_id = $(this).attr('id').substring(12); }); </script>");
       },
       error: function(xhr, status, error) {
         return noty({
@@ -375,7 +362,6 @@ $(document).ready(function() {
       data: JSON.stringify(details),
       success: function(result) {
         var description, i, output, _i, _len, _ref;
-        console.log(result);
         $("#lists-container").empty();
         description = "";
         _ref = result.subscribed_lists;
@@ -383,13 +369,12 @@ $(document).ready(function() {
           i = _ref[_i];
           description = i.description;
           if (isEmpty(description) || (description != null)) {
-            console.log("Shit");
             description = "No Description";
           }
           output = "<div class=\"media list-" + i.id + "\"> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.creator.avatar_url + "' alt='Image' width='64' height='64'> </div> <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-" + i.id + "' name='" + i.name + "'> <h4 class=\"media-heading\">" + (capitalize(i.name)) + " @" + i.creator.username + "</h4> " + description + " </div> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "' > <i style='font-size:2em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent edit-list' data-toggle='modal' data-target='.edit-list-box' type='button' id='list-edit-" + i.id + "' > <i style='font-size:2em;' class='fa fa-pencil'></i></button> <button class='pull-right button-transparent unsub-list' data-toggle='modal' data-target='.unsub-list-box' type='button' id='list-unsub-" + i.id + "'> <i style='font-size:2em;' class='fa fa-close'></i></button> </div>";
           $("#lists-container").append(output);
         }
-        return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); console.log($(this)); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); console.log(list_id); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { var details, list_id; event.preventDefault(); list_id = $(this).attr('id').substring(10); console.log('khara'); $('input[name=list-name-edit]').val('khar'); details = { list_id: list_id, method: \"get_list\", queue: \"LIST\" }; return $.ajax({ url: \"http://localhost:8080\", type: \"POST\", datatype: \"json\", data: JSON.stringify(details), success: function(result) { console.log(result); $('input[name=list-name-edit]').val(result.list.name); $('textarea[name=list-description-edit]').val(result.list.description); $('edit-list-box').modal('handleUpdate'); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: \"error\", theme: 'bootstrapTheme' }); } }); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(11); }); </script>");
+        return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { var details, list_id; event.preventDefault(); list_id = $(this).attr('id').substring(10); $('input[name=list-name-edit]').val('khar'); details = { list_id: list_id, method: \"get_list\", queue: \"LIST\" }; return $.ajax({ url: \"http://localhost:8080\", type: \"POST\", datatype: \"json\", data: JSON.stringify(details), success: function(result) { $('input[name=list-name-edit]').val(result.list.name); $('textarea[name=list-description-edit]').val(result.list.description); $('edit-list-box').modal('handleUpdate'); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: \"error\", theme: 'bootstrapTheme' }); } }); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(11); }); </script>");
       },
       error: function(xhr, status, error) {
         return noty({
@@ -407,7 +392,6 @@ $(document).ready(function() {
   return $("#send-dm").click(function(event) {
     var details;
     event.preventDefault();
-    console.log(dm_conversation);
     details = {
       session_id: localStorage.session,
       dm_text: $('input[name=dm]').val(),
@@ -469,16 +453,12 @@ $(document).ready(function() {
           });
         },
         error: function(xhr, status, error) {
-          noty({
+          return noty({
             text: 'An error occured, please try again',
             timeout: 2000,
             type: "error",
             theme: 'bootstrapTheme'
           });
-          console.log("Error: " + error);
-          console.log("Status: " + status);
-          console.dir(xhr.status);
-          return console.log(details);
         }
       });
     }
@@ -510,16 +490,12 @@ $(document).ready(function() {
         return _results;
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -550,16 +526,12 @@ $(document).ready(function() {
         return _results;
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -569,7 +541,6 @@ $(document).ready(function() {
   return $("#search").click(function(event) {
     var details;
     event.preventDefault();
-    console.log("entered");
     details = {
       user_substring: $('input[name=search]').val(),
       method: "get_users",
@@ -587,21 +558,17 @@ $(document).ready(function() {
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           i = _ref[_i];
-          _results.push($("#search-pane").append("<div class=\"media\"> <div class=\"media-left\"> <img class='media-object' src='" + i.avatar_url + "' height='64' width='64'></div> <div class=\"media-body user-search\" id='user-search-" + i.username + "'> <h4 class='user'> " + (capitalize(i.username)) + " (@" + i.username + ")</h4> </div> </div> <script> $('user-search').click(function(event) { var details; event.preventDefault(); console.log($(this)); username = $(this).attr('id').substring(11); list_name = $(this).attr('name'); console.log(list_id); details = { username: username, method: 'get_user2', queue: 'USER' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); $('search-box').hide(); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); </script>"));
+          _results.push($("#search-pane").append("<div class=\"media\"> <div class=\"media-left\"> <img class='media-object' src='" + i.avatar_url + "' height='64' width='64'></div> <div class=\"media-body user-search\" id='user-search-" + i.username + "'> <h4 class='user'> " + (capitalize(i.username)) + " (@" + i.username + ")</h4> </div> </div> <script> $('user-search').click(function(event) { var details; event.preventDefault(); username = $(this).attr('id').substring(11); list_name = $(this).attr('name'); details = { username: username, method: 'get_user2', queue: 'USER' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; $('search-box').hide(); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); </script>"));
         }
         return _results;
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -658,16 +625,12 @@ $(document).ready(function() {
               theme: 'bootstrapTheme'
             });
           } else {
-            noty({
+            return noty({
               text: 'An error occured, please try again',
               timeout: 2000,
               type: "error",
               theme: 'bootstrapTheme'
             });
-            console.log("Error: " + error);
-            console.log("Status: " + status);
-            console.dir(xhr.status);
-            return console.log(details);
           }
         }
       });
@@ -686,7 +649,6 @@ $(document).ready(function() {
   return $("#create-list").click(function(event) {
     var details, i, users_in_list, _i;
     event.preventDefault();
-    console.log("entered");
     users_in_list = [];
     for (i = _i = 1; 1 <= users_added ? _i < users_added : _i > users_added; i = 1 <= users_added ? ++_i : --_i) {
       if (!isEmpty($("input[name=user-" + i + "]").val())) {
@@ -703,7 +665,6 @@ $(document).ready(function() {
         "private": false
       })
     };
-    console.log(JSON.stringify(details));
     if (isEmpty($('input[name=list-name]').val())) {
       return noty({
         text: 'Name cannot be empty',
@@ -746,7 +707,6 @@ $(document).ready(function() {
             data: JSON.stringify(details),
             success: function(result) {
               var description, output, _j, _len, _ref;
-              console.log(result);
               $("#lists-container").empty();
               description = "";
               _ref = result.subscribed_lists;
@@ -754,13 +714,12 @@ $(document).ready(function() {
                 i = _ref[_j];
                 description = i.description;
                 if (isEmpty(description) || (description != null)) {
-                  console.log("Shit");
                   description = "No Description";
                 }
                 output = "<div class=\"media list-" + i.id + "\"> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.creator.avatar_url + "' alt='Image' width='64' height='64'> </div> <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-" + i.id + "' name='" + i.name + "'> <h4 class=\"media-heading\">" + (capitalize(i.name)) + " @" + i.creator.username + "</h4> " + description + " </div> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "' > <i style='font-size:2em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent edit-list' data-toggle='modal' data-target='.edit-list-box' type='button' id='list-edit-" + i.id + "' > <i style='font-size:2em;' class='fa fa-pencil'></i></button> <button class='pull-right button-transparent unsub-list' data-toggle='modal' data-target='.unsub-list-box' type='button' id='list-unsub-" + i.id + "'> <i style='font-size:2em;' class='fa fa-close'></i></button> </div>";
                 $("#lists-container").append(output);
               }
-              return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); console.log($(this)); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); console.log(list_id); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { var details, list_id; event.preventDefault(); list_id = $(this).attr('id').substring(10); console.log('khara'); $('input[name=list-name-edit]').val('khar'); details = { list_id: list_id, method: \"get_list\", queue: \"LIST\" }; return $.ajax({ url: \"http://localhost:8080\", type: \"POST\", datatype: \"json\", data: JSON.stringify(details), success: function(result) { console.log(result); $('input[name=list-name-edit]').val(result.list.name); $('textarea[name=list-description-edit]').val(result.list.description); $('edit-list-box').modal('handleUpdate'); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: \"error\", theme: 'bootstrapTheme' }); } }); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(11); }); </script>");
+              return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { var details, list_id; event.preventDefault(); list_id = $(this).attr('id').substring(10); $('input[name=list-name-edit]').val('khar'); details = { list_id: list_id, method: \"get_list\", queue: \"LIST\" }; return $.ajax({ url: \"http://localhost:8080\", type: \"POST\", datatype: \"json\", data: JSON.stringify(details), success: function(result) { $('input[name=list-name-edit]').val(result.list.name); $('textarea[name=list-description-edit]').val(result.list.description); $('edit-list-box').modal('handleUpdate'); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: \"error\", theme: 'bootstrapTheme' }); } }); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(11); }); </script>");
             },
             error: function(xhr, status, error) {
               return noty({
@@ -781,16 +740,12 @@ $(document).ready(function() {
               theme: 'bootstrapTheme'
             });
           } else {
-            noty({
+            return noty({
               text: 'An error occured, please try again',
               timeout: 2000,
               type: "error",
               theme: 'bootstrapTheme'
             });
-            console.log("Error: " + error);
-            console.log("Status: " + status);
-            console.dir(xhr.status);
-            return console.log(details);
           }
         }
       });
@@ -802,7 +757,6 @@ $(document).ready(function() {
   return $("#confirm-delete-list").click(function(event) {
     var details;
     event.preventDefault();
-    console.log(list_id);
     details = {
       method: "delete_list",
       queue: "LIST",
@@ -823,16 +777,12 @@ $(document).ready(function() {
         return $(".list-" + list_id).hide();
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -842,7 +792,6 @@ $(document).ready(function() {
   return $("#confirm-unsub-list").click(function(event) {
     var details;
     event.preventDefault();
-    console.log(list_id);
     details = {
       method: "unsubscribe",
       queue: "LIST",
@@ -864,16 +813,12 @@ $(document).ready(function() {
         return $(".list-" + list_id).hide();
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -883,7 +828,6 @@ $(document).ready(function() {
   return $("#confirm-edit-list").click(function(event) {
     var details;
     event.preventDefault();
-    console.log(list_id);
     details = {
       method: "update_list",
       queue: "LIST",
@@ -915,7 +859,6 @@ $(document).ready(function() {
           data: JSON.stringify(details),
           success: function(result) {
             var description, i, output, _i, _len, _ref;
-            console.log(result);
             $("#lists-container").empty();
             description = "";
             _ref = result.subscribed_lists;
@@ -923,13 +866,12 @@ $(document).ready(function() {
               i = _ref[_i];
               description = i.description;
               if (isEmpty(description) || (description != null)) {
-                console.log("Shit");
                 description = "No Description";
                 output = "<div class=\"media list-" + i.id + "\"> <div class=\"media-left\"> <img class=\"media-object\" src='" + i.creator.avatar_url + "' alt='Image' width='64' height='64'> </div> <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-" + i.id + "' name='" + i.name + "'> <h4 class=\"media-heading\">" + (capitalize(i.name)) + " @" + i.creator.username + "</h4> " + description + " </div> <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-" + i.id + "' > <i style='font-size:2em;' class='fa fa-trash'></i></button> <button class='pull-right button-transparent edit-list' data-toggle='modal' data-target='.edit-list-box' type='button' id='list-edit-" + i.id + "' > <i style='font-size:2em;' class='fa fa-pencil'></i></button> <button class='pull-right button-transparent unsub-list' data-toggle='modal' data-target='.unsub-list-box' type='button' id='list-unsub-" + i.id + "'> <i style='font-size:2em;' class='fa fa-close'></i></button> </div>";
               }
               $("#lists-container").append(output);
             }
-            return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); console.log($(this)); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); console.log(list_id); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; console.log(result); ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { var details, list_id; event.preventDefault(); list_id = $(this).attr('id').substring(10); console.log('khara'); details = { list_id: list_id, method: \"get_list\", queue: \"LIST\" }; return $.ajax({ url: \"http://localhost:8080\", type: \"POST\", datatype: \"json\", data: JSON.stringify(details), success: function(result) { console.log(result); $('input[name=list-name-edit]').val(result.list.name); $('textarea[name=list-description-edit]').val(result.list.description); $('edit-list-box').modal('handleUpdate'); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: \"error\", theme: 'bootstrapTheme' }); } }); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(11); }); </script>");
+            return $("#lists-container").append("<script> $('.list-entry').click(function(event) { var details, thread_id, list_name; event.preventDefault(); list_id = $(this).attr('id').substring(5); list_name = $(this).attr('name'); details = { list_id: list_id, method: 'get_list_feeds', queue: 'LIST' }; return $.ajax({ url: 'http://localhost:8080', type: 'POST', datatype: 'json', data: JSON.stringify(details), success: function(result) { var i, j, len, other, ref, results; ref = result.list_feeds; results = []; $('#list-header').empty(); $('#list-body').empty(); $('#list-header').append(\"<h4 class='media-heading'>\" + list_name + \"</h4>\"); for (j = 0, len = ref.length; j < len; j++) { i = ref[j]; results.push($('#list-body').append(\"<div class='media'> <div class='media-left'> <a href='#'> <img class='media-object' src='\" + i.creator.avatar_url +\"' alt='Profile' width='64' height='64'> </a> </div> <div class='media-body'> <h4 class='media-heading'>\" + i.creator.name + \"</h4> \" + i.tweet_text + \" </div> </div>\")); } return results; }, error: function(xhr,status,error) { noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'}); } }); }); $('.delete-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(12); }); $('.edit-list').click(function(event) { var details, list_id; event.preventDefault(); list_id = $(this).attr('id').substring(10); details = { list_id: list_id, method: \"get_list\", queue: \"LIST\" }; return $.ajax({ url: \"http://localhost:8080\", type: \"POST\", datatype: \"json\", data: JSON.stringify(details), success: function(result) { $('input[name=list-name-edit]').val(result.list.name); $('textarea[name=list-description-edit]').val(result.list.description); $('edit-list-box').modal('handleUpdate'); }, error: function(xhr, status, error) { return noty({ text: 'An error occured, please try again', timeout: 2000, type: \"error\", theme: 'bootstrapTheme' }); } }); }); $('.unsub-list').click(function(event) { event.preventDefault(); list_id = $(this).attr('id').substring(11); }); </script>");
           },
           error: function(xhr, status, error) {
             return noty({
@@ -942,16 +884,12 @@ $(document).ready(function() {
         });
       },
       error: function(xhr, status, error) {
-        noty({
+        return noty({
           text: 'An error occured, please try again',
           timeout: 2000,
           type: "error",
           theme: 'bootstrapTheme'
         });
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.dir(xhr.status);
-        return console.log(details);
       }
     });
   });
@@ -978,6 +916,76 @@ $(document).ready(function() {
         $(".reply-box").modal('hide');
         return noty({
           text: 'Reply Sent!',
+          timeout: 2000,
+          type: "success",
+          theme: 'bootstrapTheme'
+        });
+      },
+      error: function(xhr, status, error) {
+        return noty({
+          text: 'An error occured, please try again',
+          timeout: 2000,
+          type: "error",
+          theme: 'bootstrapTheme'
+        });
+      }
+    });
+  });
+});
+
+$(document).ready(function() {
+  return $("#confirm-delete-conv").click(function(event) {
+    var details;
+    event.preventDefault();
+    details = {
+      conv_id: conv_id,
+      method: "delete_conv",
+      queue: "DM"
+    };
+    return $.ajax({
+      url: "http://localhost:8080",
+      type: "POST",
+      datatype: "json",
+      data: JSON.stringify(details),
+      success: function(result) {
+        $(".thread-" + conv_id).hide();
+        return noty({
+          text: 'Conversation Deleted!',
+          timeout: 2000,
+          type: "success",
+          theme: 'bootstrapTheme'
+        });
+      },
+      error: function(xhr, status, error) {
+        return noty({
+          text: 'An error occured, please try again',
+          timeout: 2000,
+          type: "error",
+          theme: 'bootstrapTheme'
+        });
+      }
+    });
+  });
+});
+
+$(document).ready(function() {
+  return $("#confirm-delete-tweet").click(function(event) {
+    var details;
+    event.preventDefault();
+    details = {
+      tweet_id: tweet_id,
+      method: "delete_tweet",
+      queue: "TWEET"
+    };
+    return $.ajax({
+      url: "http://localhost:8080",
+      type: "POST",
+      datatype: "json",
+      data: JSON.stringify(details),
+      success: function(result) {
+        $(".my-tweet-" + tweet_id).hide();
+        return noty({
+          text: 'Tweet Deleted!',
           timeout: 2000,
           type: "success",
           theme: 'bootstrapTheme'

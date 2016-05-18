@@ -4,6 +4,7 @@ users_added = 2
 list_id = 0
 user_id = 0
 username = ""
+conv_id = 0
 
 $(document).ready () ->
     if(isEmpty(localStorage.session))
@@ -27,8 +28,6 @@ $(document).ready () ->
             success: (result) ->
                 $("#timeline-container").empty()
                 favorited = "fav"
-                retweeted = "retweet"
-                star = "star"
 
                 for i in result.feeds
                     if i.is_favorited
@@ -67,7 +66,7 @@ $(document).ready () ->
 
                 $("#timeline-container").append("<script>
                  $('.user-entry').click(function(event) {
-                     console.log('here 2');
+
                       var details;
                       event.preventDefault();
                       user_id = $(this).attr('id').substring(5);
@@ -82,7 +81,7 @@ $(document).ready () ->
                         datatype: 'json',
                         data: JSON.stringify(details),
                         success: function(result) {
-                          console.log(result);
+
                           $('#user-image').empty();
                           $('#user-body').empty();
                           return $('#user-image').append(\"img(name='user-image' alt='user-image' width='150' height='150' src=' \" + result.user.avatar_url + \"')\");
@@ -99,7 +98,7 @@ $(document).ready () ->
                     });
 
                      $('.fav-tweet').click(function(event) {
-                         console.log('fav');
+
                           var details;
                           event.preventDefault();
                           tweet_id = $(this).attr('id').substring(10);
@@ -115,30 +114,39 @@ $(document).ready () ->
                             datatype: 'json',
                             data: JSON.stringify(details),
                             success: function(result) {
-                              console.log(result);
+
                               $(this).removeClass('fav-tweet');
                               $(this).addClass('unfav-tweet');
                               $(this).text(0);
                                return noty({
-                                 text: 'Favorite successful!',
+                                 text: 'Tweet favorited!',
                                  timeout: 2000,
-                                 type: 'error',
+                                 type: 'success',
                                  theme: 'bootstrapTheme'
                                });
                             },
                             error: function(xhr, status, error) {
+                                if(error.includes('tweet')){
+                             return noty({
+                               text: 'Tweet already favorited',
+                               timeout: 2000,
+                               type: 'error',
+                               theme: 'bootstrapTheme'
+                             });
+                                } else {
                               return noty({
                                 text: 'An error occured, please try again',
                                 timeout: 2000,
                                 type: 'error',
                                 theme: 'bootstrapTheme'
                               });
+                          }
                             }
                           });
                         });
 
                     $('.unfav-tweet').click(function(event) {
-                        console.log('unfav');
+
                          var details;
                          event.preventDefault();
                          tweet_id = $(this).attr('id').substring(10);
@@ -179,7 +187,7 @@ $(document).ready () ->
 
 
                  $('.retweet-tweet').click(function(event) {
-                     console.log('here 2');
+
                       var details;
                       event.preventDefault();
                       tweet_id = $(this).attr('id').substring(14);
@@ -195,7 +203,7 @@ $(document).ready () ->
                         datatype: 'json',
                         data: JSON.stringify(details),
                         success: function(result) {
-                          console.log(result);
+
                            return noty({
                              text: 'Retweet successful!',
                              timeout: 2000,
@@ -224,7 +232,7 @@ $(document).ready () ->
                     });
 
                     $('.reply-tweet').click(function(event) {
-                        console.log('here 2');
+
                          var details;
                          event.preventDefault();
                          tweet_id = $(this).attr('id').substring(12);
@@ -237,10 +245,10 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#confirm-signout").click (event) ->
@@ -262,10 +270,10 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#create-tweet").click (event) ->
@@ -289,10 +297,10 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#profile").click (event) ->
@@ -327,10 +335,10 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#save-profile").click (event) ->
@@ -365,10 +373,10 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#my-tweets").click (event)->
@@ -386,37 +394,44 @@ $(document).ready () ->
             data: JSON.stringify(details),
             success: (result) ->
                 $("#my-tweets-container").empty()
+                favorited = "fav"
                 for i in result.tweets
-                    output = "<div class=\"row-fluid\">
-                          <div class=\"col-sm-4 col-sm-offset-4\">
-                            <div class=\"media my-tweet\">
+                    if i.is_favorited
+                        favorited = "unfav"
+                    else
+                        favorited = "fav"
 
-                              <div class=\"media-left\">
-                              <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'>
-                              </div>
+                        output = "<div class=\"row-fluid my-tweet-#{i.id}\">
+                        <div class=\"col-sm-4 col-sm-offset-4\">
+                        <div class=\"media my-tweet\">
 
-                            <div class=\"media-body\">
-                                  <h4 class=\"media-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </h4>
-                                  #{i.tweet_text}
-                            </div>
-                                <button class='pull-right button-transparent delete-tweet' data-toggle='modal' data-target='.delete-tweet-box' type='button' id='tweet-delete-#{i.id}' >
-                              <i style='font-size:1.5em;' class='fa fa-trash'></i></button>
+                        <div class=\"media-left\">
+                        <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'>
+                        </div>
 
-                               <button class='pull-right button-transparent #{favorited}-tweet' type='button' id='tweet-fav-#{i.id}' >
-                               <i style='font-size:1.5em;' class='fa fa-star'></i></button>
+                        <div class=\"media-body\">
+                        <h4 class=\"media-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </h4>
+                        #{i.tweet_text}
+                        </div>
 
-                               <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-#{i.id}' >
-                               <i style='font-size:1.5em;' class='fa fa-retweet'></i></button>
+                        <button class='pull-right button-transparent delete-tweet' data-toggle='modal' data-target='.delete-tweet-box' type='button' id='tweet-delete-#{i.id}' >
+                        <i style='font-size:1.5em;' class='fa fa-trash'></i></button>
+
+                        <button class='pull-right button-transparent #{favorited}-tweet' type='button' id='tweet-fav-#{i.id}' >
+                        <i style='font-size:1.5em;' class='fa fa-star'></i></button>
+
+                        <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-#{i.id}' >
+                        <i style='font-size:1.5em;' class='fa fa-retweet'></i></button>
 
 
-                              </div>
-                          </div>
+                        </div>
+                        </div>
                         </div>"
                     $("#my-tweets-container").append(output)
 
-                $().append("<script>
+                $("#my-tweets-container").append("<script>
                          $('.fav-tweet').click(function(event) {
-                                 console.log('fav');
+
                                   var details;
                                   event.preventDefault();
                                   tweet_id = $(this).attr('id').substring(10);
@@ -432,30 +447,39 @@ $(document).ready () ->
                                     datatype: 'json',
                                     data: JSON.stringify(details),
                                     success: function(result) {
-                                      console.log(result);
+
                                       $(this).removeClass('fav-tweet');
                                       $(this).addClass('unfav-tweet');
                                       $(this).text(0);
                                        return noty({
-                                         text: 'Favorite successful!',
+                                         text: 'Tweet favorited!',
                                          timeout: 2000,
-                                         type: 'error',
+                                         type: 'success',
                                          theme: 'bootstrapTheme'
                                        });
                                     },
                                     error: function(xhr, status, error) {
+                                        if(error.includes('tweet')){
+                                     return noty({
+                                       text: 'Tweet already favorited',
+                                       timeout: 2000,
+                                       type: 'error',
+                                       theme: 'bootstrapTheme'
+                                     });
+                                        } else {
                                       return noty({
                                         text: 'An error occured, please try again',
                                         timeout: 2000,
                                         type: 'error',
                                         theme: 'bootstrapTheme'
                                       });
+                                  }
                                     }
                                   });
                                 });
 
                             $('.unfav-tweet').click(function(event) {
-                                console.log('unfav');
+
                                  var details;
                                  event.preventDefault();
                                  tweet_id = $(this).attr('id').substring(10);
@@ -496,7 +520,7 @@ $(document).ready () ->
 
 
                          $('.retweet-tweet').click(function(event) {
-                             console.log('here 2');
+
                               var details;
                               event.preventDefault();
                               tweet_id = $(this).attr('id').substring(14);
@@ -512,7 +536,7 @@ $(document).ready () ->
                                 datatype: 'json',
                                 data: JSON.stringify(details),
                                 success: function(result) {
-                                  console.log(result);
+
                                    return noty({
                                      text: 'Retweet successful!',
                                      timeout: 2000,
@@ -539,6 +563,15 @@ $(document).ready () ->
                                 }
                               });
                             });
+
+                            $('.delete-tweet').click(function(event) {
+
+                                var details;
+                                event.preventDefault();
+                                tweet_id = $(this).attr('id').substring(13);
+
+                                });
+
                             </script>")
 
             error: (xhr, status, error) ->
@@ -563,33 +596,36 @@ $(document).ready () ->
                 $("#notifications-container").empty()
                 for i in result.mentions
                     output = "<div class=\"row-fluid\">
-                          <div class=\"col-sm-4 col-sm-offset-4\">
-                            <div class=\"media timeline\">
+                    <div class=\"col-sm-4 col-sm-offset-4\">
+                    <div class=\"media timeline\">
 
-                              <div class=\"media-left\">
-                              <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'>
-                              </div>
+                    <div class=\"media-left\">
+                    <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'>
+                    </div>
 
-                              <div class=\"media-body\">
-                                  <h4 class=\"media-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </h4>
-                                  #{i.tweet_text}
-                                </div>
-                                <button class='pull-right button-transparent fav-tweet' type='button' id='tweet-fav-#{i.id}' >
-                              <i style='font-size:1.5em;' class='fa fa-star'></i></button>
+                    <div class=\"media-body\">
+                    <h4 class=\"media-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </h4>
+                    #{i.tweet_text}
+                    </div>
 
-                              <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-#{i.id}' >
-                              <i style='font-size:1.5em;' class='fa fa-retweet'></i></button>
 
-                              <button class='pull-right button-transparent reply-tweet' data-toggle='modal' data-target='.unsub-list-box' type='button' id='tweet-reply-#{i.id}'>
-                              <i style='font-size:1.5em;' class='fa fa-reply'></i></button>
-                            </div>
-                          </div>
-                        </div>"
+                    </div>
+                    <button class='pull-right button-transparent fav-tweet' type='button' id='tweet-fav-#{i.id}' >
+                    <i style='font-size:1.5em;' class='fa fa-star'></i></button>
+
+                    <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-#{i.id}' >
+                    <i style='font-size:1.5em;' class='fa fa-retweet'></i></button>
+
+                    <button class='pull-right button-transparent reply-tweet' data-toggle='modal' data-target='.reply-box' type='button' id='tweet-reply-#{i.id}'>
+                    <i style='font-size:1.5em;' class='fa fa-reply'></i></button>
+
+                    </div>
+                    </div>"
                     $("#notifications-container").append(output)
 
                 $("#notifications-container").append("<script>
              $('.fav-tweet').click(function(event) {
-                 console.log('fav');
+
                   var details;
                   event.preventDefault();
                   tweet_id = $(this).attr('id').substring(10);
@@ -605,30 +641,39 @@ $(document).ready () ->
                     datatype: 'json',
                     data: JSON.stringify(details),
                     success: function(result) {
-                      console.log(result);
+
                       $(this).removeClass('fav-tweet');
                       $(this).addClass('unfav-tweet');
                       $(this).text(0);
                        return noty({
-                         text: 'Favorite successful!',
+                         text: 'Tweet favorited!',
                          timeout: 2000,
-                         type: 'error',
+                         type: 'success',
                          theme: 'bootstrapTheme'
                        });
                     },
                     error: function(xhr, status, error) {
+                        if(error.includes('tweet')){
+                     return noty({
+                       text: 'Tweet already favorited',
+                       timeout: 2000,
+                       type: 'error',
+                       theme: 'bootstrapTheme'
+                     });
+                        } else {
                       return noty({
                         text: 'An error occured, please try again',
                         timeout: 2000,
                         type: 'error',
                         theme: 'bootstrapTheme'
                       });
+                  }
                     }
                   });
                 });
 
             $('.unfav-tweet').click(function(event) {
-                console.log('unfav');
+
                  var details;
                  event.preventDefault();
                  tweet_id = $(this).attr('id').substring(10);
@@ -669,7 +714,7 @@ $(document).ready () ->
 
 
          $('.retweet-tweet').click(function(event) {
-             console.log('here 2');
+
               var details;
               event.preventDefault();
               tweet_id = $(this).attr('id').substring(14);
@@ -685,7 +730,7 @@ $(document).ready () ->
                 datatype: 'json',
                 data: JSON.stringify(details),
                 success: function(result) {
-                  console.log(result);
+
                    return noty({
                      text: 'Retweet successful!',
                      timeout: 2000,
@@ -714,33 +759,11 @@ $(document).ready () ->
             });
 
             $('.reply-tweet').click(function(event) {
-                console.log('here 2');
+
                  var details;
                  event.preventDefault();
-                 tweet_id = $(this).attr('id').substring(14);
-                 details = {
-                   session_id: localStorage.session,
-                   tweet_id: tweet_id,
-                   method: 'retweet',
-                   queue: 'TWEET'
-                 };
-                 return $.ajax({
-                   url: 'http://localhost:8080',
-                   type: 'POST',
-                   datatype: 'json',
-                   data: JSON.stringify(details),
-                   success: function(result) {
+                 tweet_id = $(this).attr('id').substring(12);
 
-                   },
-                   error: function(xhr, status, error) {
-                     return noty({
-                       text: 'An error occured, please try again',
-                       timeout: 2000,
-                       type: 'error',
-                       theme: 'bootstrapTheme'
-                     });
-                   }
-                 });
                });
 
                 </script>")
@@ -762,7 +785,8 @@ $(document).ready () ->
             datatype: "json",
             data: JSON.stringify(details),
             success: (result) ->
-                # console.log result
+                #
+                $("#messages-container").empty()
                 other = ''
                 for i in result.convs
                     if (i.lastDM.sender.name == localStorage.name)
@@ -770,17 +794,22 @@ $(document).ready () ->
                     else
                        other = i.lastDM.sender.name
 
-                    output = "<div class=\"media thread\" data-toggle='modal' data-target='.message' id='thread-#{i.id}'>
+                    output = "<div class=\"media thread-#{i.id}\" >
+
                                     <div class=\"media-left\">
                                     <img class=\"media-object\" src='#{i.lastDM.sender.avatar_url}' alt='DM Image' width='64' height='64'>
                                     </div>
-                                    <div class=\"media-body\">
+
+                                    <div class=\"media-body thread\" id='thread-#{i.id}' data-toggle='modal' data-target='.message' >
                                     <h4 class=\"media-heading\">#{other}</h4>
                                     #{i.lastDM.dm_text}
+                                </div>
 
-                                    <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-#{i.id}' >
-                              <i style='font-size:1.5em;' class='fa fa-trash'></i></button>
-                                </div>"
+
+                                            <button class='pull-right button-transparent delete-conversation' data-toggle='modal' data-target='.delete-conv-box' type='button' id='conv-delete-#{i.id}' >
+                                      <i style='font-size:1.5em;' class='fa fa-trash'></i></button>
+
+                                      </div>"
 
                     $("#messages-container").append(output)
 
@@ -788,10 +817,10 @@ $(document).ready () ->
                  $('.thread').click(function(event) {
                    var details, thread_id;
                    event.preventDefault();
-                   console.log($(this));
+
                    thread_id = $(this).attr('id').substring(7);
                    dm_conversation = thread_id;
-                   console.log('thread id ' + dm_conversation);
+
                    details = {
                      conv_id: thread_id,
                      method: 'get_conv',
@@ -804,7 +833,7 @@ $(document).ready () ->
                      data: JSON.stringify(details),
                      success: function(result) {
                        var i, j, len, other, ref, results;
-                       console.log(result);
+
                        other = '';
                        if (result.conv.dms[0].sender.name === localStorage.name) {
                          $('#message-header').empty();
@@ -829,6 +858,16 @@ $(document).ready () ->
                      }
                    });
                  });
+
+            $('.delete-conversation').click(function(event) {
+
+                 var details;
+                 event.preventDefault();
+                 conv_id = $(this).attr('id').substring(12);
+
+               });
+
+
                     </script>")
 
             error: (xhr,status,error) ->
@@ -842,7 +881,7 @@ $(document).ready () ->
             method: "get_subscribed_lists",
             queue: "USER"
         }
-        # console.log localStorage.user_id
+        #
 
         $.ajax
             url: "http://localhost:8080",
@@ -850,13 +889,13 @@ $(document).ready () ->
             datatype: "json",
             data: JSON.stringify(details),
             success: (result) ->
-                console.log result
+
                 $("#lists-container").empty()
                 description = ""
                 for i in result.subscribed_lists
                     description = i.description
                     if (isEmpty(description) || description?)
-                        console.log "Shit"
+
                         description = "No Description"
 
                     output = "<div class=\"media list-#{i.id}\">
@@ -886,10 +925,10 @@ $(document).ready () ->
                  $('.list-entry').click(function(event) {
                    var details, thread_id, list_name;
                    event.preventDefault();
-                   console.log($(this));
+
                    list_id = $(this).attr('id').substring(5);
                    list_name = $(this).attr('name');
-                   console.log(list_id);
+
                    details = {
                      list_id: list_id,
                      method: 'get_list_feeds',
@@ -902,7 +941,7 @@ $(document).ready () ->
                      data: JSON.stringify(details),
                      success: function(result) {
                        var i, j, len, other, ref, results;
-                       console.log(result);
+
                        ref = result.list_feeds;
                        results = [];
                        $('#list-header').empty();
@@ -935,7 +974,7 @@ $(document).ready () ->
                   var details, list_id;
                   event.preventDefault();
                   list_id = $(this).attr('id').substring(10);
-                  console.log('khara');
+
                 $('input[name=list-name-edit]').val('khar');
 
                   details = {
@@ -949,7 +988,7 @@ $(document).ready () ->
                     datatype: \"json\",
                     data: JSON.stringify(details),
                     success: function(result) {
-                        console.log(result);
+
                       $('input[name=list-name-edit]').val(result.list.name);
                       $('textarea[name=list-description-edit]').val(result.list.description);
                       $('edit-list-box').modal('handleUpdate');
@@ -979,7 +1018,7 @@ $(document).ready () ->
 $(document).ready () ->
     $("#send-dm").click (event)->
         event.preventDefault()
-        console.log dm_conversation
+
         details = {
             session_id: localStorage.session,
             dm_text: $('input[name=dm]').val(),
@@ -1022,10 +1061,10 @@ $(document).ready () ->
 
                 error: (xhr,status,error) ->
                     noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                    console.log "Error: " + error
-                    console.log "Status: " + status
-                    console.dir xhr.status
-                    console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#followers").click (event) ->
@@ -1054,10 +1093,10 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#following").click (event) ->
@@ -1091,17 +1130,17 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 
 
 $(document).ready () ->
     $("#search").click (event) ->
         event.preventDefault()
-        console.log "entered"
+
         details = {
             user_substring: $('input[name=search]').val(),
             method: "get_users",
@@ -1130,10 +1169,10 @@ $(document).ready () ->
                     $('user-search').click(function(event) {
                       var details;
                       event.preventDefault();
-                      console.log($(this));
+
                       username = $(this).attr('id').substring(11);
                       list_name = $(this).attr('name');
-                      console.log(list_id);
+
                       details = {
                         username: username,
                         method: 'get_user2',
@@ -1146,7 +1185,7 @@ $(document).ready () ->
                         data: JSON.stringify(details),
                         success: function(result) {
                           var i, j, len, other, ref, results;
-                          console.log(result);
+
                           $('search-box').hide();
                           ref = result.list_feeds;
                           results = [];
@@ -1175,10 +1214,10 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#create-conversation").click (event) ->
@@ -1210,10 +1249,10 @@ $(document).ready () ->
                         noty({text: 'Username wrong or conversation already exists', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                     else
                         noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                        console.log "Error: " + error
-                        console.log "Status: " + status
-                        console.dir xhr.status
-                        console.log details
+
+
+
+
 
 
 $(document).ready () ->
@@ -1231,7 +1270,7 @@ $(document).ready () ->
 $(document).ready () ->
     $("#create-list").click (event) ->
         event.preventDefault()
-        console.log "entered"
+
         users_in_list = []
         for i in [1...users_added]
             if(!isEmpty($("input[name=user-#{i}]").val()))
@@ -1247,7 +1286,7 @@ $(document).ready () ->
             private: false
 
         }
-        console.log JSON.stringify(details)
+
         if(isEmpty($('input[name=list-name]').val()))
             noty({text: 'Name cannot be empty', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
         else
@@ -1269,13 +1308,13 @@ $(document).ready () ->
                         method: "get_subscribed_lists",
                         queue: "USER"
                     }
-                    # console.log localStorage.user_id
+                    #
                     details = {
                         session_id: localStorage.session,
                         method: "get_subscribed_lists",
                         queue: "USER"
                     }
-                    # console.log localStorage.user_id
+                    #
 
                     $.ajax
                         url: "http://localhost:8080",
@@ -1283,13 +1322,13 @@ $(document).ready () ->
                         datatype: "json",
                         data: JSON.stringify(details),
                         success: (result) ->
-                            console.log result
+
                             $("#lists-container").empty()
                             description = ""
                             for i in result.subscribed_lists
                                 description = i.description
                                 if (isEmpty(description) || description?)
-                                    console.log "Shit"
+
                                     description = "No Description"
 
                                 output = "<div class=\"media list-#{i.id}\">
@@ -1319,10 +1358,10 @@ $(document).ready () ->
                              $('.list-entry').click(function(event) {
                                var details, thread_id, list_name;
                                event.preventDefault();
-                               console.log($(this));
+
                                list_id = $(this).attr('id').substring(5);
                                list_name = $(this).attr('name');
-                               console.log(list_id);
+
                                details = {
                                  list_id: list_id,
                                  method: 'get_list_feeds',
@@ -1335,7 +1374,7 @@ $(document).ready () ->
                                  data: JSON.stringify(details),
                                  success: function(result) {
                                    var i, j, len, other, ref, results;
-                                   console.log(result);
+
                                    ref = result.list_feeds;
                                    results = [];
                                    $('#list-header').empty();
@@ -1368,7 +1407,7 @@ $(document).ready () ->
                               var details, list_id;
                               event.preventDefault();
                               list_id = $(this).attr('id').substring(10);
-                              console.log('khara');
+
                             $('input[name=list-name-edit]').val('khar');
 
                               details = {
@@ -1382,7 +1421,7 @@ $(document).ready () ->
                                 datatype: \"json\",
                                 data: JSON.stringify(details),
                                 success: function(result) {
-                                    console.log(result);
+
                                   $('input[name=list-name-edit]').val(result.list.name);
                                   $('textarea[name=list-description-edit]').val(result.list.description);
                                   $('edit-list-box').modal('handleUpdate');
@@ -1414,16 +1453,16 @@ $(document).ready () ->
                         noty({text: 'List already exists', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                     else
                         noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                        console.log "Error: " + error
-                        console.log "Status: " + status
-                        console.dir xhr.status
-                        console.log details
+
+
+
+
 
 
 $(document).ready () ->
     $("#confirm-delete-list").click (event) ->
         event.preventDefault()
-        console.log list_id
+
         details = {
             method: "delete_list",
             queue: "LIST",
@@ -1442,15 +1481,15 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#confirm-unsub-list").click (event) ->
         event.preventDefault()
-        console.log list_id
+
         details = {
             method: "unsubscribe",
             queue: "LIST",
@@ -1470,15 +1509,15 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#confirm-edit-list").click (event) ->
         event.preventDefault()
-        console.log list_id
+
         details = {
             method: "update_list",
             queue: "LIST",
@@ -1507,13 +1546,13 @@ $(document).ready () ->
                     datatype: "json",
                     data: JSON.stringify(details),
                     success: (result) ->
-                        console.log result
+
                         $("#lists-container").empty()
                         description = ""
                         for i in result.subscribed_lists
                             description = i.description
                             if (isEmpty(description) || description?)
-                                console.log "Shit"
+
                                 description = "No Description"
 
                                 output = "<div class=\"media list-#{i.id}\">
@@ -1543,10 +1582,10 @@ $(document).ready () ->
                          $('.list-entry').click(function(event) {
                            var details, thread_id, list_name;
                            event.preventDefault();
-                           console.log($(this));
+
                            list_id = $(this).attr('id').substring(5);
                            list_name = $(this).attr('name');
-                           console.log(list_id);
+
                            details = {
                              list_id: list_id,
                              method: 'get_list_feeds',
@@ -1559,7 +1598,7 @@ $(document).ready () ->
                              data: JSON.stringify(details),
                              success: function(result) {
                                var i, j, len, other, ref, results;
-                               console.log(result);
+
                                ref = result.list_feeds;
                                results = [];
                                $('#list-header').empty();
@@ -1592,7 +1631,7 @@ $(document).ready () ->
                           var details, list_id;
                           event.preventDefault();
                           list_id = $(this).attr('id').substring(10);
-                          console.log('khara');
+
 
 
                           details = {
@@ -1606,7 +1645,7 @@ $(document).ready () ->
                             datatype: \"json\",
                             data: JSON.stringify(details),
                             success: function(result) {
-                                console.log(result);
+
                               $('input[name=list-name-edit]').val(result.list.name);
                               $('textarea[name=list-description-edit]').val(result.list.description);
                               $('edit-list-box').modal('handleUpdate');
@@ -1634,10 +1673,10 @@ $(document).ready () ->
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-                console.log "Error: " + error
-                console.log "Status: " + status
-                console.dir xhr.status
-                console.log details
+
+
+
+
 
 $(document).ready () ->
     $("#confirm-reply").click (event) ->
@@ -1659,6 +1698,48 @@ $(document).ready () ->
                 $('textarea[name=reply-text]').val('')
                 $(".reply-box").modal('hide')
                 noty({text: 'Reply Sent!', timeout: 2000, type:"success", theme: 'bootstrapTheme'})
+
+            error: (xhr,status,error) ->
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+
+$(document).ready () ->
+    $("#confirm-delete-conv").click (event) ->
+        event.preventDefault()
+        details = {
+            conv_id: conv_id,
+            method: "delete_conv",
+            queue: "DM"
+        }
+
+        $.ajax
+            url: "http://localhost:8080",
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify(details),
+            success: (result) ->
+                $(".thread-#{conv_id}").hide()
+                noty({text: 'Conversation Deleted!', timeout: 2000, type:"success", theme: 'bootstrapTheme'})
+
+            error: (xhr,status,error) ->
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+
+$(document).ready () ->
+    $("#confirm-delete-tweet").click (event) ->
+        event.preventDefault()
+        details = {
+            tweet_id: tweet_id,
+            method: "delete_tweet",
+            queue: "TWEET"
+        }
+
+        $.ajax
+            url: "http://localhost:8080",
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify(details),
+            success: (result) ->
+                $(".my-tweet-#{tweet_id}").hide()
+                noty({text: 'Tweet Deleted!', timeout: 2000, type:"success", theme: 'bootstrapTheme'})
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
