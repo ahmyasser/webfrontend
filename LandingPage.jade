@@ -191,7 +191,10 @@ html
         div(class="modal fade followers-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
                 div(class="modal-content")
-                    #followers-pane.modal-body
+                    .modal-body
+                        .container
+                            #followers-pane
+                    
             
         div(class="modal fade search-box" role="dialog" tabindex="-1")
             div(class="modal-dialog" )
@@ -244,6 +247,25 @@ html
                         .row
                             .col-sm-6.col-sm-offset-3
                                 #list-body
+                                
+                                
+                                
+        div(class="modal fade reply-box" role="dialog" tabindex="-1")
+            div(class="modal-dialog" )
+                div(class="modal-content")
+                    div(class="modal-header" id="reply-header")
+                        
+                    div(class="modal-body")
+                        form
+                            .form-group
+                                    textarea.form-control(name="reply-text" )
+                                    
+                                
+                    div(class="modal-footer")
+                        button(class="btn btn-default" type="button" data-dismiss="modal")
+                            |Cancel
+                        button(class="btn btn-default button-colour" type="button" id="confirm-reply")
+                            |Reply
                     //- div(class="list-footer")
                     //-     form
                     //-         .form-group
@@ -262,7 +284,7 @@ html
             div(class="tab-pane" id="messages-pane" role="tabpanel")
                 .container
                     .row-fluid
-                        #messages-container.col-sm-6.col-sm-offset-4
+                        #messages-container.col-sm-4.col-sm-offset-4
                         .col-sm-1
                             button(id="new-conv" type="button" data-toggle="modal" data-target=".new-conv-box")
                                 i(class="fa fa-plus-circle" style="font-size:2em;")

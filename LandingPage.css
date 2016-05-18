@@ -107,6 +107,10 @@ body {
   margin: 20px;
 }
 
+.my-tweet {
+  margin: 20px;
+}
+
 #spinner {
   background-color: #333;
   opacity: 0.8;

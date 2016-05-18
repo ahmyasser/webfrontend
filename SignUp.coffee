@@ -31,7 +31,6 @@ $(document).ready () ->
                         password: $("input[name=password-signup]").val()
                     }
 
-
                     $.ajax
                         url: "http://localhost:8080",
                         type: "POST",
@@ -40,6 +39,7 @@ $(document).ready () ->
                         success: (result) ->
                             noty({text: 'Signup successful! You will be redirected shortly', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
                             localStorage.session = result.user.session_id
+                            #redirect after 3 seconds
                             window.setTimeout(  ->
                                 window.location.href = "LandingPage.html"
                             , 3000)
@@ -90,7 +90,7 @@ $(document).ready () ->
                     else
                         noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
 
-                
+#regular expression cerated to  validate form inputs when a keyboard button is released
 $(document).ready () ->
     $("input[name=email-signup]").keyup (event) ->
         if($("input[name=email-signup]").val().match(///^[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}$///))
@@ -144,6 +144,6 @@ $(document).ready () ->
 
             $("#signup-name").removeClass("has-success")
 
-
+#The following method capitalizes the first letter in a word
 capitalize = (string) ->
     return string.charAt(0).toUpperCase() + string.slice(1)

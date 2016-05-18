@@ -3,6 +3,10 @@ require 'json'
 require 'uri'
 
 @uri = URI("http://localhost:8080")
+=begin
+The following are tests that send demo JSON requests to the server to check that there is no
+issue in the front end. The tests need to be edited for each method as they are generated using perl 6.
+=end
 
 def confirm_follow
     req = Net::HTTP::Post.new(@uri, initheader = {'Content-Type' => 'application/json'})

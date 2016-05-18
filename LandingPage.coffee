@@ -1,4 +1,4 @@
-# out:./LandingPage.js
+#global variables
 dm_conversation = 0
 users_added = 2
 list_id = 0
@@ -8,48 +8,6 @@ username = ""
 $(document).ready () ->
     if(isEmpty(localStorage.session))
         noty({text: 'You are not signed in, please sign in', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-
-
-# $(document).ready () ->
-#     details = {
-#         session_id: localStorage.session,
-#         method: "timeline",
-#         queue: "USER"
-#     }
-#
-#     noty({text: 'Loading Timeline', timeout: 1500, type:"success", theme: 'bootstrapTheme'})
-#
-#     $.ajax
-#         url: "http://localhost:8080",
-#         type: "POST",
-#         datatype: "json",
-#         data: JSON.stringify(details),
-#         success: (result) ->
-#             $("#timeline-container").empty()
-#             for i in result.feeds
-#                 output = "<div class=\"row-fluid\">
-#                       <div class=\"col-sm-6 col-sm-offset-4\">
-#                         <div class=\"media timeline\">
-#                           <div class=\"media-left\">
-#                           <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'></div>
-#                           <div class=\"media-body\">
-#                             <h4 class='media-heading'>
-#                             #{capitalize(i.creator.username)} (@#{i.creator.username})</h4>
-#                             #{i.tweet_text}
-#
-#                           </div>
-#                         </div>
-#                       </div>
-#                     </div>"
-#                 $("#timeline-container").append(output)
-#
-#
-#         error: (xhr,status,error) ->
-#             noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
-#             console.log "Error: " + error
-#             console.log "Status: " + status
-#             console.dir xhr.status
-#             console.log details
 
 $(document).ready () ->
     $("#timeline").click (event) ->
@@ -68,17 +26,39 @@ $(document).ready () ->
             data: JSON.stringify(details),
             success: (result) ->
                 $("#timeline-container").empty()
+                favorited = "fav"
+                retweeted = "retweet"
+                star = "star"
+
                 for i in result.feeds
+                    if i.is_favorited
+                        favorited = "unfav"
+                    else
+                        favorited = "fav"
+
                     output = "<div class=\"row-fluid\">
-                          <div class=\"col-sm-6 col-sm-offset-4\">
+                          <div class=\"col-sm-4 col-sm-offset-4\">
                             <div class=\"media timeline\">
+
                               <div class=\"media-left\">
-                              <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'></div>
+                              <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'>
+                              </div>
+
                               <div class=\"media-body\">
                                 <h4 class='media-heading user-entry' id='user-#{i.creator.id}' data-toggle='modal' data-target='.user-details' >
                                 #{capitalize(i.creator.username)} (@#{i.creator.username})</h4>
                                 #{i.tweet_text}
                               </div>
+
+                              <button class='pull-right button-transparent #{favorited}-tweet' type='button' id='tweet-fav-#{i.id}' >
+                              <i style='font-size:1.5em;' class='fa fa-star'></i></button>
+
+                              <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-#{i.id}' >
+                              <i style='font-size:1.5em;' class='fa fa-retweet'></i></button>
+
+                              <button class='pull-right button-transparent reply-tweet' data-toggle='modal' data-target='.reply-box' type='button' id='tweet-reply-#{i.id}'>
+                              <i style='font-size:1.5em;' class='fa fa-reply'></i></button>
+
                             </div>
                           </div>
                         </div>"
@@ -86,7 +66,6 @@ $(document).ready () ->
 
 
                 $("#timeline-container").append("<script>
-                console.log('entered');
                  $('.user-entry').click(function(event) {
                      console.log('here 2');
                       var details;
@@ -118,6 +97,139 @@ $(document).ready () ->
                         }
                       });
                     });
+
+                     $('.fav-tweet').click(function(event) {
+                         console.log('fav');
+                          var details;
+                          event.preventDefault();
+                          tweet_id = $(this).attr('id').substring(10);
+                          details = {
+                            session_id: localStorage.session,
+                            tweet_id: tweet_id,
+                            method: 'favorite',
+                            queue: 'TWEET'
+                          };
+                          return $.ajax({
+                            url: 'http://localhost:8080',
+                            type: 'POST',
+                            datatype: 'json',
+                            data: JSON.stringify(details),
+                            success: function(result) {
+                              console.log(result);
+                              $(this).removeClass('fav-tweet');
+                              $(this).addClass('unfav-tweet');
+                              $(this).text(0);
+                               return noty({
+                                 text: 'Favorite successful!',
+                                 timeout: 2000,
+                                 type: 'error',
+                                 theme: 'bootstrapTheme'
+                               });
+                            },
+                            error: function(xhr, status, error) {
+                              return noty({
+                                text: 'An error occured, please try again',
+                                timeout: 2000,
+                                type: 'error',
+                                theme: 'bootstrapTheme'
+                              });
+                            }
+                          });
+                        });
+
+                    $('.unfav-tweet').click(function(event) {
+                        console.log('unfav');
+                         var details;
+                         event.preventDefault();
+                         tweet_id = $(this).attr('id').substring(10);
+                         details = {
+                           session_id: localStorage.session,
+                           tweet_id: tweet_id,
+                           method: 'unfavorite',
+                           queue: 'TWEET'
+                         };
+                         return $.ajax({
+                           url: 'http://localhost:8080',
+                           type: 'POST',
+                           datatype: 'json',
+                           data: JSON.stringify(details),
+                           success: function(result) {
+
+                             $(this).removeClass('unfav-tweet');
+                             $(this).addClass('fav-tweet');
+                             $(this).text(0);
+
+                              return noty({
+                                text: 'Unfavorite successful!',
+                                timeout: 2000,
+                                type: 'error',
+                                theme: 'bootstrapTheme'
+                              });
+                           },
+                           error: function(xhr, status, error) {
+                             return noty({
+                               text: 'An error occured, please try again',
+                               timeout: 2000,
+                               type: 'error',
+                               theme: 'bootstrapTheme'
+                             });
+                           }
+                         });
+                       });
+
+
+                 $('.retweet-tweet').click(function(event) {
+                     console.log('here 2');
+                      var details;
+                      event.preventDefault();
+                      tweet_id = $(this).attr('id').substring(14);
+                      details = {
+                        session_id: localStorage.session,
+                        tweet_id: tweet_id,
+                        method: 'retweet',
+                        queue: 'TWEET'
+                      };
+                      return $.ajax({
+                        url: 'http://localhost:8080',
+                        type: 'POST',
+                        datatype: 'json',
+                        data: JSON.stringify(details),
+                        success: function(result) {
+                          console.log(result);
+                           return noty({
+                             text: 'Retweet successful!',
+                             timeout: 2000,
+                             type: 'success',
+                             theme: 'bootstrapTheme'
+                           });
+                        },
+                        error: function(xhr, status, error) {
+                            if (error.includes(\"retweet\")) {
+                                return noty({
+                                  text: 'This tweet, is already retweeted',
+                                  timeout: 2000,
+                                  type: 'error',
+                                  theme: 'bootstrapTheme'
+                                });
+                            } else {
+                          return noty({
+                            text: 'An error occured, please try again',
+                            timeout: 2000,
+                            type: 'error',
+                            theme: 'bootstrapTheme'
+                          });
+                      }
+                        }
+                      });
+                    });
+
+                    $('.reply-tweet').click(function(event) {
+                        console.log('here 2');
+                         var details;
+                         event.preventDefault();
+                         tweet_id = $(this).attr('id').substring(12);
+
+                       });
 
 
 
@@ -273,20 +385,161 @@ $(document).ready () ->
             datatype: "json",
             data: JSON.stringify(details),
             success: (result) ->
+                $("#my-tweets-container").empty()
                 for i in result.tweets
                     output = "<div class=\"row-fluid\">
-                          <div class=\"col-sm-6 col-sm-offset-4\">
-                            <div class=\"media\">
-                              <div class=\"media-left\"><img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'></div>
-                              <div class=\"media-body\">
+                          <div class=\"col-sm-4 col-sm-offset-4\">
+                            <div class=\"media my-tweet\">
+
+                              <div class=\"media-left\">
+                              <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'>
+                              </div>
+
+                            <div class=\"media-body\">
                                   <h4 class=\"media-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </h4>
                                   #{i.tweet_text}
-                                </div>
+                            </div>
+                                <button class='pull-right button-transparent delete-tweet' data-toggle='modal' data-target='.delete-tweet-box' type='button' id='tweet-delete-#{i.id}' >
+                              <i style='font-size:1.5em;' class='fa fa-trash'></i></button>
+
+                               <button class='pull-right button-transparent #{favorited}-tweet' type='button' id='tweet-fav-#{i.id}' >
+                               <i style='font-size:1.5em;' class='fa fa-star'></i></button>
+
+                               <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-#{i.id}' >
+                               <i style='font-size:1.5em;' class='fa fa-retweet'></i></button>
+
 
                               </div>
                           </div>
                         </div>"
                     $("#my-tweets-container").append(output)
+
+                $().append("<script>
+                         $('.fav-tweet').click(function(event) {
+                                 console.log('fav');
+                                  var details;
+                                  event.preventDefault();
+                                  tweet_id = $(this).attr('id').substring(10);
+                                  details = {
+                                    session_id: localStorage.session,
+                                    tweet_id: tweet_id,
+                                    method: 'favorite',
+                                    queue: 'TWEET'
+                                  };
+                                  return $.ajax({
+                                    url: 'http://localhost:8080',
+                                    type: 'POST',
+                                    datatype: 'json',
+                                    data: JSON.stringify(details),
+                                    success: function(result) {
+                                      console.log(result);
+                                      $(this).removeClass('fav-tweet');
+                                      $(this).addClass('unfav-tweet');
+                                      $(this).text(0);
+                                       return noty({
+                                         text: 'Favorite successful!',
+                                         timeout: 2000,
+                                         type: 'error',
+                                         theme: 'bootstrapTheme'
+                                       });
+                                    },
+                                    error: function(xhr, status, error) {
+                                      return noty({
+                                        text: 'An error occured, please try again',
+                                        timeout: 2000,
+                                        type: 'error',
+                                        theme: 'bootstrapTheme'
+                                      });
+                                    }
+                                  });
+                                });
+
+                            $('.unfav-tweet').click(function(event) {
+                                console.log('unfav');
+                                 var details;
+                                 event.preventDefault();
+                                 tweet_id = $(this).attr('id').substring(10);
+                                 details = {
+                                   session_id: localStorage.session,
+                                   tweet_id: tweet_id,
+                                   method: 'unfavorite',
+                                   queue: 'TWEET'
+                                 };
+                                 return $.ajax({
+                                   url: 'http://localhost:8080',
+                                   type: 'POST',
+                                   datatype: 'json',
+                                   data: JSON.stringify(details),
+                                   success: function(result) {
+
+                                     $(this).removeClass('unfav-tweet');
+                                     $(this).addClass('fav-tweet');
+                                     $(this).text(0);
+
+                                      return noty({
+                                        text: 'Unfavorite successful!',
+                                        timeout: 2000,
+                                        type: 'error',
+                                        theme: 'bootstrapTheme'
+                                      });
+                                   },
+                                   error: function(xhr, status, error) {
+                                     return noty({
+                                       text: 'An error occured, please try again',
+                                       timeout: 2000,
+                                       type: 'error',
+                                       theme: 'bootstrapTheme'
+                                     });
+                                   }
+                                 });
+                               });
+
+
+                         $('.retweet-tweet').click(function(event) {
+                             console.log('here 2');
+                              var details;
+                              event.preventDefault();
+                              tweet_id = $(this).attr('id').substring(14);
+                              details = {
+                                session_id: localStorage.session,
+                                tweet_id: tweet_id,
+                                method: 'retweet',
+                                queue: 'TWEET'
+                              };
+                              return $.ajax({
+                                url: 'http://localhost:8080',
+                                type: 'POST',
+                                datatype: 'json',
+                                data: JSON.stringify(details),
+                                success: function(result) {
+                                  console.log(result);
+                                   return noty({
+                                     text: 'Retweet successful!',
+                                     timeout: 2000,
+                                     type: 'success',
+                                     theme: 'bootstrapTheme'
+                                   });
+                                },
+                                error: function(xhr, status, error) {
+                                    if (error.includes(\"retweet\")) {
+                                        return noty({
+                                          text: 'This tweet, is already retweeted',
+                                          timeout: 2000,
+                                          type: 'error',
+                                          theme: 'bootstrapTheme'
+                                        });
+                                    } else {
+                                  return noty({
+                                    text: 'An error occured, please try again',
+                                    timeout: 2000,
+                                    type: 'error',
+                                    theme: 'bootstrapTheme'
+                                  });
+                              }
+                                }
+                              });
+                            });
+                            </script>")
 
             error: (xhr, status, error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
@@ -307,20 +560,190 @@ $(document).ready () ->
             datatype: "json",
             data: JSON.stringify(details),
             success: (result) ->
-                console.log result
+                $("#notifications-container").empty()
                 for i in result.mentions
                     output = "<div class=\"row-fluid\">
-                          <div class=\"col-sm-6 col-sm-offset-4\">
+                          <div class=\"col-sm-4 col-sm-offset-4\">
                             <div class=\"media timeline\">
-                              <div class=\"media-left\"><img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'></div>
+
+                              <div class=\"media-left\">
+                              <img class='media-object' src='#{i.creator.avatar_url}' height='64' width='64'>
+                              </div>
+
                               <div class=\"media-body\">
                                   <h4 class=\"media-heading\"> #{capitalize(i.creator.username)} (@#{i.creator.username}) </h4>
                                   #{i.tweet_text}
                                 </div>
+                                <button class='pull-right button-transparent fav-tweet' type='button' id='tweet-fav-#{i.id}' >
+                              <i style='font-size:1.5em;' class='fa fa-star'></i></button>
+
+                              <button class='pull-right button-transparent retweet-tweet' type='button' id='tweet-retweet-#{i.id}' >
+                              <i style='font-size:1.5em;' class='fa fa-retweet'></i></button>
+
+                              <button class='pull-right button-transparent reply-tweet' data-toggle='modal' data-target='.unsub-list-box' type='button' id='tweet-reply-#{i.id}'>
+                              <i style='font-size:1.5em;' class='fa fa-reply'></i></button>
                             </div>
                           </div>
                         </div>"
                     $("#notifications-container").append(output)
+
+                $("#notifications-container").append("<script>
+             $('.fav-tweet').click(function(event) {
+                 console.log('fav');
+                  var details;
+                  event.preventDefault();
+                  tweet_id = $(this).attr('id').substring(10);
+                  details = {
+                    session_id: localStorage.session,
+                    tweet_id: tweet_id,
+                    method: 'favorite',
+                    queue: 'TWEET'
+                  };
+                  return $.ajax({
+                    url: 'http://localhost:8080',
+                    type: 'POST',
+                    datatype: 'json',
+                    data: JSON.stringify(details),
+                    success: function(result) {
+                      console.log(result);
+                      $(this).removeClass('fav-tweet');
+                      $(this).addClass('unfav-tweet');
+                      $(this).text(0);
+                       return noty({
+                         text: 'Favorite successful!',
+                         timeout: 2000,
+                         type: 'error',
+                         theme: 'bootstrapTheme'
+                       });
+                    },
+                    error: function(xhr, status, error) {
+                      return noty({
+                        text: 'An error occured, please try again',
+                        timeout: 2000,
+                        type: 'error',
+                        theme: 'bootstrapTheme'
+                      });
+                    }
+                  });
+                });
+
+            $('.unfav-tweet').click(function(event) {
+                console.log('unfav');
+                 var details;
+                 event.preventDefault();
+                 tweet_id = $(this).attr('id').substring(10);
+                 details = {
+                   session_id: localStorage.session,
+                   tweet_id: tweet_id,
+                   method: 'unfavorite',
+                   queue: 'TWEET'
+                 };
+                 return $.ajax({
+                   url: 'http://localhost:8080',
+                   type: 'POST',
+                   datatype: 'json',
+                   data: JSON.stringify(details),
+                   success: function(result) {
+
+                     $(this).removeClass('unfav-tweet');
+                     $(this).addClass('fav-tweet');
+                     $(this).text(0);
+
+                      return noty({
+                        text: 'Unfavorite successful!',
+                        timeout: 2000,
+                        type: 'error',
+                        theme: 'bootstrapTheme'
+                      });
+                   },
+                   error: function(xhr, status, error) {
+                     return noty({
+                       text: 'An error occured, please try again',
+                       timeout: 2000,
+                       type: 'error',
+                       theme: 'bootstrapTheme'
+                     });
+                   }
+                 });
+               });
+
+
+         $('.retweet-tweet').click(function(event) {
+             console.log('here 2');
+              var details;
+              event.preventDefault();
+              tweet_id = $(this).attr('id').substring(14);
+              details = {
+                session_id: localStorage.session,
+                tweet_id: tweet_id,
+                method: 'retweet',
+                queue: 'TWEET'
+              };
+              return $.ajax({
+                url: 'http://localhost:8080',
+                type: 'POST',
+                datatype: 'json',
+                data: JSON.stringify(details),
+                success: function(result) {
+                  console.log(result);
+                   return noty({
+                     text: 'Retweet successful!',
+                     timeout: 2000,
+                     type: 'success',
+                     theme: 'bootstrapTheme'
+                   });
+                },
+                error: function(xhr, status, error) {
+                    if (error.includes(\"retweet\")) {
+                        return noty({
+                          text: 'This tweet, is already retweeted',
+                          timeout: 2000,
+                          type: 'error',
+                          theme: 'bootstrapTheme'
+                        });
+                    } else {
+                  return noty({
+                    text: 'An error occured, please try again',
+                    timeout: 2000,
+                    type: 'error',
+                    theme: 'bootstrapTheme'
+                  });
+              }
+                }
+              });
+            });
+
+            $('.reply-tweet').click(function(event) {
+                console.log('here 2');
+                 var details;
+                 event.preventDefault();
+                 tweet_id = $(this).attr('id').substring(14);
+                 details = {
+                   session_id: localStorage.session,
+                   tweet_id: tweet_id,
+                   method: 'retweet',
+                   queue: 'TWEET'
+                 };
+                 return $.ajax({
+                   url: 'http://localhost:8080',
+                   type: 'POST',
+                   datatype: 'json',
+                   data: JSON.stringify(details),
+                   success: function(result) {
+
+                   },
+                   error: function(xhr, status, error) {
+                     return noty({
+                       text: 'An error occured, please try again',
+                       timeout: 2000,
+                       type: 'error',
+                       theme: 'bootstrapTheme'
+                     });
+                   }
+                 });
+               });
+
+                </script>")
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
@@ -354,6 +777,9 @@ $(document).ready () ->
                                     <div class=\"media-body\">
                                     <h4 class=\"media-heading\">#{other}</h4>
                                     #{i.lastDM.dm_text}
+
+                                    <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-#{i.id}' >
+                              <i style='font-size:1.5em;' class='fa fa-trash'></i></button>
                                 </div>"
 
                     $("#messages-container").append(output)
@@ -649,14 +1075,19 @@ $(document).ready () ->
             data: JSON.stringify(details),
             success: (result) ->
                 for i in result.following
-                    $("#followers-pane").append("<div class=\"media\">
+                    $("#followers-pane").append("
+                    <div class=\"row\">
+                    <div class=\"col-sm-6 col-sm-offset-1\">
+                    <div class=\"media\">
                           <div class=\"media-left\">
                           <img class='media-object' src='#{i.avatar_url}' height='64' width='64'></div>
                           <div class=\"media-body\">
                             <h4>
                             #{capitalize(i.username)} (@#{i.username})</h4>
                       </div>
-                    </div>")
+                      </div>
+                      </div>
+                      </div>")
 
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
@@ -1069,7 +1500,6 @@ $(document).ready () ->
                     method: "get_subscribed_lists",
                     queue: "USER"
                 }
-                # console.log localStorage.user_id
 
                 $.ajax
                     url: "http://localhost:8080",
@@ -1086,26 +1516,26 @@ $(document).ready () ->
                                 console.log "Shit"
                                 description = "No Description"
 
-                            output = "<div class=\"media list-#{i.id}\">
-                                            <div class=\"media-left\">
-                                                <img class=\"media-object\" src='#{i.creator.avatar_url}' alt='Image' width='64' height='64'>
-                                            </div>
+                                output = "<div class=\"media list-#{i.id}\">
+                                <div class=\"media-left\">
+                                <img class=\"media-object\" src='#{i.creator.avatar_url}' alt='Image' width='64' height='64'>
+                                </div>
 
-                                            <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-#{i.id}' name='#{i.name}'>
-                                                <h4 class=\"media-heading\">#{capitalize(i.name)} @#{i.creator.username}</h4>
-                                                #{description}
-                                            </div>
+                                <div class=\"media-body  list-entry\" data-toggle='modal' data-target='.list'  id='list-#{i.id}' name='#{i.name}'>
+                                <h4 class=\"media-heading\">#{capitalize(i.name)} @#{i.creator.username}</h4>
+                                #{description}
+                                </div>
 
-                                            <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-#{i.id}' >
-                                            <i style='font-size:2em;' class='fa fa-trash'></i></button>
+                                <button class='pull-right button-transparent delete-list' data-toggle='modal' data-target='.delete-list-box' type='button' id='list-delete-#{i.id}' >
+                                <i style='font-size:2em;' class='fa fa-trash'></i></button>
 
-                                            <button class='pull-right button-transparent edit-list' data-toggle='modal' data-target='.edit-list-box' type='button' id='list-edit-#{i.id}' >
-                                            <i style='font-size:2em;' class='fa fa-pencil'></i></button>
+                                <button class='pull-right button-transparent edit-list' data-toggle='modal' data-target='.edit-list-box' type='button' id='list-edit-#{i.id}' >
+                                <i style='font-size:2em;' class='fa fa-pencil'></i></button>
 
-                                            <button class='pull-right button-transparent unsub-list' data-toggle='modal' data-target='.unsub-list-box' type='button' id='list-unsub-#{i.id}'>
-                                            <i style='font-size:2em;' class='fa fa-close'></i></button>
+                                <button class='pull-right button-transparent unsub-list' data-toggle='modal' data-target='.unsub-list-box' type='button' id='list-unsub-#{i.id}'>
+                                <i style='font-size:2em;' class='fa fa-close'></i></button>
 
-                                            </div>"
+                                </div>"
 
                             $("#lists-container").append(output)
 
@@ -1163,7 +1593,7 @@ $(document).ready () ->
                           event.preventDefault();
                           list_id = $(this).attr('id').substring(10);
                           console.log('khara');
-                        $('input[name=list-name-edit]').val('khar');
+
 
                           details = {
                             list_id: list_id,
@@ -1202,16 +1632,37 @@ $(document).ready () ->
                     error: (xhr,status,error)->
                         noty({text: 'An error occured, please try again', timeout: 2000, type:'error', theme: 'bootstrapTheme'})
 
-
-
-
-
             error: (xhr,status,error) ->
                 noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
                 console.log "Error: " + error
                 console.log "Status: " + status
                 console.dir xhr.status
                 console.log details
+
+$(document).ready () ->
+    $("#confirm-reply").click (event) ->
+        event.preventDefault()
+        details = {
+            session_id: localStorage.session,
+            tweet_id: tweet_id,
+            tweet_text: $('textarea[name=reply-text]').val(),
+            method: "logout",
+            queue: "USER"
+        }
+
+        $.ajax
+            url: "http://localhost:8080",
+            type: "POST",
+            datatype: "json",
+            data: JSON.stringify(details),
+            success: (result) ->
+                $('textarea[name=reply-text]').val('')
+                $(".reply-box").modal('hide')
+                noty({text: 'Reply Sent!', timeout: 2000, type:"success", theme: 'bootstrapTheme'})
+
+            error: (xhr,status,error) ->
+                noty({text: 'An error occured, please try again', timeout: 2000, type:"error", theme: 'bootstrapTheme'})
+
 
 $(document).ready () ->
     $("#back").click (event) ->
@@ -1223,6 +1674,7 @@ $(document).ready () ->
 capitalize = (string) ->
     return string.charAt(0).toUpperCase() + string.slice(1)
 
+#checks for empty strings since it is not implemented in JS
 isEmpty = (string) ->
     if(string == null || string == "")
         return true
