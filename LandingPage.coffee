@@ -44,7 +44,7 @@ $(document).ready () ->
                               </div>
 
                               <div class=\"media-body\">
-                                <h4 class='media-heading user-entry' id='user-#{i.creator.id}' data-toggle='modal' data-target='.user-details' >
+                                <h4 class='media-heading user-entry' id='user-#{i.creator.id}' >
                                 #{capitalize(i.creator.username)} (@#{i.creator.username})</h4>
                                 #{i.tweet_text}
                               </div>
@@ -65,39 +65,7 @@ $(document).ready () ->
 
 
                 $("#timeline-container").append("<script>
-                 $('.user-entry').click(function(event) {
-
-                      var details;
-                      event.preventDefault();
-                      user_id = $(this).attr('id').substring(5);
-                      details = {
-                        user_id: user_id,
-                        method: 'get_user',
-                        queue: 'USER'
-                      };
-                      return $.ajax({
-                        url: 'http://localhost:8080',
-                        type: 'POST',
-                        datatype: 'json',
-                        data: JSON.stringify(details),
-                        success: function(result) {
-
-                          $('#user-image').empty();
-                          $('#user-body').empty();
-                          return $('#user-image').append(\"img(name='user-image' alt='user-image' width='150' height='150' src=' \" + result.user.avatar_url + \"')\");
-                        },
-                        error: function(xhr, status, error) {
-                          return noty({
-                            text: 'An error occured, please try again',
-                            timeout: 2000,
-                            type: 'error',
-                            theme: 'bootstrapTheme'
-                          });
-                        }
-                      });
-                    });
-
-                     $('.fav-tweet').click(function(event) {
+                    $('.fav-tweet').click(function(event) {
 
                           var details;
                           event.preventDefault();
